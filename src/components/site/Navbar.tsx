@@ -46,18 +46,16 @@ export function Navbar() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-all duration-300",
+        "fixed inset-x-0 top-0 z-50 flex justify-center transition-all duration-300",
         scrolled ? "py-2" : "py-4",
       )}
     >
       <div
         className={cn(
-          "container mx-auto flex max-w-7xl items-center justify-between rounded-full px-5 py-3 transition-all duration-300",
+          "mx-auto flex w-auto items-center gap-2 rounded-full px-3 py-2 transition-all duration-300",
           scrolled ? "glass-strong shadow-soft" : "glass",
         )}
       >
-        <Link to="/" aria-label="Home" className="h-9 w-9" />
-
 
         <nav className="hidden items-center gap-1 lg:flex">
           {mainLinks.slice(0, 3).map((l) => (
