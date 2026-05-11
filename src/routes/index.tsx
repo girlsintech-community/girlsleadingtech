@@ -8,10 +8,15 @@ import { stats } from "@/data/stats";
 import { initiatives } from "@/data/initiatives";
 import { speakers, testimonials, partners } from "@/data/community";
 import { colleges } from "@/data/colleges";
-import community1 from "@/assets/community-1.jpg";
-import community2 from "@/assets/community-2.jpg";
-import community3 from "@/assets/community-3.jpg";
-import community4 from "@/assets/community-4.jpg";
+import gallery1 from "@/assets/gallery-1.jpg";
+import gallery2 from "@/assets/gallery-2.jpg";
+import gallery3 from "@/assets/gallery-3.jpg";
+import gallery4 from "@/assets/gallery-4.jpg";
+import gallery5 from "@/assets/gallery-5.jpg";
+import gallery6 from "@/assets/gallery-6.jpg";
+import gallery7 from "@/assets/gallery-7.jpg";
+import gallery8 from "@/assets/gallery-8.jpg";
+import gallery9 from "@/assets/gallery-9.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -23,7 +28,7 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-const galleryImages = [community1, community2, community3, community4, community1, community2];
+const galleryImages = [gallery1, gallery2, gallery3, gallery4, gallery5, gallery6, gallery7, gallery8, gallery9];
 
 const initiativeStyles: Record<string, { grad: string; ring: string; chip: string; emoji: string }> = {
   pink:     { grad: "from-rose-400 via-pink-500 to-fuchsia-500",   ring: "ring-rose-300/50",     chip: "bg-rose-100 text-rose-700",         emoji: "🌸" },
@@ -246,21 +251,28 @@ function HomePage() {
         </div>
         <div className="mt-12">
           <Marquee>
-            {speakers.map((s) => (
-              <div
-                key={s.id}
-                className="w-72 shrink-0 rounded-3xl glass p-6 shadow-soft"
-              >
-                <div className="flex h-16 w-16 items-center justify-center rounded-full gradient-primary text-xl font-medium text-white shadow-glow">
-                  {s.name.charAt(0)}
-                </div>
-                <h4 className="mt-4 font-display text-lg">{s.name}</h4>
-                <p className="text-xs font-medium uppercase tracking-widest text-primary">
-                  {s.designation}
-                </p>
-                <p className="text-sm text-muted-foreground">{s.company}</p>
-              </div>
-            ))}
+            {speakers.map((s) => {
+              const Wrap: any = s.linkedin ? "a" : "div";
+              const props = s.linkedin
+                ? { href: s.linkedin, target: "_blank", rel: "noopener noreferrer" }
+                : {};
+              return (
+                <Wrap
+                  key={s.id}
+                  {...props}
+                  className="block w-72 shrink-0 rounded-3xl glass p-6 shadow-soft transition hover:-translate-y-1 hover:shadow-glow"
+                >
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full gradient-primary text-xl font-medium text-white shadow-glow">
+                    {s.name.charAt(0)}
+                  </div>
+                  <h4 className="mt-4 font-display text-lg">{s.name}</h4>
+                  <p className="text-xs font-medium uppercase tracking-widest text-primary">
+                    {s.designation}
+                  </p>
+                  {s.company && <p className="text-sm text-muted-foreground">{s.company}</p>}
+                </Wrap>
+              );
+            })}
           </Marquee>
         </div>
       </section>
