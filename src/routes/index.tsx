@@ -6,17 +6,18 @@ import { Marquee } from "@/components/site/Marquee";
 import { ArrowRight, Heart, Users, Sparkle, Star, Flower2 } from "lucide-react";
 import { stats } from "@/data/stats";
 import { initiatives } from "@/data/initiatives";
-import { speakers, testimonials, partners } from "@/data/community";
+import { speakers, testimonials } from "@/data/community";
+import { communityPartners, industryPartners, ecosystemPartners } from "@/data/partners";
 import { colleges } from "@/data/colleges";
-import gallery1 from "@/assets/gallery-1.jpg";
-import gallery2 from "@/assets/gallery-2.jpg";
-import gallery3 from "@/assets/gallery-3.jpg";
-import gallery4 from "@/assets/gallery-4.jpg";
-import gallery5 from "@/assets/gallery-5.jpg";
-import gallery6 from "@/assets/gallery-6.jpg";
-import gallery7 from "@/assets/gallery-7.jpg";
-import gallery8 from "@/assets/gallery-8.jpg";
-import gallery9 from "@/assets/gallery-9.jpg";
+import gallery1 from "@/assets/gallery-1.webp";
+import gallery2 from "@/assets/gallery-2.webp";
+import gallery3 from "@/assets/gallery-3.webp";
+import gallery4 from "@/assets/gallery-4.webp";
+import gallery5 from "@/assets/gallery-5.webp";
+import gallery6 from "@/assets/gallery-6.webp";
+import gallery7 from "@/assets/gallery-7.webp";
+import gallery8 from "@/assets/gallery-8.webp";
+import gallery9 from "@/assets/gallery-9.webp";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -240,40 +241,56 @@ function HomePage() {
         </div>
       </section>
 
-      {/* SPEAKERS */}
+      {/* SPEAKERS — featured static grid */}
       <section className="relative py-20">
         <div className="container mx-auto max-w-6xl px-6">
           <SectionHeading
             eyebrow="Speakers"
             title="Voices who've graced our stages."
-            description="Engineers, founders and leaders from the companies you dream of joining."
+            description="A glimpse of the engineers, founders and leaders who've shared their stories with us."
           />
-        </div>
-        <div className="mt-12">
-          <Marquee>
-            {speakers.map((s) => {
-              const Wrap: any = s.linkedin ? "a" : "div";
-              const props = s.linkedin
-                ? { href: s.linkedin, target: "_blank", rel: "noopener noreferrer" }
-                : {};
-              return (
-                <Wrap
-                  key={s.id}
-                  {...props}
-                  className="block w-72 shrink-0 rounded-3xl glass p-6 shadow-soft transition hover:-translate-y-1 hover:shadow-glow"
-                >
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full gradient-primary text-xl font-medium text-white shadow-glow">
-                    {s.name.charAt(0)}
+          <div className="mt-14 grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+            {speakers
+              .filter((s) => ["s99","s100","s102","s19","s20","s18","s17","s45","s50","s46","s96","s97"].includes(s.id))
+              .map((s, idx) => {
+                const card = (
+                  <div className="relative h-full overflow-hidden rounded-3xl bg-white/85 p-6 backdrop-blur-xl ring-1 ring-primary/10 shadow-soft transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-glow">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl gradient-primary text-lg font-semibold text-white shadow-glow">
+                      {s.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}
+                    </div>
+                    <h4 className="mt-4 font-display text-lg leading-tight">{s.name}</h4>
+                    <p className="mt-1 text-[11px] font-semibold uppercase tracking-widest text-primary">
+                      {s.designation}
+                    </p>
+                    {s.company && <p className="text-sm text-muted-foreground">{s.company}</p>}
                   </div>
-                  <h4 className="mt-4 font-display text-lg">{s.name}</h4>
-                  <p className="text-xs font-medium uppercase tracking-widest text-primary">
-                    {s.designation}
-                  </p>
-                  {s.company && <p className="text-sm text-muted-foreground">{s.company}</p>}
-                </Wrap>
-              );
-            })}
-          </Marquee>
+                );
+                return s.linkedin ? (
+                  <a
+                    key={s.id}
+                    href={s.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group block animate-fade-up"
+                    style={{ animationDelay: `${idx * 0.05}s` }}
+                  >
+                    {card}
+                  </a>
+                ) : (
+                  <div key={s.id} className="group block animate-fade-up" style={{ animationDelay: `${idx * 0.05}s` }}>
+                    {card}
+                  </div>
+                );
+              })}
+          </div>
+          <div className="mt-10 text-center">
+            <Link
+              to="/humans"
+              className="inline-flex items-center gap-2 rounded-full gradient-primary px-6 py-3 text-sm font-semibold text-white shadow-glow transition hover:scale-105"
+            >
+              See more speakers <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -337,13 +354,43 @@ function HomePage() {
           <SectionHeading
             eyebrow="Partners"
             title="The companies cheering us on."
+            description="Communities, industry leaders and ecosystem builders amplifying the movement."
           />
-          <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {partners.map((p) => (
-              <GlassCard key={p.id} className="flex items-center justify-center p-6">
-                <span className="font-display text-lg text-foreground/70">{p.name}</span>
-              </GlassCard>
-            ))}
+          {[
+            { label: "Community Partners", list: communityPartners },
+            { label: "Industry Partners", list: industryPartners },
+            { label: "Ecosystem Partners", list: ecosystemPartners },
+          ].map((group) => (
+            <div key={group.label} className="mt-14">
+              <h3 className="mb-6 text-center text-xs font-bold uppercase tracking-[0.25em] text-muted-foreground">
+                {group.label}
+              </h3>
+              <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+                {group.list.map((p) => {
+                  const inner = (
+                    <div className="flex h-24 items-center justify-center rounded-2xl glass p-3 shadow-soft transition hover:-translate-y-1 hover:shadow-glow">
+                      {p.logo ? (
+                        <img src={p.logo} alt={p.name} loading="lazy" className="max-h-14 max-w-[80%] object-contain" />
+                      ) : (
+                        <span className="text-center text-sm font-display text-foreground/70">{p.name}</span>
+                      )}
+                    </div>
+                  );
+                  return p.website ? (
+                    <a key={p.id} href={p.website} target="_blank" rel="noopener noreferrer" title={p.name}>
+                      {inner}
+                    </a>
+                  ) : (
+                    <div key={p.id} title={p.name}>{inner}</div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+          <div className="mt-10 text-center">
+            <Link to="/partners" className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">
+              See all partners <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
         </div>
       </section>
