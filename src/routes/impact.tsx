@@ -8,6 +8,16 @@ import { testimonials } from "@/data/community";
 import { colleges } from "@/data/colleges";
 import { ArrowRight } from "lucide-react";
 
+export const Route = createFileRoute("/impact")({
+  head: () => ({
+    meta: [
+      { title: "Impact — Girls Leading Tech" },
+      { name: "description", content: "4000+ women, 1100+ colleges, 23+ states. The numbers, stories and reach behind Girls Leading Tech." },
+    ],
+  }),
+  component: ImpactPage,
+});
+
 function ImpactPage() {
   return (
     <>
