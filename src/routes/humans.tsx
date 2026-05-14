@@ -52,7 +52,7 @@ function HumansPage() {
             ))}
           {tab === "speakers" &&
             speakers.map((m, i) => (
-              <PersonCard key={m.id} name={m.name} sub={m.designation} location={m.company} kind="company" delay={i} linkedin={(m as { linkedin?: string }).linkedin} />
+              <PersonCard key={m.id} name={m.name} sub={m.designation} location={m.company} kind="company" delay={i} linkedin={m.linkedin} image={m.image} />
             ))}
           {tab === "mentors" &&
             mentors.map((m, i) => (
@@ -75,6 +75,7 @@ function PersonCard({
   kind,
   delay = 0,
   linkedin,
+  image,
 }: {
   name: string;
   sub?: string;
@@ -82,12 +83,17 @@ function PersonCard({
   kind: "location" | "company";
   delay?: number;
   linkedin?: string;
+  image?: string;
 }) {
   const Icon = kind === "company" ? Building2 : MapPin;
   return (
     <GlassCard glow className="group p-6 text-center animate-fade-up" style={{ animationDelay: `${(delay % 12) * 0.05}s` }}>
-      <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full gradient-primary text-2xl font-medium text-white shadow-glow transition group-hover:scale-110">
-        {name.charAt(0)}
+      <div className="mx-auto flex h-20 w-20 items-center justify-center overflow-hidden rounded-full gradient-primary text-2xl font-medium text-white shadow-glow transition group-hover:scale-110">
+        {image ? (
+          <img src={image} alt={name} loading="lazy" className="h-full w-full object-cover" />
+        ) : (
+          name.charAt(0)
+        )}
       </div>
       <h3 className="mt-4 font-display text-lg">{name}</h3>
       {sub && <p className="text-xs font-semibold uppercase tracking-widest text-primary">{sub}</p>}
