@@ -11,9 +11,8 @@ export const GlassCard = React.forwardRef<HTMLDivElement, GlassCardProps>(
     <div
       ref={ref}
       className={cn(
-        "rounded-3xl p-6 transition-all duration-300",
+        "rounded-3xl p-6 transition-all duration-300 shadow-soft",
         strong ? "glass-strong" : "glass",
-        glow ? "shadow-glow hover:shadow-lavender" : "shadow-soft",
         "hover:-translate-y-1",
         className,
       )}
