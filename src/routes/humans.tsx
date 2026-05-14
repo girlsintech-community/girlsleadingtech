@@ -5,6 +5,7 @@ import { GlassCard } from "@/components/site/GlassCard";
 import { team, mentors, speakers, contributors } from "@/data/community";
 import { cn } from "@/lib/utils";
 import { Linkedin, MapPin, Building2 } from "lucide-react";
+import { SpeakerCard } from "@/components/site/SpeakerCard";
 
 export const Route = createFileRoute("/humans")({
   head: () => ({ meta: [{ title: "Humans — Girls Leading Tech" }, { name: "description", content: "The team, mentors, speakers and contributors behind Girls Leading Tech." }] }),
