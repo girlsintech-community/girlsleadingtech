@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { GlassCard } from "@/components/site/GlassCard";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { Marquee } from "@/components/site/Marquee";
+import { SpeakerCard } from "@/components/site/SpeakerCard";
 import { ArrowRight, Heart, Users, Sparkle, Star, Flower2, Linkedin } from "lucide-react";
 import { stats } from "@/data/stats";
 import { initiatives } from "@/data/initiatives";
