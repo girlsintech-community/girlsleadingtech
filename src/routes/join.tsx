@@ -34,7 +34,7 @@ function JoinPage() {
         </p>
         <a
           href={socials.joinForm}
-          className="mt-6 inline-flex items-center gap-2 rounded-full gradient-primary px-6 py-3 text-sm font-semibold text-white shadow-glow"
+          className="mt-6 inline-flex items-center gap-2 rounded-full gradient-primary px-6 py-3 text-sm font-semibold text-white shadow-soft"
         >
           Open form now <ArrowRight className="h-4 w-4" />
         </a>

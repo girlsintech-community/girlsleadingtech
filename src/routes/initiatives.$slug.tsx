@@ -68,7 +68,7 @@ function InitiativeDetail() {
                   href={initiative.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-8 inline-flex items-center gap-2 rounded-full gradient-primary px-7 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:scale-105"
+                  className="mt-8 inline-flex items-center gap-2 rounded-full gradient-primary px-7 py-3.5 text-sm font-semibold text-white shadow-soft transition hover:scale-105"
                 >
                   Visit program site <ExternalLink className="h-4 w-4" />
                 </a>

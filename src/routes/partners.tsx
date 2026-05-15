@@ -15,7 +15,7 @@ function PartnerGroup({ title, items }: { title: string; items: PartnerEntry[] }
       <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {items.map((p) => {
           const card = (
-            <div className="flex h-32 flex-col items-center justify-center gap-2 rounded-2xl glass p-4 shadow-soft transition hover:-translate-y-1 hover:shadow-glow">
+            <div className="flex h-32 flex-col items-center justify-center gap-2 rounded-2xl glass p-4 shadow-soft transition hover:-translate-y-1 hover:shadow-soft">
               {p.logo ? (
                 <img src={p.logo} alt={p.name} loading="lazy" className="max-h-16 max-w-[80%] object-contain" />
               ) : (

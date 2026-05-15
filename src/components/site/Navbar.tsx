@@ -75,7 +75,7 @@ export function Navbar() {
               Resources <ChevronDown className="h-3.5 w-3.5 transition group-hover:rotate-180" />
             </button>
             <div className="invisible absolute left-1/2 top-full mt-2 w-[640px] -translate-x-1/2 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100">
-              <div className="glass-strong grid grid-cols-2 gap-1 rounded-3xl p-3 shadow-glow">
+              <div className="glass-strong grid grid-cols-2 gap-1 rounded-3xl p-3 shadow-soft">
                 {resourceLinks.map((r) => (
                   <Link
                     key={r.to}
@@ -111,7 +111,7 @@ export function Navbar() {
           </a>
           <Link
             to="/join"
-            className="rounded-full gradient-primary px-5 py-2.5 text-sm font-semibold text-white shadow-glow transition hover:scale-105"
+            className="rounded-full gradient-primary px-5 py-2.5 text-sm font-semibold text-white shadow-soft transition hover:scale-105"
           >
             Join Us
           </Link>
@@ -165,7 +165,7 @@ export function Navbar() {
               <Link
                 to="/join"
                 onClick={() => setOpen(false)}
-                className="mt-4 rounded-full gradient-primary px-5 py-3 text-center text-sm font-semibold text-white shadow-glow"
+                className="mt-4 rounded-full gradient-primary px-5 py-3 text-center text-sm font-semibold text-white shadow-soft"
               >
                 Join Us
               </Link>

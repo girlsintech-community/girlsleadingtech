@@ -42,7 +42,7 @@ function AboutPage() {
       <section className="container mx-auto max-w-6xl px-6 pb-20">
         <div className="grid gap-6 md:grid-cols-2">
           <GlassCard glow className="p-8 md:p-10">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-primary shadow-glow">
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-primary shadow-soft">
               <Compass className="h-5 w-5 text-white" />
             </div>
             <h3 className="font-display text-3xl">Our Vision</h3>
@@ -52,7 +52,7 @@ function AboutPage() {
             </p>
           </GlassCard>
           <GlassCard glow className="p-8 md:p-10">
-            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary shadow-lavender">
+            <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-secondary shadow-soft">
               <Sparkles className="h-5 w-5 text-white" />
             </div>
             <h3 className="font-display text-3xl">Our Mission</h3>
@@ -86,7 +86,7 @@ function AboutPage() {
           {timeline.map((t, i) => (
             <div key={t.year} className={`relative mb-10 md:flex ${i % 2 === 0 ? "md:flex-row" : "md:flex-row-reverse"}`}>
               <div className="absolute left-4 -translate-x-1/2 md:left-1/2">
-                <div className="h-4 w-4 rounded-full gradient-primary shadow-glow ring-4 ring-background" />
+                <div className="h-4 w-4 rounded-full gradient-primary shadow-soft ring-4 ring-background" />
               </div>
               <div className="ml-12 md:ml-0 md:w-1/2 md:px-8">
                 <GlassCard glow className="p-6">
@@ -111,7 +111,7 @@ function AboutPage() {
           </p>
           <Link
             to="/join"
-            className="mt-8 inline-flex items-center gap-2 rounded-full gradient-primary px-7 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:scale-105"
+            className="mt-8 inline-flex items-center gap-2 rounded-full gradient-primary px-7 py-3.5 text-sm font-semibold text-white shadow-soft transition hover:scale-105"
           >
             Join the community <ArrowRight className="h-4 w-4" />
           </Link>

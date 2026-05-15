@@ -8,7 +8,7 @@ import appCss from "../styles.css?url";
 function NotFound() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-mesh px-4">
-      <div className="glass-strong max-w-md rounded-3xl p-10 text-center shadow-glow">
+      <div className="glass-strong max-w-md rounded-3xl p-10 text-center shadow-soft">
         <h1 className="font-display text-7xl text-gradient">404</h1>
         <h2 className="mt-3 font-display text-2xl">Page not found</h2>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -16,7 +16,7 @@ function NotFound() {
         </p>
         <Link
           to="/"
-          className="mt-6 inline-flex rounded-full gradient-primary px-5 py-2.5 text-sm font-semibold text-white shadow-glow"
+          className="mt-6 inline-flex rounded-full gradient-primary px-5 py-2.5 text-sm font-semibold text-white shadow-soft"
         >
           Take me home
         </Link>

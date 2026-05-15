@@ -72,7 +72,7 @@ function EventDetail() {
             href={event.registrationLink || event.youtubeLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-8 inline-flex items-center gap-2 rounded-full gradient-primary px-7 py-3 text-sm font-semibold text-white shadow-glow"
+            className="mt-8 inline-flex items-center gap-2 rounded-full gradient-primary px-7 py-3 text-sm font-semibold text-white shadow-soft"
           >
             {event.status === "upcoming" ? "Register" : "Watch recording"} <ExternalLink className="h-4 w-4" />
           </a>

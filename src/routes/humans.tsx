@@ -38,7 +38,7 @@ function HumansPage() {
               onClick={() => setTab(t.id)}
               className={cn(
                 "rounded-full px-5 py-2 text-sm font-semibold transition",
-                tab === t.id ? "gradient-primary text-white shadow-glow" : "text-foreground/70 hover:text-primary",
+                tab === t.id ? "gradient-primary text-white shadow-soft" : "text-foreground/70 hover:text-primary",
               )}
             >
               {t.label} <span className="opacity-60">· {t.count}</span>
@@ -97,7 +97,7 @@ function PersonCard({
   const Icon = kind === "company" ? Building2 : MapPin;
   return (
     <GlassCard glow className="group p-6 text-center animate-fade-up" style={{ animationDelay: `${(delay % 12) * 0.05}s` }}>
-      <div className="mx-auto flex h-20 w-20 items-center justify-center overflow-hidden rounded-full gradient-primary text-2xl font-medium text-white shadow-glow transition group-hover:scale-110">
+      <div className="mx-auto flex h-20 w-20 items-center justify-center overflow-hidden rounded-full gradient-primary text-2xl font-medium text-white shadow-soft transition group-hover:scale-110">
         {image ? (
           <img src={image} alt={name} loading="lazy" className="h-full w-full object-cover" />
         ) : (

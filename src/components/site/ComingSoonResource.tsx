@@ -20,7 +20,7 @@ export function ComingSoonResource({
       />
       <section className="container mx-auto max-w-2xl px-6 pb-32">
         <GlassCard strong glow className="p-10 text-center md:p-14">
-          <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary shadow-glow">
+          <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary shadow-soft">
             <Sparkles className="h-7 w-7 text-white" />
           </div>
           <h2 className="mt-6 font-display text-2xl">Curating in progress</h2>

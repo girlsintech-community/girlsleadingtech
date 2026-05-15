@@ -26,7 +26,7 @@ function EventsLayout() {
               to="/events/upcoming"
               className={cn(
                 "rounded-full px-5 py-2 text-sm font-semibold transition",
-                !isPast ? "gradient-primary text-white shadow-glow" : "text-foreground/70 hover:text-primary",
+                !isPast ? "gradient-primary text-white shadow-soft" : "text-foreground/70 hover:text-primary",
               )}
             >
               Upcoming
@@ -35,7 +35,7 @@ function EventsLayout() {
               to="/events/past"
               className={cn(
                 "rounded-full px-5 py-2 text-sm font-semibold transition",
-                isPast ? "gradient-primary text-white shadow-glow" : "text-foreground/70 hover:text-primary",
+                isPast ? "gradient-primary text-white shadow-soft" : "text-foreground/70 hover:text-primary",
               )}
             >
               Past

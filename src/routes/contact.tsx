@@ -24,7 +24,7 @@ function ContactPage() {
       />
       <section className="container mx-auto max-w-2xl px-6 pb-20">
         <GlassCard glow className="p-8 text-center md:p-12">
-          <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary shadow-glow">
+          <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-2xl gradient-primary shadow-soft">
             <Mail className="h-7 w-7 text-white" />
           </div>
           <h2 className="mt-6 font-display text-2xl">Email us</h2>
@@ -33,7 +33,7 @@ function ContactPage() {
           </a>
           <a
             href={`mailto:${socials.email}`}
-            className="mt-8 inline-flex items-center gap-2 rounded-full gradient-primary px-7 py-3 text-sm font-semibold text-white shadow-glow"
+            className="mt-8 inline-flex items-center gap-2 rounded-full gradient-primary px-7 py-3 text-sm font-semibold text-white shadow-soft"
           >
             <Send className="h-4 w-4" /> Open mail
           </a>

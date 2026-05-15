@@ -26,7 +26,7 @@ function PeoplePage() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {peopleToFollow.map((p) => (
             <GlassCard key={p.id} glow className="p-7">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full gradient-primary text-lg font-medium text-white shadow-glow">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full gradient-primary text-lg font-medium text-white shadow-soft">
                 {p.name.charAt(0)}
               </div>
               <h3 className="mt-4 font-display text-xl">{p.name}</h3>

@@ -73,7 +73,7 @@ function ImpactPage() {
 
       {/* CTA */}
       <section className="container mx-auto max-w-5xl px-6 pb-24">
-        <div className="relative overflow-hidden rounded-[2.5rem] gradient-primary p-12 text-center shadow-glow md:p-16">
+        <div className="relative overflow-hidden rounded-[2.5rem] gradient-primary p-12 text-center shadow-soft md:p-16">
           <h2 className="font-display text-4xl text-white md:text-5xl">Want to be on this list next?</h2>
           <p className="mx-auto mt-3 max-w-xl text-white/90">Join 4000+ women already leading tech across India.</p>
           <Link to="/join" className="mt-8 inline-flex items-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-primary shadow-soft hover:scale-105 transition">

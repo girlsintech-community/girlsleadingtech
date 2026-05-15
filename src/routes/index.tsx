@@ -95,7 +95,7 @@ function HomePage() {
           >
             <Link
               to="/join"
-              className="group flex items-center gap-2 rounded-full gradient-primary px-7 py-3.5 text-sm font-semibold text-white shadow-glow transition hover:scale-105"
+              className="group flex items-center gap-2 rounded-full gradient-primary px-7 py-3.5 text-sm font-semibold text-white shadow-soft transition hover:scale-105"
             >
               Join the community
               <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
@@ -151,7 +151,7 @@ function HomePage() {
           />
           <div className="mt-14 grid gap-6 md:grid-cols-2">
             <GlassCard glow className="p-8 md:p-10">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-primary shadow-glow">
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-primary shadow-soft">
                 <Heart className="h-5 w-5 text-white" />
               </div>
               <h3 className="font-display text-2xl">Our Vision</h3>
@@ -162,7 +162,7 @@ function HomePage() {
               </p>
             </GlassCard>
             <GlassCard glow className="p-8 md:p-10">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-sunset shadow-coral">
+              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-sunset shadow-soft">
                 <Users className="h-5 w-5 text-white" />
               </div>
               <h3 className="font-display text-2xl">Our Mission</h3>
@@ -198,7 +198,7 @@ function HomePage() {
                   {/* gradient halo */}
                   <div className={`pointer-events-none absolute -inset-[2px] rounded-[2rem] bg-gradient-to-br ${s.grad} opacity-60 blur-md transition-all duration-500 group-hover:opacity-100 group-hover:blur-lg`} />
 
-                  <div className={`relative h-full overflow-hidden rounded-[1.85rem] bg-white/85 p-7 backdrop-blur-xl ring-1 ${s.ring} shadow-soft transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-glow`}>
+                  <div className={`relative h-full overflow-hidden rounded-[1.85rem] bg-white/85 p-7 backdrop-blur-xl ring-1 ${s.ring} shadow-soft transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-soft`}>
                     {/* decorative blob */}
                     <div className={`pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-gradient-to-br ${s.grad} opacity-30 blur-2xl transition-transform duration-700 group-hover:scale-125`} />
                     {/* big rotating emoji */}
@@ -221,7 +221,7 @@ function HomePage() {
                       <div className="mt-6 flex items-center justify-between">
                         <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">
                           Explore
-                          <span className={`inline-block rounded-full bg-gradient-to-br ${s.grad} p-1.5 text-white shadow-glow transition-transform duration-300 group-hover:translate-x-1 group-hover:rotate-[-12deg]`}>
+                          <span className={`inline-block rounded-full bg-gradient-to-br ${s.grad} p-1.5 text-white shadow-soft transition-transform duration-300 group-hover:translate-x-1 group-hover:rotate-[-12deg]`}>
                             <ArrowRight className="h-3.5 w-3.5" />
                           </span>
                         </span>
@@ -268,7 +268,7 @@ function HomePage() {
           <div className="mt-10 text-center">
             <Link
               to="/humans"
-              className="inline-flex items-center gap-2 rounded-full gradient-primary px-6 py-3 text-sm font-semibold text-white shadow-glow transition hover:scale-105"
+              className="inline-flex items-center gap-2 rounded-full gradient-primary px-6 py-3 text-sm font-semibold text-white shadow-soft transition hover:scale-105"
             >
               See more speakers <ArrowRight className="h-4 w-4" />
             </Link>
@@ -348,7 +348,7 @@ function HomePage() {
             <Marquee key={group.label} reverse={gi % 2 === 1}>
               {group.list.map((p) => {
                 const inner = (
-                  <div className="flex h-24 w-44 shrink-0 items-center justify-center rounded-2xl glass p-4 shadow-soft transition hover:-translate-y-1 hover:shadow-glow">
+                  <div className="flex h-24 w-44 shrink-0 items-center justify-center rounded-2xl glass p-4 shadow-soft transition hover:-translate-y-1 hover:shadow-soft">
                     {p.logo ? (
                       <img src={p.logo} alt={p.name} loading="lazy" className="max-h-14 max-w-[80%] object-contain" />
                     ) : (
@@ -377,7 +377,7 @@ function HomePage() {
       {/* CTA */}
       <section className="relative py-24">
         <div className="container mx-auto max-w-5xl px-6">
-          <div className="relative overflow-hidden rounded-[2.5rem] gradient-sunset p-12 text-center shadow-glow md:p-16">
+          <div className="relative overflow-hidden rounded-[2.5rem] gradient-sunset p-12 text-center shadow-soft md:p-16">
             <div className="pointer-events-none absolute -left-10 -top-10 h-48 w-48 rounded-full bg-white/20 blur-2xl animate-blob" />
             <div className="pointer-events-none absolute -right-10 -bottom-10 h-48 w-48 rounded-full bg-white/20 blur-2xl animate-blob" style={{ animationDelay: "3s" }} />
             <h2 className="relative font-serif text-4xl text-white md:text-6xl">

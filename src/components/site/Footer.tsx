@@ -10,7 +10,7 @@ export function Footer() {
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div>
             <Link to="/" className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-full gradient-primary shadow-glow">
+              <span className="flex h-9 w-9 items-center justify-center rounded-full gradient-primary shadow-soft">
                 <Sparkles className="h-4 w-4 text-white" />
               </span>
               <span className="font-display text-lg">

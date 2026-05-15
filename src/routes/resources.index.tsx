@@ -45,7 +45,7 @@ function ResourcesHub() {
               <GlassCard glow className="relative h-full overflow-hidden p-7">
                 <div className={`absolute -right-10 -top-10 h-40 w-40 rounded-full bg-gradient-to-br ${color} blur-2xl`} />
                 <div className="relative">
-                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-primary shadow-glow">
+                  <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-primary shadow-soft">
                     <Icon className="h-5 w-5 text-white" />
                   </div>
                   <h3 className="mt-5 font-display text-xl">{label}</h3>
