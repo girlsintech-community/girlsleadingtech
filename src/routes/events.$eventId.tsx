@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { GlassCard } from "@/components/site/GlassCard";
 import { getEvent } from "@/data/community";
+import { youtubeThumb, getSpeakerImageByName } from "@/lib/event-helpers";
 import { Calendar, Clock, ArrowLeft, ExternalLink } from "lucide-react";
 
 export const Route = createFileRoute("/events/$eventId")({
