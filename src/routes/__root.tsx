@@ -2,6 +2,7 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { ScrollToTop } from "@/components/site/ScrollToTop";
+import Chatbot from "@/components/Chatbot";
 import { HeadContent, Scripts, createRootRoute, Link } from "@tanstack/react-router";
 import { CommunityChatbot } from "@/components/site/CommunityChatbot";
 import appCss from "../styles.css?url";
@@ -83,6 +84,7 @@ function RootComponent() {
       <Footer />
       <CommunityChatbot />
       <ScrollToTop />
+      <Chatbot />
     </>
   );
 }
