@@ -1,253 +1,526 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const API_ENDPOINT = "/api/chat";
-const RESULTS_PER_PAGE = 5;
+const LS_KEY = "glt_chatbot_messages";
 
-function ChatMessage({ message }) {
+const WELCOME = {
+  role: "assistant",
+  text: "Hi! I'm your GLT assistant. Ask me about Scholarships, Events, Mentorship, or tech roadmaps like DSA, Python, Frontend, ML, Cloud and more!",
+};
+
+function loadMessages() {
+  try {
+    const raw = typeof window !== "undefined" ? localStorage.getItem(LS_KEY) : null;
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch {}
+  return [WELCOME];
+}
+
+function saveMessages(msgs) {
+  try {
+    if (typeof window !== "undefined") {
+      localStorage.setItem(LS_KEY, JSON.stringify(msgs));
+    }
+  } catch {}
+}
+
+/** Render a single message bubble */
+function MessageBubble({ message }) {
+  const isUser = message.role === "user";
   return (
-    <div className={`mb-4 rounded-3xl px-4 py-3 ${message.role === "user" ? "bg-white/90 text-slate-900 self-end" : "bg-violet-950/95 text-white self-start"}`}>
-      <p className="text-sm leading-6 whitespace-pre-line">{message.text}</p>
-      {message.results?.length ? (
-        <div className="mt-4 space-y-3">
-          {message.results.map((result, index) => (
-            <div key={index} className="rounded-2xl border border-white/10 bg-white/5 p-3">
-              <div className="flex items-center justify-between gap-3">
-                <span className="text-sm font-semibold text-pink-200">{`${index + 1}. ${result.title || result.name || result.event || result.scholarship || "Result"}`}</span>
-                {result.link ? (
-                  <a
-                    href={result.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-xs font-medium uppercase tracking-[0.12em] text-violet-200 hover:text-white"
-                  >
-                    Visit
-                  </a>
-                ) : null}
-              </div>
-              {result.description ? <p className="mt-2 text-sm text-slate-100">{result.description}</p> : null}
-              {result.fields?.length ? (
-                <div className="mt-3 space-y-1 text-xs text-slate-300">
-                  {result.fields.slice(0, 4).map((field, fieldIndex) => (
-                    <div key={fieldIndex} className="flex items-start gap-2">
-                      <span className="font-semibold text-violet-100">{field.key.replace(/_/g, " ")}:</span>
-                      <span className="break-words">{field.value}</span>
-                    </div>
-                  ))}
-                </div>
-              ) : null}
-              {result.category ? <p className="mt-2 text-xs text-slate-300">Category: {result.category}</p> : null}
-            </div>
-          ))}
+    <div
+      style={{
+        display: "flex",
+        justifyContent: isUser ? "flex-end" : "flex-start",
+        marginBottom: "12px",
+        animation: "gltFadeUp 0.3s ease both",
+      }}
+    >
+      {!isUser && (
+        <div
+          style={{
+            width: "30px",
+            height: "30px",
+            borderRadius: "50%",
+            background: "linear-gradient(135deg, #a855f7, #ec4899)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontSize: "13px",
+            flexShrink: 0,
+            marginRight: "8px",
+            marginTop: "2px",
+            boxShadow: "0 0 10px rgba(168,85,247,0.5)",
+          }}
+        >
+          ✦
         </div>
-      ) : null}
-      {message.meta ? <p className="mt-3 text-xs text-slate-300">{message.meta}</p> : null}
+      )}
+      <div
+        style={{
+          maxWidth: "82%",
+          padding: "10px 14px",
+          borderRadius: isUser ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
+          background: isUser
+            ? "linear-gradient(135deg, #7c3aed, #db2777)"
+            : "rgba(255,255,255,0.07)",
+          border: isUser ? "none" : "1px solid rgba(255,255,255,0.12)",
+          backdropFilter: isUser ? "none" : "blur(8px)",
+          color: "#fff",
+          fontSize: "13px",
+          lineHeight: "1.65",
+          whiteSpace: "pre-line",
+          boxShadow: isUser
+            ? "0 4px 20px rgba(124,58,237,0.3)"
+            : "0 2px 12px rgba(0,0,0,0.3)",
+          wordBreak: "break-word",
+        }}
+      >
+        {message.text}
+      </div>
     </div>
   );
 }
 
-function Chatbot() {
-  const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
-  const [messages, setMessages] = useState([
-    {
-      role: "assistant",
-      text: "Hello! Ask me about Scholarships, Events, or Mentorship and I’ll search our Sheets for the best matches.",
-    },
-  ]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [lastQuery, setLastQuery] = useState("");
-  const [paginationState, setPaginationState] = useState({ totalPages: 0, totalResults: 0 });
+/** Typing indicator */
+function TypingIndicator() {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "12px" }}>
+      <div
+        style={{
+          width: "30px",
+          height: "30px",
+          borderRadius: "50%",
+          background: "linear-gradient(135deg, #a855f7, #ec4899)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "13px",
+          flexShrink: 0,
+          boxShadow: "0 0 10px rgba(168,85,247,0.5)",
+        }}
+      >
+        ✦
+      </div>
+      <div
+        style={{
+          padding: "10px 16px",
+          borderRadius: "18px 18px 18px 4px",
+          background: "rgba(255,255,255,0.07)",
+          border: "1px solid rgba(255,255,255,0.12)",
+          backdropFilter: "blur(8px)",
+          display: "flex",
+          gap: "5px",
+          alignItems: "center",
+        }}
+      >
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            style={{
+              width: "7px",
+              height: "7px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, #a855f7, #ec4899)",
+              display: "inline-block",
+              animation: `gltDot 1.2s ease-in-out ${i * 0.2}s infinite`,
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
-  const lastAssistantMessage = useMemo(() => {
-    return [...messages].reverse().find((message) => message.role === "assistant");
+const SUGGESTIONS = ["DSA roadmap", "Python", "Scholarships", "Events", "Girls in tech", "Machine learning"];
+
+export default function Chatbot() {
+  const [open, setOpen] = useState(false);
+  const [messages, setMessages] = useState(loadMessages);
+  const [query, setQuery] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [pulse, setPulse] = useState(true);
+  const bottomRef = useRef(null);
+  const inputRef = useRef(null);
+  const scrollRef = useRef(null);
+
+  /* Persist messages */
+  useEffect(() => {
+    saveMessages(messages);
   }, [messages]);
 
+  /* Auto-scroll to bottom */
   useEffect(() => {
-    if (!open) {
-      return;
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: "smooth" });
     }
-    document.body.style.overflow = "auto";
-    return () => {
-      document.body.style.overflow = "";
-    };
+  }, [messages, loading]);
+
+  /* Focus input when opened */
+  useEffect(() => {
+    if (open && inputRef.current) {
+      setTimeout(() => inputRef.current?.focus(), 150);
+    }
   }, [open]);
 
-  const handleSubmit = async (event) => {
-    event?.preventDefault();
-    const trimmed = query.trim();
-    if (!trimmed || loading) {
-      return;
-    }
+  /* Stop pulse after first open */
+  useEffect(() => {
+    if (open) setPulse(false);
+  }, [open]);
 
-    setLoading(true);
-    const userMessage = { role: "user", text: trimmed };
-    setMessages((prev) => [...prev, userMessage]);
+  const sendQuery = async (text) => {
+    const trimmed = text.trim();
+    if (!trimmed || loading) return;
+
+    setMessages((prev) => [...prev, { role: "user", text: trimmed }]);
     setQuery("");
-    setLastQuery(trimmed);
-    setPage(1);
+    setLoading(true);
 
     try {
-      const response = await fetch(API_ENDPOINT, {
+      const res = await fetch(API_ENDPOINT, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query: trimmed, page: 1, pageSize: RESULTS_PER_PAGE }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: trimmed }),
       });
-      const data = await response.json();
+      const data = await res.json();
+      const responseText =
+        data.text ||
+        data.fallback ||
+        "Sorry, I couldn't find anything right now. Try asking about Scholarships, Events, or Mentorship.";
 
-      const assistantMessage = {
-        role: "assistant",
-        text: data.fallback || `Here are ${data.totalResults} result${data.totalResults === 1 ? "" : "s"} from our sheets.`,
-        results: data.results || [],
-        meta:
-          data.totalResults > 0
-            ? `Page ${data.page} of ${data.totalPages} · ${data.totalResults} total matches`
-            : data.fallback
-            ? "No spreadsheet matches found. Showing OpenAI fallback answer."
-            : "No results found.",
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
-      setPaginationState({ totalPages: data.totalPages || 0, totalResults: data.totalResults || 0 });
-    } catch (error) {
+      // Strip any leftover em-dashes just in case
+      const cleaned = responseText.replace(/\u2014/g, "-");
+      setMessages((prev) => [...prev, { role: "assistant", text: cleaned }]);
+    } catch {
       setMessages((prev) => [
         ...prev,
-        {
-          role: "assistant",
-          text: "Something went wrong while searching. Please try again.",
-          meta: error?.message || "Unexpected fetch error.",
-        },
+        { role: "assistant", text: "Something went wrong. Please try again." },
       ]);
     } finally {
       setLoading(false);
     }
   };
 
-  const handlePageChange = async (newPage) => {
-    if (loading || !lastQuery || newPage < 1 || newPage > paginationState.totalPages) {
-      return;
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    sendQuery(query);
+  };
 
-    setLoading(true);
-    setPage(newPage);
+  const handleSuggestion = (s) => sendQuery(s);
 
-    try {
-      const response = await fetch(API_ENDPOINT, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query: lastQuery, page: newPage, pageSize: RESULTS_PER_PAGE }),
-      });
-      const data = await response.json();
-
-      const assistantMessage = {
-        role: "assistant",
-        text: data.fallback || `Showing page ${data.page} of ${data.totalPages}.`,
-        results: data.results || [],
-        meta: `Page ${data.page} of ${data.totalPages} · ${data.totalResults} total matches`,
-      };
-
-      setMessages((prev) => [...prev, assistantMessage]);
-      setPaginationState({ totalPages: data.totalPages || 0, totalResults: data.totalResults || 0 });
-    } catch (error) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "assistant",
-          text: "Something went wrong while changing pages. Please try again.",
-          meta: error?.message || "Unexpected fetch error.",
-        },
-      ]);
-    } finally {
-      setLoading(false);
-    }
+  const clearHistory = () => {
+    setMessages([WELCOME]);
+    try { localStorage.removeItem(LS_KEY); } catch {}
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end">
-      <button
-        type="button"
-        onClick={() => setOpen((state) => !state)}
-        className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-fuchsia-500 to-violet-600 text-white shadow-2xl shadow-fuchsia-500/30 transition hover:scale-105"
-        aria-label={open ? "Close chatbot" : "Open chatbot"}
+    <>
+      {/* Injected keyframes */}
+      <style>{`
+        @keyframes gltFadeUp {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes gltDot {
+          0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+          40%            { transform: scale(1);   opacity: 1;   }
+        }
+        @keyframes gltPulse {
+          0%, 100% { box-shadow: 0 0 0 0 rgba(168,85,247,0.6); }
+          50%       { box-shadow: 0 0 0 12px rgba(168,85,247,0); }
+        }
+        @keyframes gltSlideUp {
+          from { opacity: 0; transform: translateY(20px) scale(0.97); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        #glt-chatbot-input::placeholder { color: rgba(255,255,255,0.35); }
+        #glt-chatbot-input:focus { outline: none; }
+        #glt-chat-scroll::-webkit-scrollbar { width: 4px; }
+        #glt-chat-scroll::-webkit-scrollbar-track { background: transparent; }
+        #glt-chat-scroll::-webkit-scrollbar-thumb { background: rgba(168,85,247,0.3); border-radius: 4px; }
+      `}</style>
+
+      {/* Floating launcher button */}
+      <div
+        style={{
+          position: "fixed",
+          bottom: "24px",
+          right: "24px",
+          zIndex: 9999,
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-end",
+          gap: "12px",
+        }}
       >
-        {open ? "×" : "Chat"}
-      </button>
-
-      {open ? (
-        <div className="mt-4 w-[96vw] max-w-md rounded-[32px] border border-white/10 bg-slate-950/95 p-4 shadow-2xl shadow-black/50 backdrop-blur-xl">
-          <div className="mb-4 flex items-center justify-between rounded-3xl bg-violet-950 px-4 py-3 text-white shadow-inner">
-            <div>
-              <p className="text-sm font-semibold">Girls Leading Tech Chat</p>
-              <p className="text-xs text-violet-200">Ask about scholarships, events or mentorship.</p>
-            </div>
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="rounded-full border border-white/10 px-3 py-1 text-xs text-white/80 hover:bg-white/10"
+        {/* Chat panel */}
+        {open && (
+          <div
+            style={{
+              width: "min(92vw, 400px)",
+              height: "min(88vh, 580px)",
+              borderRadius: "24px",
+              border: "1px solid rgba(168,85,247,0.25)",
+              background: "rgba(10,8,25,0.82)",
+              backdropFilter: "blur(24px) saturate(180%)",
+              WebkitBackdropFilter: "blur(24px) saturate(180%)",
+              boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(168,85,247,0.15), inset 0 1px 0 rgba(255,255,255,0.06)",
+              display: "flex",
+              flexDirection: "column",
+              overflow: "hidden",
+              animation: "gltSlideUp 0.35s cubic-bezier(0.34,1.56,0.64,1) both",
+            }}
+          >
+            {/* Header */}
+            <div
+              style={{
+                padding: "16px 18px 14px",
+                background: "linear-gradient(135deg, rgba(124,58,237,0.4), rgba(219,39,119,0.25))",
+                borderBottom: "1px solid rgba(255,255,255,0.08)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                flexShrink: 0,
+              }}
             >
-              Close
-            </button>
-          </div>
-
-          <div className="max-h-[430px] space-y-4 overflow-y-auto pr-1 pb-2">
-            {messages.map((message, index) => (
-              <ChatMessage key={`${message.role}-${index}`} message={message} />
-            ))}
-          </div>
-
-          <form onSubmit={handleSubmit} className="mt-4 flex gap-3">
-            <label htmlFor="chatbot-query" className="sr-only">
-              Ask about scholarships, events, or mentorship
-            </label>
-            <input
-              id="chatbot-query"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Search scholarships, events, mentorship..."
-              className="w-full rounded-3xl border border-white/10 bg-slate-900/90 px-4 py-3 text-sm text-white outline-none transition focus:border-pink-400 focus:ring-2 focus:ring-pink-400/20"
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              className="inline-flex shrink-0 items-center justify-center rounded-3xl bg-gradient-to-r from-pink-500 to-violet-500 px-5 text-sm font-semibold text-white transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {loading ? "Searching..." : "Send"}
-            </button>
-          </form>
-
-          {paginationState.totalPages > 1 ? (
-            <div className="mt-4 flex items-center justify-between rounded-3xl bg-white/5 px-4 py-3 text-sm text-slate-200">
-              <button
-                type="button"
-                aria-label="Previous page"
-                disabled={loading || page <= 1}
-                onClick={() => handlePageChange(page - 1)}
-                className="rounded-full border border-white/10 bg-slate-900/80 px-3 py-2 text-xs font-semibold transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Previous
-              </button>
-              <span>
-                Page {page} of {paginationState.totalPages}
-              </span>
-              <button
-                type="button"
-                aria-label="Next page"
-                disabled={loading || page >= paginationState.totalPages}
-                onClick={() => handlePageChange(page + 1)}
-                className="rounded-full border border-white/10 bg-slate-900/80 px-3 py-2 text-xs font-semibold transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                Next
-              </button>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <div
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "50%",
+                    background: "linear-gradient(135deg, #a855f7, #ec4899)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "16px",
+                    boxShadow: "0 0 16px rgba(168,85,247,0.6)",
+                  }}
+                >
+                  ✦
+                </div>
+                <div>
+                  <div style={{ color: "#fff", fontWeight: 700, fontSize: "14px", letterSpacing: "0.01em" }}>
+                    GLT Assistant
+                  </div>
+                  <div style={{ color: "rgba(255,255,255,0.45)", fontSize: "11px" }}>
+                    Ask about roadmaps, scholarships &amp; more
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: "flex", gap: "6px" }}>
+                <button
+                  type="button"
+                  onClick={clearHistory}
+                  title="Clear chat"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: "8px",
+                    color: "rgba(255,255,255,0.5)",
+                    padding: "5px 9px",
+                    fontSize: "11px",
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.color = "#fff"}
+                  onMouseOut={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.5)"}
+                >
+                  Clear
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  title="Close"
+                  style={{
+                    background: "rgba(255,255,255,0.06)",
+                    border: "1px solid rgba(255,255,255,0.1)",
+                    borderRadius: "8px",
+                    color: "rgba(255,255,255,0.5)",
+                    padding: "5px 9px",
+                    fontSize: "16px",
+                    lineHeight: 1,
+                    cursor: "pointer",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.color = "#fff"}
+                  onMouseOut={(e) => e.currentTarget.style.color = "rgba(255,255,255,0.5)"}
+                >
+                  ×
+                </button>
+              </div>
             </div>
-          ) : null}
-        </div>
-      ) : null}
-    </div>
+
+            {/* Messages */}
+            <div
+              id="glt-chat-scroll"
+              ref={scrollRef}
+              style={{
+                flex: 1,
+                overflowY: "auto",
+                padding: "16px 16px 8px",
+              }}
+            >
+              {messages.map((msg, i) => (
+                <MessageBubble key={i} message={msg} />
+              ))}
+              {loading && <TypingIndicator />}
+              <div ref={bottomRef} />
+            </div>
+
+            {/* Suggestions */}
+            {messages.length <= 1 && !loading && (
+              <div
+                style={{
+                  padding: "0 14px 10px",
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "6px",
+                  flexShrink: 0,
+                }}
+              >
+                {SUGGESTIONS.map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => handleSuggestion(s)}
+                    style={{
+                      background: "rgba(168,85,247,0.12)",
+                      border: "1px solid rgba(168,85,247,0.3)",
+                      borderRadius: "20px",
+                      color: "rgba(255,255,255,0.75)",
+                      fontSize: "11px",
+                      padding: "5px 11px",
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                    }}
+                    onMouseOver={(e) => {
+                      e.currentTarget.style.background = "rgba(168,85,247,0.3)";
+                      e.currentTarget.style.color = "#fff";
+                    }}
+                    onMouseOut={(e) => {
+                      e.currentTarget.style.background = "rgba(168,85,247,0.12)";
+                      e.currentTarget.style.color = "rgba(255,255,255,0.75)";
+                    }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Input bar */}
+            <form
+              onSubmit={handleSubmit}
+              style={{
+                padding: "12px 14px 14px",
+                borderTop: "1px solid rgba(255,255,255,0.07)",
+                display: "flex",
+                gap: "8px",
+                flexShrink: 0,
+                background: "rgba(0,0,0,0.2)",
+              }}
+            >
+              <input
+                id="glt-chatbot-input"
+                ref={inputRef}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    sendQuery(query);
+                  }
+                }}
+                placeholder="Ask me anything..."
+                disabled={loading}
+                style={{
+                  flex: 1,
+                  background: "rgba(255,255,255,0.07)",
+                  border: "1px solid rgba(168,85,247,0.3)",
+                  borderRadius: "14px",
+                  color: "#fff",
+                  fontSize: "13px",
+                  padding: "10px 14px",
+                  transition: "border-color 0.2s, box-shadow 0.2s",
+                  fontFamily: "inherit",
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(168,85,247,0.7)";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px rgba(168,85,247,0.15)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(168,85,247,0.3)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              />
+              <button
+                type="submit"
+                disabled={loading || !query.trim()}
+                style={{
+                  background: "linear-gradient(135deg, #7c3aed, #db2777)",
+                  border: "none",
+                  borderRadius: "14px",
+                  color: "#fff",
+                  fontWeight: 700,
+                  fontSize: "13px",
+                  padding: "10px 16px",
+                  cursor: loading || !query.trim() ? "not-allowed" : "pointer",
+                  opacity: loading || !query.trim() ? 0.5 : 1,
+                  transition: "opacity 0.2s, transform 0.15s",
+                  flexShrink: 0,
+                  boxShadow: "0 4px 14px rgba(124,58,237,0.35)",
+                  whiteSpace: "nowrap",
+                }}
+                onMouseOver={(e) => {
+                  if (!loading && query.trim()) e.currentTarget.style.transform = "scale(1.03)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                }}
+              >
+                {loading ? "..." : "Send"}
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* FAB button */}
+        <button
+          type="button"
+          id="glt-chatbot-toggle"
+          onClick={() => setOpen((v) => !v)}
+          aria-label={open ? "Close chatbot" : "Open GLT Assistant"}
+          style={{
+            width: "56px",
+            height: "56px",
+            borderRadius: "50%",
+            background: open
+              ? "rgba(30,20,60,0.9)"
+              : "linear-gradient(135deg, #7c3aed, #db2777)",
+            border: open ? "2px solid rgba(168,85,247,0.4)" : "none",
+            color: "#fff",
+            fontSize: open ? "22px" : "22px",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: open
+              ? "0 4px 20px rgba(0,0,0,0.4)"
+              : "0 8px 32px rgba(124,58,237,0.55)",
+            animation: pulse && !open ? "gltPulse 2s ease-in-out infinite" : "none",
+            transition: "background 0.3s, box-shadow 0.3s, transform 0.2s",
+            flexShrink: 0,
+          }}
+          onMouseOver={(e) => { e.currentTarget.style.transform = "scale(1.08)"; }}
+          onMouseOut={(e) => { e.currentTarget.style.transform = "scale(1)"; }}
+        >
+          {open ? "×" : "✦"}
+        </button>
+      </div>
+    </>
   );
 }
-
-export default Chatbot;

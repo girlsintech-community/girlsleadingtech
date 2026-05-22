@@ -1,265 +1,262 @@
-import { csvToJson, flattenRowValues } from "./excel.js";
-
-const RESULTS_PER_PAGE = 5;
-const DEFAULT_SPREADSHEET_ID = "15S2GgrqC_eHQAxS38E-arWUVszoyvpdvAfdT24Ml9mE";
-const DEFAULT_SHEET_EXPORT_URL = `https://docs.google.com/spreadsheets/d/${DEFAULT_SPREADSHEET_ID}/export?format=csv`;
+import { scholarships } from "../data/scholarships";
+import { realEvents } from "../data/events-real";
+import { initiatives } from "../data/initiatives";
+import {
+  books,
+  communities,
+  programs,
+  roadmaps,
+  interviewPrep,
+  certifications,
+  articles,
+  videos
+} from "../data/resources";
+import { curatedRoadmaps, girlsInTechResources } from "../data/curated-resources";
 
 interface ChatRequestBody {
   query?: string;
-  page?: number | string;
-  pageSize?: number | string;
 }
 
 interface ChatResult {
   query?: string;
+  text?: string;
   results?: Array<Record<string, unknown>>;
   totalResults?: number;
   page?: number;
   pageSize?: number;
   totalPages?: number;
-  fallback?: string;
   error?: string;
 }
 
-function parseInteger(value: unknown, fallback: number) {
-  const parsed = Number(value);
-  return Number.isInteger(parsed) && parsed > 0 ? parsed : fallback;
-}
+function matchCuratedResource(query: string): string | null {
+  const norm = query.toLowerCase().trim();
 
-function buildFallbackPrompt(query: string) {
-  return `You are a friendly assistant for Girls Leading Tech. A user asked: "${query}". If the query is about scholarships, events, or mentorship, give useful advice even though the spreadsheet search returned no direct matches. Keep the answer concise and encouraging.`;
-}
+  // Helper to check word/phrase match
+  const match = (keywords: string[]) => keywords.some(kw => norm.includes(kw));
 
-function getSheetUrls() {
-  const explicitUrls = process.env.SHEET_EXPORT_URLS
-    ? process.env.SHEET_EXPORT_URLS.split(",").map((entry) => entry.trim()).filter(Boolean)
-    : [];
-
-  if (explicitUrls.length) {
-    return explicitUrls;
+  // 1. DSA
+  if (match(["dsa", "data structure", "algorithm", "leet-code", "leetcode"])) {
+    return formatRoadmap(curatedRoadmaps.dsa);
+  }
+  // 2. Java
+  if (match(["java"]) && !norm.includes("javascript")) {
+    return formatRoadmap(curatedRoadmaps.java);
+  }
+  // 3. Frontend
+  if (match(["frontend", "front-end", "html", "css", "javascript", "react", "tailwind", "ui library", "material-ui", "material ui"])) {
+    return formatRoadmap(curatedRoadmaps.frontend);
+  }
+  // 4. Backend
+  if (match(["backend", "back-end", "node.js", "node", "express", "rest api", "database", "sql", "nosql", "auth"])) {
+    return formatRoadmap(curatedRoadmaps.backend);
+  }
+  // 5. Python
+  if (match(["python"])) {
+    return formatRoadmap(curatedRoadmaps.python);
+  }
+  // 6. Machine Learning
+  if (match(["machine learning", " ml ", " ml", "ml ", "deep learning", "ai ", " ai", "artificial intelligence", "pytorch", "tensorflow", "model training"])) {
+    return formatRoadmap(curatedRoadmaps.ml);
+  }
+  // 7. IoT
+  if (match(["iot", "internet of things", "esp32", "sensor", "microcontroller", "arduino"])) {
+    return formatRoadmap(curatedRoadmaps.iot);
+  }
+  // 8. Version Control
+  if (match(["git", "github", "version control", "branch", "pull request", "open source contribution"])) {
+    return formatRoadmap(curatedRoadmaps.git);
+  }
+  // 9. Cloud & Deployment
+  if (match(["cloud", "deploy", "docker", "ci/cd", "vercel", "netlify", "aws", "azure", "gcp"])) {
+    return formatRoadmap(curatedRoadmaps.cloud);
+  }
+  // 10. Girls in Tech
+  if (match(["girl", "woman", "women", "female", "gender", "sister", "diversity"])) {
+    return formatGirlsResources();
   }
 
-  const spreadsheetId = process.env.SHEET_SPREADSHEET_ID?.trim();
-  const gids = process.env.SHEET_GIDS?.split(",").map((entry) => entry.trim()).filter(Boolean) ?? [];
-
-  if (spreadsheetId && gids.length) {
-    return gids.map((gid) => `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv&gid=${gid}`);
-  }
-
-  if (spreadsheetId) {
-    return [`https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`];
-  }
-
-  return [DEFAULT_SHEET_EXPORT_URL];
+  return null;
 }
 
-async function fetchCsv(url: string) {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`Failed to fetch sheet CSV: ${response.status} ${response.statusText}`);
-  }
+function formatRoadmap(roadmap: any): string {
+  let text = `[Roadmap] ${roadmap.title}\n\n`;
+  text += `Here is a step-by-step path to master this topic:\n`;
+  roadmap.steps.forEach((step: string, index: number) => {
+    text += `${index + 1}. ${step}\n`;
+  });
+  
+  text += `\nRecommended Resources:\n`;
+  roadmap.links.forEach((link: any) => {
+    text += `- ${link.name}: ${link.url}\n`;
+  });
 
-  return response.text();
+  text += `\nKeep exploring - opportunities are waiting for you!`;
+  
+  return text.replace(/—/g, "-");
 }
 
-function recordSheetName(url: string) {
-  try {
-    const parsed = new URL(url);
-    const params = parsed.searchParams;
-    if (params.has("gid")) {
-      return `Sheet ${params.get("gid")}`;
+function formatGirlsResources(): string {
+  let text = `[Community] Girls & Tech Student Resources\n\n`;
+  text += `Here are some amazing programs, scholarships, and communities curated for girls and tech students:\n\n`;
+  girlsInTechResources.forEach((res, index) => {
+    text += `${index + 1}. [${res.category}] ${res.title} - ${res.description} (Link: ${res.link})\n\n`;
+  });
+
+  text += `Keep exploring - opportunities are waiting for you!`;
+  
+  return text.replace(/—/g, "-");
+}
+
+function searchAll(query: string) {
+  const norm = query.toLowerCase().trim();
+  const results: { category: string; title: string; description: string; link?: string }[] = [];
+
+  const matchAndAdd = (items: any[], category: string, getFields: (item: any) => { title: string; desc: string; link?: string }) => {
+    if (!items) return;
+    for (const item of items) {
+      const fields = getFields(item);
+      const textToSearch = `${fields.title} ${fields.desc}`.toLowerCase();
+      if (textToSearch.includes(norm)) {
+        results.push({
+          category,
+          title: fields.title,
+          description: fields.desc,
+          link: fields.link
+        });
+      }
     }
-  } catch {
-    return "Primary sheet";
-  }
-  return "Primary sheet";
+  };
+
+  // 1. Scholarships
+  matchAndAdd(scholarships, "Scholarship", (s) => ({
+    title: s.title,
+    desc: `${s.provider || ""} | Benefit: ${s.benefit || ""} | Eligibility: ${s.eligibility || ""} | Open Date: ${s.openDate || ""}`,
+    link: s.link
+  }));
+
+  // 2. Events
+  matchAndAdd(realEvents, "Event", (e) => ({
+    title: e.title,
+    desc: `${e.summary || ""} Speaker: ${e.speakerName || ""} (${e.speakerDesignation || ""} at ${e.speakerCompany || ""})`,
+    link: e.youtubeLink || e.registrationLink
+  }));
+
+  // 3. Initiatives
+  matchAndAdd(initiatives, "Mentorship", (i) => ({
+    title: i.name,
+    desc: `${i.tagline || ""} - ${i.description || ""}`,
+    link: i.url
+  }));
+
+  // 4. Resources
+  matchAndAdd(books, "Resource", (b) => ({
+    title: b.title,
+    desc: `${b.author ? `By ${b.author} | ` : ""}${b.description || ""}`,
+    link: b.link
+  }));
+
+  matchAndAdd(communities, "Community", (c) => ({
+    title: c.title,
+    desc: c.description || "",
+    link: c.link
+  }));
+
+  matchAndAdd(programs, "Program", (p) => ({
+    title: p.title,
+    desc: `${p.author ? `By ${p.author} | ` : ""}${p.description || ""}`,
+    link: p.link
+  }));
+
+  matchAndAdd(roadmaps, "Roadmap", (r) => ({
+    title: r.title,
+    desc: r.description || "",
+    link: r.link
+  }));
+
+  matchAndAdd(interviewPrep, "Resource", (ip) => ({
+    title: ip.title,
+    desc: ip.description || "",
+    link: ip.link
+  }));
+
+  matchAndAdd(certifications, "Resource", (c) => ({
+    title: c.title,
+    desc: c.description || "",
+    link: c.link
+  }));
+
+  matchAndAdd(articles, "Resource", (a) => ({
+    title: a.title,
+    desc: `${a.author ? `By ${a.author} | ` : ""}${a.description || ""}`,
+    link: a.link
+  }));
+
+  matchAndAdd(videos, "Resource", (v) => ({
+    title: v.title,
+    desc: v.description || "",
+    link: v.link
+  }));
+
+  return results;
 }
 
-async function loadDataRows() {
-  const urls = getSheetUrls();
-  const rows: Array<Record<string, string>> = [];
-
-  for (const url of urls) {
-    const csv = await fetchCsv(url);
-    const sheetRows = csvToJson(csv);
-    const sheetName = recordSheetName(url);
-    sheetRows.forEach((row) => {
-      rows.push({ ...row, sheetName });
-    });
-  }
-
-  return rows;
-}
-
-function searchRows(rows: Array<Record<string, string>>, query: string) {
-  const normalized = query.toLowerCase().trim();
-  return rows.filter((row) => {
-    const text = flattenRowValues(row);
-    return text.includes(normalized);
-  });
-}
-
-const titleKeys = [
-  "title",
-  "name",
-  "event",
-  "scholarship",
-  "program",
-  "course",
-  "organization",
-  "organisation",
-  "company",
-  "mentor",
-  "role",
-  "subject",
-  "topic",
-  "scheme",
-  "name_of_program",
-  "title_of_program",
-];
-
-const descriptionKeys = ["description", "summary", "details", "notes", "eligibility", "benefits", "about", "info"];
-const linkKeys = ["link", "url", "website", "website_link", "apply_link", "application_link", "registration_link", "form"];
-const ignoreKeys = ["sheetName", "gid"];
-
-function getValue(row: Record<string, string>, keys: string[]) {
-  for (const key of keys) {
-    if (row[key]?.trim()) {
-      return row[key].trim();
-    }
-  }
-  return "";
-}
-
-function buildTitle(row: Record<string, string>) {
-  const title = getValue(row, titleKeys);
-  if (title) {
-    return title;
-  }
-
-  const fallback = Object.entries(row)
-    .filter(([key, value]) => !ignoreKeys.includes(key) && value?.trim())
-    .map(([key, value]) => value?.trim())
-    .find(Boolean);
-
-  return fallback || row.sheetName || "Result";
-}
-
-function buildDescription(row: Record<string, string>, title: string) {
-  const description = getValue(row, descriptionKeys);
-  if (description) {
-    return description;
+function formatResultsResponse(results: any[], query: string) {
+  if (results.length === 0) {
+    return `Sorry, I couldn’t find anything right now. Try asking about Scholarships, Events, or Mentorship.`;
   }
 
-  const summaryFields = Object.entries(row)
-    .filter(([key, value]) => !ignoreKeys.includes(key) && value?.trim())
-    .filter(([key]) => !titleKeys.includes(key) && !descriptionKeys.includes(key) && !linkKeys.includes(key))
-    .slice(0, 3)
-    .map(([key, value]) => `${key.replace(/_/g, " ")}: ${value?.trim()}`);
+  const topResults = results.slice(0, 5);
+  let text = `Here are the top ${topResults.length} matches I found for "${query}":\n\n`;
 
-  return summaryFields.join(" · ");
-}
+  topResults.forEach((res, index) => {
+    let desc = res.description || "";
+    desc = desc.replace(/—/g, "-");
 
-function buildLink(row: Record<string, string>) {
-  return getValue(row, linkKeys);
-}
+    const sentences = desc.split(/(?<=[.!?])\s+/);
+    const shortDesc = sentences.slice(0, 3).join(" ");
 
-function normalizeResults(rows: Array<Record<string, string>>) {
-  return rows.map((row) => {
-    const title = buildTitle(row);
-    const description = buildDescription(row, title);
-    return {
-      title,
-      description,
-      category: row.category || row.type || row.sheetName,
-      link: buildLink(row),
-      fields: Object.entries(row)
-        .filter(
-          ([key, value]) =>
-            !ignoreKeys.includes(key) &&
-            !titleKeys.includes(key) &&
-            !descriptionKeys.includes(key) &&
-            !linkKeys.includes(key) &&
-            value?.trim(),
-        )
-        .map(([key, value]) => ({ key, value: value?.trim() })),
-      raw: row,
-    };
-  });
-}
-
-async function fetchOpenAIAnswer(query: string) {
-  const apiKey = process.env.OPENAI_API_KEY;
-  if (!apiKey) {
-    throw new Error("OPENAI_API_KEY is not defined.");
-  }
-
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: "You are a helpful assistant for Girls Leading Tech." },
-        { role: "user", content: buildFallbackPrompt(query) },
-      ],
-      max_tokens: 250,
-      temperature: 0.8,
-    }),
+    const linkStr = res.link ? ` (Link: ${res.link})` : "";
+    text += `${index + 1}. [${res.category}] ${res.title} - ${shortDesc}${linkStr}\n\n`;
   });
 
-  if (!response.ok) {
-    const body = await response.text();
-    throw new Error(`OpenAI API error: ${response.status} ${body}`);
-  }
-
-  const payload = await response.json();
-  return payload?.choices?.[0]?.message?.content?.trim() || "I couldn't find a match right now.";
+  text += `Keep exploring - opportunities are waiting for you!`;
+  return text.replace(/—/g, "-");
 }
 
 export async function handleChatRequest(body: ChatRequestBody): Promise<ChatResult> {
   const cleanedQuery = (body.query || "").toString().trim();
   if (!cleanedQuery) {
     return {
-      error: "Query is required.",
+      error: "Query is required."
     };
   }
 
-  const parsedPage = parseInteger(body.page, 1);
-  const parsedPageSize = parseInteger(body.pageSize, RESULTS_PER_PAGE);
-
-  const rows = await loadDataRows();
-  const matches = searchRows(rows, cleanedQuery);
-
-  if (!matches.length) {
-    const fallback = await fetchOpenAIAnswer(cleanedQuery);
+  // 1. Check curated resources first (DSA, Java, Python, Frontend, Backend, ML, IoT, Cloud, Git, Girls in tech)
+  const curatedMatchText = matchCuratedResource(cleanedQuery);
+  if (curatedMatchText) {
     return {
       query: cleanedQuery,
+      text: curatedMatchText,
       results: [],
-      totalResults: 0,
+      totalResults: 1,
       page: 1,
-      pageSize: parsedPageSize,
-      totalPages: 0,
-      fallback,
+      pageSize: 5,
+      totalPages: 1
     };
   }
 
-  const totalResults = matches.length;
-  const totalPages = Math.max(1, Math.ceil(totalResults / parsedPageSize));
-  const safePage = Math.min(parsedPage, totalPages);
-  const startIndex = (safePage - 1) * parsedPageSize;
-  const pageResults = normalizeResults(matches.slice(startIndex, startIndex + parsedPageSize));
+  // 2. Regular local dataset search
+  const matches = searchAll(cleanedQuery);
+  const formattedResponseText = formatResultsResponse(matches, cleanedQuery);
 
   return {
     query: cleanedQuery,
-    results: pageResults,
-    totalResults,
-    page: safePage,
-    pageSize: parsedPageSize,
-    totalPages,
+    text: formattedResponseText,
+    results: [],
+    totalResults: matches.length,
+    page: 1,
+    pageSize: 5,
+    totalPages: matches.length > 0 ? 1 : 0
   };
 }
 
