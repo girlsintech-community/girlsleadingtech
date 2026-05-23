@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { GlassCard } from "@/components/site/GlassCard";
 import { SectionHeading } from "@/components/site/SectionHeading";
@@ -9,7 +10,11 @@ import { stats } from "@/data/stats";
 import { initiatives } from "@/data/initiatives";
 import { speakers, testimonials } from "@/data/community";
 import { communityPartners, industryPartners, ecosystemPartners } from "@/data/partners";
+import { useState } from "react";
 import { colleges } from "@/data/colleges";
+import testimonialCard from "@/assets/testimonial-card.png"
+
+
 import gallery1 from "@/assets/gallery-1.webp";
 import gallery2 from "@/assets/gallery-2.webp";
 import gallery3 from "@/assets/gallery-3.webp";
@@ -19,6 +24,7 @@ import gallery6 from "@/assets/gallery-6.webp";
 import gallery7 from "@/assets/gallery-7.webp";
 import gallery8 from "@/assets/gallery-8.webp";
 import gallery9 from "@/assets/gallery-9.webp";
+import Hero from "@/components/home/hero";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -40,6 +46,8 @@ const initiativeStyles: Record<string, { grad: string; ring: string; chip: strin
   violet:   { grad: "from-purple-500 via-fuchsia-500 to-pink-500", ring: "ring-purple-300/50",   chip: "bg-purple-100 text-purple-700",     emoji: "🔮" },
 };
 
+<style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');`}</style>
+
 function HeroDecor() {
   return (
     <>
@@ -51,96 +59,389 @@ function HeroDecor() {
   );
 }
 
+// auto photo carousel + user constrolled
+function AutoCarousel({ images }: { images: string[] }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+useEffect(() => {
+  const el = ref.current;
+  if (!el) return;
+
+  let speed = 1.4; // faster scroll
+  let animationId: number;
+  let paused = false;
+
+  const loop = () => {
+    if (!el) return;
+
+    if (!paused) {
+      el.scrollLeft += speed;
+
+      // infinite loop
+      if (el.scrollLeft >= el.scrollWidth / 2) {
+        el.scrollLeft = 0;
+      }
+    }
+
+    animationId = requestAnimationFrame(loop);
+  };
+
+  animationId = requestAnimationFrame(loop);
+
+  // pause/resume helpers
+  const pause = () => (paused = true);
+  const resume = () => (paused = false);
+
+  // hover + touch pause
+  el.addEventListener("mouseenter", pause);
+  el.addEventListener("mouseleave", resume);
+  el.addEventListener("touchstart", pause);
+  el.addEventListener("touchend", resume);
+
+  // resume when user scrolls back into view
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        paused = false; // restart when visible again
+      }
+    },
+    { threshold: 0.2 }
+  );
+
+  observer.observe(el);
+
+  return () => {
+    cancelAnimationFrame(animationId);
+    observer.disconnect();
+
+    el.removeEventListener("mouseenter", pause);
+    el.removeEventListener("mouseleave", resume);
+    el.removeEventListener("touchstart", pause);
+    el.removeEventListener("touchend", resume);
+  };
+}, []);
+
+  // drag support
+  const isDown = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
+  return (
+    <div
+      ref={ref}
+      className="flex gap-6 px-8 overflow-x-auto scroll-smooth
+    cursor-grab active:cursor-grabbing
+    select-none
+    [&::-webkit-scrollbar]:hidden
+    [scrollbar-width:none]"
+      onMouseDown={(e) => {
+        isDown.current = true;
+        startX.current = e.pageX;
+        scrollLeft.current = ref.current!.scrollLeft;
+      }}
+      onMouseLeave={() => (isDown.current = false)}
+      onMouseUp={() => (isDown.current = false)}
+      onMouseMove={(e) => {
+        if (!isDown.current) return;
+        e.preventDefault();
+
+        const walk = (e.pageX - startX.current) * 1.2;
+        ref.current!.scrollLeft = scrollLeft.current - walk;
+      }}
+      onTouchStart={(e) => {
+        startX.current = e.touches[0].pageX;
+        scrollLeft.current = ref.current!.scrollLeft;
+      }}
+      onTouchMove={(e) => {
+        const walk = (e.touches[0].pageX - startX.current) * 1.2;
+        ref.current!.scrollLeft = scrollLeft.current - walk;
+      }}
+    >
+      {[...images, ...images].map((src, i) => (
+        <div
+          key={i}
+          className="h-56 w-80 shrink-0 overflow-hidden rounded-3xl md:h-72 md:w-96"
+        >
+          <img
+            src={src}
+            className="h-full w-full object-cover pointer-events-none"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function TestimonialPixelBackground() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+    ctx.imageSmoothingEnabled = false;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      draw();
+    };
+
+    const draw = () => {
+      const { width, height } = canvas;
+      ctx.clearRect(0, 0, width, height);
+      const grid = 28;
+      for (let x = 0; x < width; x += grid) {
+        for (let y = 0; y < height; y += grid) {
+          ctx.fillStyle = "rgba(180, 55, 120, 0.18)";
+          ctx.fillRect(x, y, 2.5, 2.5);
+        }
+      }
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, []);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full -z-10" />;
+}
+
+// testimonials 
+function TestimonialsCarousel() {
+  const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [key, setKey] = useState(0);
+
+  const next = () => {
+    setDirection(1);
+    setIndex((prev) => (prev + 1) % testimonials.length);
+    setKey((k) => k + 1);
+  };
+
+  const prev = () => {
+    setDirection(-1);
+    setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    setKey((k) => k + 1);
+  };
+
+  const t = testimonials[index];
+
+  return (
+    <section className="relative py-10 md:py-14">
+      <TestimonialPixelBackground />
+      <div className="container mx-auto max-w-5xl px-6">
+
+        {/* HEADING */}
+        <div className="text-center mb-4">
+          <p
+            className="uppercase tracking-[0.35em] font-black font-bold"
+            style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "clamp(0.85rem, 1.4vw, 1.1rem)" }}
+          >
+            Stories
+          </p>
+        </div>
+
+        {/* CARD */}
+        <div className="flex justify-center overflow-hidden">
+          <motion.div
+            key={key}
+            initial={{
+              opacity: 0,
+              rotate: direction === 1 ? 18 : -18,
+              x: direction === 1 ? 320 : -320,
+              y: -60,
+              scale: 0.85,
+            }}
+            animate={{ opacity: 1, rotate: 0, x: 0, y: 0, scale: 1 }}
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              width: "clamp(280px, 48vw, 480px)",
+              borderRadius: 14,
+              overflow: "hidden",
+              boxShadow: "0 8px 32px rgba(217,85,164,0.13), 0 2px 8px rgba(0,0,0,0.07)",
+              border: "1.5px solid #000000",
+            }}
+          >
+            {/* YELLOW BAR */}
+            <div
+              style={{
+                background: "#ffed95",
+                height: "clamp(28px, 5vw, 38px)",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                paddingLeft: "clamp(14px, 4%, 22px)",
+                gap: 7,
+              }}
+            >
+              {/* three dots for fun */}
+              {["#FF8FAB", "#d955a4", "#f0b158"].map((c, i) => (
+                <span
+                  key={i}
+                  style={{
+                    width: 10, height: 10,
+                    borderRadius: "50%",
+                    background: c,
+                    display: "inline-block",
+                  }}
+                />
+              ))}
+            </div>
+
+            {/* PINK BODY */}
+            <div
+              style={{
+                background: "#ffc8e3",
+                padding: "clamp(1.2rem, 6%, 2rem) clamp(1.2rem, 6%, 2rem)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "clamp(0.8rem, 3%, 1.2rem)",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "'Press Start 2P', monospace",
+                  fontWeight: 600,
+                  fontSize: "clamp(0.82rem, 2vw, 1.05rem)",
+                  lineHeight: 1.55,
+                  color: "#1a1a1a",
+                  margin: 0,
+                }}
+              >
+                &ldquo;{t.quote}&rdquo;
+              </p>
+
+              {/* divider */}
+              <div style={{ width: 36, height: 2, background: "#d955a4", borderRadius: 2 }} />
+
+              <div>
+                <p
+                  style={{
+                    fontFamily: "'Montserrat', sans-serif",
+                    fontWeight: 700,
+                    fontSize: "clamp(0.75rem, 1.6vw, 0.92rem)",
+                    color: "#1a1a1a",
+                    margin: 0,
+                  }}
+                >
+                  {t.name}
+                </p>
+                <p
+                  style={{
+                    fontFamily: "'Montserrat', sans-serif",
+                    fontSize: "clamp(0.65rem, 1.3vw, 0.78rem)",
+                    color: "rgb(0, 0, 0)",
+                    margin: "3px 0 0",
+                    fontWeight: 400,
+                  }}
+                >
+                  {t.role}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* ARROWS */}
+        <div className="mt-6 flex justify-center gap-5">
+          {[{ fn: prev, label: "←" }, { fn: next, label: "→" }].map(({ fn, label }) => (
+            <button
+              key={label}
+              onClick={fn}
+              style={{
+                height: 44, width: 44,
+                background: "#fff",
+                border: "1.5px solid #e879c0",
+                borderRadius: 6,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1rem",
+                cursor: "pointer",
+                transition: "transform 0.15s",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.07)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.95)")}
+              onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1.07)")}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
+      </div>
+    </section>
+  );
+}
+// -------- HOME PAGE --------
 function HomePage() {
   return (
     <>
-      {/* HERO — editorial, asymmetric, bold */}
-      <section className="relative isolate overflow-hidden pt-28 pb-24 md:pt-36 md:pb-32">
-        <HeroDecor />
+      <Hero />
 
-        {/* floating sparkles */}
-        <Star className="absolute left-[12%] top-32 h-5 w-5 -rotate-12 fill-current text-[oklch(0.7_0.2_25)] animate-shimmer" />
-        <Star className="absolute right-[14%] top-48 h-4 w-4 fill-current text-[oklch(0.6_0.22_340)] animate-shimmer" style={{ animationDelay: "1s" }} />
-        <Flower2 className="absolute left-[8%] bottom-32 h-7 w-7 text-[oklch(0.65_0.22_15)] animate-float" />
-        <Sparkle className="absolute right-[10%] bottom-40 h-6 w-6 text-[oklch(0.6_0.22_330)] animate-float" style={{ animationDelay: "2s" }} />
+      {/* PICTURES SECTION */}
+      <section className="relative overflow-hidden pt-8 pb-24 bg-[#fdf9f5]">
 
-        <div className="container relative mx-auto max-w-7xl px-6 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif whitespace-nowrap text-[clamp(2.5rem,11vw,9rem)] font-normal leading-[1.15] tracking-tight pb-2"
+        {/* CENTER CREAM / YELLOW GLOW */}
+        <div
+          className="absolute inset-0 z-0"
+          style={{
+            background:
+              "radial-gradient(circle at center, rgba(255,236,179,0.38) 0%, rgba(255,248,220,0.18) 35%, transparent 70%)",
+          }}
+        />
+
+        {/* LEFT PINK EDGE */}
+        <div
+          className="
+            pointer-events-none
+            absolute left-0 top-0
+            h-full w-[22vw]
+            z-0
+          "
+          style={{
+            background:
+              "linear-gradient(to right, rgba(255,120,180,0.22), rgba(255,180,220,0.10), transparent)",
+          }}
+        />
+
+        {/* RIGHT PINK EDGE */}
+        <div
+          className="
+            pointer-events-none
+            absolute right-0 top-0
+            h-full w-[22vw]
+            z-0
+          "
+          style={{
+            background:
+              "linear-gradient(to left, rgba(245,130,255,0.20), rgba(255,190,230,0.08), transparent)",
+          }}
+        />
+
+        
+        {/* HEADING */}
+        <div className="relative z-10 mb-12 flex flex-col items-center text-center pt-0">
+
+          <p className="text-xs md:text-lg uppercase tracking-[0.3em] text-[#d955a4] font-bold"
+          style={{ fontFamily: "'Montserrat', 'sans serif'"}}
           >
-            <span className="text-foreground/90">Girls </span>
-            <span className="italic text-gradient-sunset">Leading </span>
-            <span className="text-foreground/90">Tech</span>
-          </motion.h1>
+            COMMUNITY MOMENTS
+          </p>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="mx-auto mt-7 max-w-2xl text-base text-muted-foreground md:text-lg"
-          >
-            Mentorship, scholarships, hackathons and a sisterhood of builders —
-            everything a woman in tech needs to learn, ship and shine, all in
-            one beautiful place.
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-10 flex flex-wrap items-center justify-center gap-4"
-          >
-            <Link
-              to="/join"
-              className="group flex items-center gap-2 rounded-full gradient-primary px-7 py-3.5 text-sm font-semibold text-white shadow-soft transition hover:scale-105"
-            >
-              Join the community
-              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-            </Link>
-            <Link
-              to="/resources"
-              className="rounded-full glass-strong px-7 py-3.5 text-sm font-semibold text-foreground shadow-soft transition hover:bg-white"
-            >
-              Explore resources
-            </Link>
-          </motion.div>
-
-          {/* mini stats strip */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="mx-auto mt-14 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4"
-          >
-            {stats.map((s) => (
-              <div key={s.label} className="rounded-2xl glass px-4 py-4 text-center shadow-soft">
-                <div className="font-serif text-2xl text-gradient">
-                  {s.value.toLocaleString()}{s.suffix}
-                </div>
-                <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">{s.label}</div>
-              </div>
-            ))}
-          </motion.div>
         </div>
+
+        {/* MARQUEE */}
+        <div className="relative z-10">
+          <AutoCarousel images={galleryImages} />
+        </div>
+
       </section>
 
-      {/* PICTURES MARQUEE */}
-      <section className="relative pb-20">
-        <Marquee>
-          {galleryImages.map((src, i) => (
-            <div
-              key={i}
-              className="h-56 w-80 shrink-0 overflow-hidden rounded-3xl shadow-soft md:h-72 md:w-96"
-            >
-              <img src={src} alt="" loading="lazy" className="h-full w-full object-cover" />
-            </div>
-          ))}
-        </Marquee>
-      </section>
-
+    
       {/* ABOUT / VISION / MISSION */}
       <section className="relative py-20">
         <div className="container mx-auto max-w-6xl px-6">
@@ -277,31 +578,7 @@ function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="relative py-20">
-        <div className="container mx-auto max-w-6xl px-6">
-          <SectionHeading
-            eyebrow="Stories"
-            title="Glow-ups, in their own words."
-          />
-          <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {testimonials.map((t, idx) => (
-              <GlassCard
-                key={t.id}
-                glow
-                className="p-6 animate-fade-up"
-                style={{ animationDelay: `${idx * 0.1}s` }}
-              >
-                <div className="text-3xl text-primary/40 font-display leading-none">"</div>
-                <p className="text-sm text-foreground/85">{t.quote}</p>
-                <div className="mt-5 border-t border-primary/10 pt-4">
-                  <div className="font-semibold">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">{t.role}</div>
-                </div>
-              </GlassCard>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialsCarousel />
 
       {/* COLLEGES REACHED */}
       <section className="relative py-20">
