@@ -38,3 +38,13 @@ export default defineConfig({
     plugins: [chatApiDevPlugin()],
   },
 });
+export default defineConfig({
+    cloudflare: false, // Disables Cloudflare Worker generation
+    tanstackStart: {
+        server: {
+            preset: "vercel", // Tells Nitro to build for Vercel Serverless Functions
+        },
+        spa: {} // Enable SPA mode to generate a static HTML shell for Vercel
+    }
+});
+
