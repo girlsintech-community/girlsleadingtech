@@ -544,15 +544,16 @@ function HomePage() {
           </section>
 
       {/* SPEAKERS — featured static grid */}
-     <div className="mt-6 md:mt-10">
+     <div className="my-10 md:my-16 lg:my-24">
           <SpeakersShowcase />
       </div>
-            
-      {/* TESTIMONIALS */}
-      <TestimonialsGrid />
+        
 
       {/* COLLEGES REACHED */}
       <CollegesReachedSection />
+
+         {/* TESTIMONIALS */}
+      <TestimonialsGrid />
 
       {/* PARTNERS — smooth marquee */}
         <PartnersSection
