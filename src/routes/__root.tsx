@@ -3,6 +3,7 @@ import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { ScrollToTop } from "@/components/site/ScrollToTop";
 import Chatbot from "@/components/Chatbot";
+import FeedbackButton from "@/components/FeedbackButton";
 import { HeadContent, Scripts, createRootRoute, Link } from "@tanstack/react-router";
 import appCss from "../styles.css?url";
 
@@ -83,6 +84,7 @@ function RootComponent() {
       <Footer />
       <ScrollToTop />
       <Chatbot />
+      <FeedbackButton />
     </>
   );
 }
