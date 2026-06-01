@@ -1,15 +1,25 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { motion } from "motion/react";
+import { useEffect, useRef } from "react";
+import { motion, useScroll, useMotionValueEvent } from "motion/react";
 import { GlassCard } from "@/components/site/GlassCard";
 import { SectionHeading } from "@/components/site/SectionHeading";
 import { Marquee } from "@/components/site/Marquee";
 import { SpeakerCard } from "@/components/site/SpeakerCard";
 import { ArrowRight, Heart, Users, Sparkle, Star, Flower2, Linkedin } from "lucide-react";
+import FAQ from "@/components/site/FAQ";
 import { stats } from "@/data/stats";
 import { initiatives } from "@/data/initiatives";
 import { speakers, testimonials } from "@/data/community";
 import { communityPartners, industryPartners, ecosystemPartners } from "@/data/partners";
+import { useState } from "react";
 import { colleges } from "@/data/colleges";
+import testimonialCard from "@/assets/testimonial-card.png"
+import LborderCard from "@/components/ui/LborderCard";
+import { InitiativesScrapbook } from "./initiatives";
+import pixelBtn from "@/assets/pixel-button.png"
+import presenting from "@/assets/characters/main-mascot/presenting.png"
+
+
 import gallery1 from "@/assets/gallery-1.webp";
 import gallery2 from "@/assets/gallery-2.webp";
 import gallery3 from "@/assets/gallery-3.webp";
@@ -19,6 +29,7 @@ import gallery6 from "@/assets/gallery-6.webp";
 import gallery7 from "@/assets/gallery-7.webp";
 import gallery8 from "@/assets/gallery-8.webp";
 import gallery9 from "@/assets/gallery-9.webp";
+import Hero from "@/components/home/hero";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -40,6 +51,8 @@ const initiativeStyles: Record<string, { grad: string; ring: string; chip: strin
   violet:   { grad: "from-purple-500 via-fuchsia-500 to-pink-500", ring: "ring-purple-300/50",   chip: "bg-purple-100 text-purple-700",     emoji: "🔮" },
 };
 
+<style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');`}</style>
+
 function HeroDecor() {
   return (
     <>
@@ -51,196 +64,636 @@ function HeroDecor() {
   );
 }
 
-function HomePage() {
+// auto photo carousel + user constrolled
+function AutoCarousel({ images }: { images: string[] }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+useEffect(() => {
+  const el = ref.current;
+  if (!el) return;
+
+  let speed = 1.4; // faster scroll
+  let animationId: number;
+  let paused = false;
+
+  const loop = () => {
+    if (!el) return;
+
+    if (!paused) {
+      el.scrollLeft += speed;
+
+      // infinite loop
+      if (el.scrollLeft >= el.scrollWidth / 2) {
+        el.scrollLeft = 0;
+      }
+    }
+
+    animationId = requestAnimationFrame(loop);
+  };
+
+  animationId = requestAnimationFrame(loop);
+
+  // pause/resume helpers
+  const pause = () => (paused = true);
+  const resume = () => (paused = false);
+
+  // hover + touch pause
+  el.addEventListener("mouseenter", pause);
+  el.addEventListener("mouseleave", resume);
+  el.addEventListener("touchstart", pause);
+  el.addEventListener("touchend", resume);
+
+  // resume when user scrolls back into view
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) {
+        paused = false; // restart when visible again
+      }
+    },
+    { threshold: 0.2 }
+  );
+
+  observer.observe(el);
+
+  return () => {
+    cancelAnimationFrame(animationId);
+    observer.disconnect();
+
+    el.removeEventListener("mouseenter", pause);
+    el.removeEventListener("mouseleave", resume);
+    el.removeEventListener("touchstart", pause);
+    el.removeEventListener("touchend", resume);
+  };
+}, []);
+
+  // drag support
+  const isDown = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+
   return (
-    <>
-      {/* HERO — editorial, asymmetric, bold */}
-      <section className="relative isolate overflow-hidden pt-28 pb-24 md:pt-36 md:pb-32">
-        <HeroDecor />
+    <div
+      ref={ref}
+      className="flex gap-6 px-8 overflow-x-auto scroll-smooth
+    cursor-grab active:cursor-grabbing
+    select-none
+    [&::-webkit-scrollbar]:hidden
+    [scrollbar-width:none]"
+      onMouseDown={(e) => {
+        isDown.current = true;
+        startX.current = e.pageX;
+        scrollLeft.current = ref.current!.scrollLeft;
+      }}
+      onMouseLeave={() => (isDown.current = false)}
+      onMouseUp={() => (isDown.current = false)}
+      onMouseMove={(e) => {
+        if (!isDown.current) return;
+        e.preventDefault();
 
-        {/* floating sparkles */}
-        <Star className="absolute left-[12%] top-32 h-5 w-5 -rotate-12 fill-current text-[oklch(0.7_0.2_25)] animate-shimmer" />
-        <Star className="absolute right-[14%] top-48 h-4 w-4 fill-current text-[oklch(0.6_0.22_340)] animate-shimmer" style={{ animationDelay: "1s" }} />
-        <Flower2 className="absolute left-[8%] bottom-32 h-7 w-7 text-[oklch(0.65_0.22_15)] animate-float" />
-        <Sparkle className="absolute right-[10%] bottom-40 h-6 w-6 text-[oklch(0.6_0.22_330)] animate-float" style={{ animationDelay: "2s" }} />
+        const walk = (e.pageX - startX.current) * 1.2;
+        ref.current!.scrollLeft = scrollLeft.current - walk;
+      }}
+      onTouchStart={(e) => {
+        startX.current = e.touches[0].pageX;
+        scrollLeft.current = ref.current!.scrollLeft;
+      }}
+      onTouchMove={(e) => {
+        const walk = (e.touches[0].pageX - startX.current) * 1.2;
+        ref.current!.scrollLeft = scrollLeft.current - walk;
+      }}
+    >
+      {[...images, ...images].map((src, i) => (
+        <div
+          key={i}
+          className="h-56 w-80 shrink-0 overflow-hidden rounded-3xl md:h-72 md:w-96"
+        >
+          <img
+            src={src}
+            className="h-full w-full object-cover pointer-events-none"
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
 
-        <div className="container relative mx-auto max-w-7xl px-6 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-            className="font-serif whitespace-nowrap text-[clamp(2.5rem,11vw,9rem)] font-normal leading-[1.15] tracking-tight pb-2"
+function TestimonialPixelBackground() {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d")!;
+    ctx.imageSmoothingEnabled = false;
+
+    const resize = () => {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      draw();
+    };
+
+    const draw = () => {
+      const { width, height } = canvas;
+      ctx.clearRect(0, 0, width, height);
+      const grid = 28;
+      for (let x = 0; x < width; x += grid) {
+        for (let y = 0; y < height; y += grid) {
+          ctx.fillStyle = "rgba(180, 55, 120, 0.18)";
+          ctx.fillRect(x, y, 2.5, 2.5);
+        }
+      }
+    };
+
+    resize();
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, []);
+
+  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full -z-10" />;
+}
+
+{/* testimonial carousel */} 
+function TestimonialsCarousel() {
+  const [index, setIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [key, setKey] = useState(0);
+
+  const next = () => {
+    setDirection(1);
+    setIndex((prev) => (prev + 1) % testimonials.length);
+    setKey((k) => k + 1);
+  };
+
+  const prev = () => {
+    setDirection(-1);
+    setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+    setKey((k) => k + 1);
+  };
+
+  const t = testimonials[index];
+
+  return (
+    <section className="relative py-10 md:py-14">
+      <TestimonialPixelBackground />
+      <div className="container mx-auto max-w-5xl px-6">
+
+        {/* HEADING */}
+        <div className="text-center mb-4">
+          <p
+            className="uppercase tracking-[0.35em] font-black font-bold"
+            style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "clamp(0.85rem, 1.4vw, 1.1rem)" }}
           >
-            <span className="text-foreground/90">Girls </span>
-            <span className="italic text-gradient-sunset">Leading </span>
-            <span className="text-foreground/90">Tech</span>
-          </motion.h1>
+            Stories
+          </p>
+        </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="mx-auto mt-7 max-w-2xl text-base text-muted-foreground md:text-lg"
-          >
-            Mentorship, scholarships, hackathons and a sisterhood of builders —
-            everything a woman in tech needs to learn, ship and shine, all in
-            one beautiful place.
-          </motion.p>
-
+        {/* CARD */}
+        <div className="flex justify-center overflow-hidden">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-10 flex flex-wrap items-center justify-center gap-4"
+            key={key}
+            initial={{
+              opacity: 0,
+              rotate: direction === 1 ? 18 : -18,
+              x: direction === 1 ? 320 : -320,
+              y: -60,
+              scale: 0.85,
+            }}
+            animate={{ opacity: 1, rotate: 0, x: 0, y: 0, scale: 1 }}
+            transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+            style={{
+              width: "clamp(280px, 48vw, 480px)",
+              borderRadius: 14,
+              overflow: "hidden",
+              boxShadow: "0 8px 32px rgba(217,85,164,0.13), 0 2px 8px rgba(0,0,0,0.07)",
+              border: "1.5px solid #000000",
+            }}
           >
-            <Link
-              to="/join"
-              className="group flex items-center gap-2 rounded-full gradient-primary px-7 py-3.5 text-sm font-semibold text-white shadow-soft transition hover:scale-105"
+            {/* YELLOW BAR */}
+            <div
+              style={{
+                background: "#ffed95",
+                height: "clamp(28px, 5vw, 38px)",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                paddingLeft: "clamp(14px, 4%, 22px)",
+                gap: 7,
+              }}
             >
-              Join the community
-              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-            </Link>
-            <Link
-              to="/resources"
-              className="rounded-full glass-strong px-7 py-3.5 text-sm font-semibold text-foreground shadow-soft transition hover:bg-white"
-            >
-              Explore resources
-            </Link>
-          </motion.div>
+              {/* three dots for fun */}
+              {["#FF8FAB", "#d955a4", "#f0b158"].map((c, i) => (
+                <span
+                  key={i}
+                  style={{
+                    width: 10, height: 10,
+                    borderRadius: "50%",
+                    background: c,
+                    display: "inline-block",
+                  }}
+                />
+              ))}
+            </div>
 
-          {/* mini stats strip */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            className="mx-auto mt-14 grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-4"
-          >
-            {stats.map((s) => (
-              <div key={s.label} className="rounded-2xl glass px-4 py-4 text-center shadow-soft">
-                <div className="font-serif text-2xl text-gradient">
-                  {s.value.toLocaleString()}{s.suffix}
-                </div>
-                <div className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">{s.label}</div>
+            {/* PINK BODY */}
+            <div
+              style={{
+                background: "#ffc8e3",
+                padding: "clamp(1.2rem, 6%, 2rem) clamp(1.2rem, 6%, 2rem)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "clamp(0.8rem, 3%, 1.2rem)",
+              }}
+            >
+              <p
+                style={{
+                  fontFamily: "'Press Start 2P', monospace",
+                  fontWeight: 600,
+                  fontSize: "clamp(0.82rem, 2vw, 1.05rem)",
+                  lineHeight: 1.55,
+                  color: "#1a1a1a",
+                  margin: 0,
+                }}
+              >
+                &ldquo;{t.quote}&rdquo;
+              </p>
+
+              {/* divider */}
+              <div style={{ width: 36, height: 2, background: "#d955a4", borderRadius: 2 }} />
+
+              <div>
+                <p
+                  style={{
+                    fontFamily: "'Montserrat', sans-serif",
+                    fontWeight: 700,
+                    fontSize: "clamp(0.75rem, 1.6vw, 0.92rem)",
+                    color: "#1a1a1a",
+                    margin: 0,
+                  }}
+                >
+                  {t.name}
+                </p>
+                <p
+                  style={{
+                    fontFamily: "'Montserrat', sans-serif",
+                    fontSize: "clamp(0.65rem, 1.3vw, 0.78rem)",
+                    color: "rgb(0, 0, 0)",
+                    margin: "3px 0 0",
+                    fontWeight: 400,
+                  }}
+                >
+                  {t.role}
+                </p>
               </div>
-            ))}
+            </div>
           </motion.div>
         </div>
-      </section>
 
-      {/* PICTURES MARQUEE */}
-      <section className="relative pb-20">
-        <Marquee>
-          {galleryImages.map((src, i) => (
-            <div
-              key={i}
-              className="h-56 w-80 shrink-0 overflow-hidden rounded-3xl shadow-soft md:h-72 md:w-96"
+        {/* ARROWS */}
+        <div className="mt-6 flex justify-center gap-5">
+          {[{ fn: prev, label: "←" }, { fn: next, label: "→" }].map(({ fn, label }) => (
+            <button
+              key={label}
+              onClick={fn}
+              style={{
+                height: 44, width: 44,
+                background: "#fff",
+                border: "1.5px solid #e879c0",
+                borderRadius: 6,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "1rem",
+                cursor: "pointer",
+                transition: "transform 0.15s",
+                boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.07)")}
+              onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+              onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.95)")}
+              onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1.07)")}
             >
-              <img src={src} alt="" loading="lazy" className="h-full w-full object-cover" />
-            </div>
+              {label}
+            </button>
           ))}
-        </Marquee>
+        </div>
+
+      </div>
+    </section>
+  );
+}
+
+{/* grid bg */}
+function GridBackground() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+      
+      {/* LEFT GLOW (unchanged) */}
+      <div
+        className="absolute left-[-12%] top-[-10%] h-[120%] w-[35vw] blur-3xl opacity-80"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,120,180,0.28), transparent 75%)",
+        }}
+      />
+
+      {/* RIGHT GLOW (unchanged) */}
+      <div
+        className="absolute right-[-12%] top-[-10%] h-[120%] w-[35vw] blur-3xl opacity-80"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(240,120,255,0.24), transparent 75%)",
+        }}
+      />
+
+      {/* CENTER CREAM GLOW (unchanged) */}
+      <div
+        className="absolute left-1/2 top-1/2 h-[30rem] w-[50rem] -translate-x-1/2 -translate-y-1/2 blur-3xl"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,240,190,0.28), transparent 72%)",
+        }}
+      />
+
+      {/* GRID LAYER (added on top but subtle so it doesn't kill glow) */}
+      <div
+        className="absolute inset-0 opacity-60"
+        style={{
+          backgroundImage: `
+            linear-gradient(rgba(72, 38, 96, 0.13) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(160, 100, 200, 0.13) 1px, transparent 1px)
+          `,
+          backgroundSize: "22px 22px",
+        }}
+      />
+    </div>
+  );
+}
+
+
+// -------- HOME PAGE --------
+function HomePage() {
+  const initiativesSectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: initiativesScrollYProgress } = useScroll({
+    target: initiativesSectionRef,
+    offset: ["start start", "end end"],
+  });
+  
+  const [animateBar, setAnimateBar] = useState(false);
+
+  useMotionValueEvent(initiativesScrollYProgress, "change", (latest) => {
+    if (latest > 0.01 && !animateBar) {
+      setAnimateBar(true);
+    }
+  });
+
+  useEffect(() => {
+    if (initiativesScrollYProgress.get() > 0.01) {
+      setAnimateBar(true);
+    }
+  }, [initiativesScrollYProgress]);
+
+  return (
+    <>
+      <Hero />
+
+      {/* PICTURES SECTION */}
+      <section className="relative py-18 pb-0 overflow-hidden">
+        <GridBackground />
+        
+        
+        {/* HEADING */}
+        <div className="relative z-10 mb-12 flex flex-col items-center text-center pt-0">
+
+          <p className="text-xs md:text-lg uppercase tracking-[0.3em] text-[#d955a4] font-bold"
+          style={{ fontFamily: "'Montserrat', 'sans serif'"}}
+          >
+            COMMUNITY MOMENTS
+          </p>
+
+        </div>
+
+        {/* MARQUEE */}
+        <div className="relative z-10">
+          <AutoCarousel images={galleryImages} />
+        </div>
+
       </section>
 
       {/* ABOUT / VISION / MISSION */}
-      <section className="relative py-20">
-        <div className="container mx-auto max-w-6xl px-6">
-          <SectionHeading
-            eyebrow="About us"
-            title="Built for women in tech."
-            description="Girls Leading Tech is a movement for every girl who's ever wondered if she belongs in this room. Spoiler: she leads it."
-          />
-          <div className="mt-14 grid gap-6 md:grid-cols-2">
-            <GlassCard glow className="p-8 md:p-10">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-primary shadow-soft">
-                <Heart className="h-5 w-5 text-white" />
-              </div>
-              <h3 className="font-display text-2xl">Our Vision</h3>
-              <p className="mt-3 text-muted-foreground">
-                A world where every girl who dreams in code, design or data has a
-                community, a mentor and a runway to lead. No gatekeeping. Just
-                glow-ups.
-              </p>
-            </GlassCard>
-            <GlassCard glow className="p-8 md:p-10">
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl gradient-sunset shadow-soft">
-                <Users className="h-5 w-5 text-white" />
-              </div>
-              <h3 className="font-display text-2xl">Our Mission</h3>
-              <p className="mt-3 text-muted-foreground">
-                To equip 100,000 women in tech across India with the resources,
-                mentorship and confidence to ship the products and lead the teams
-                of tomorrow.
-              </p>
-            </GlassCard>
+<section className="relative py-24 overflow-hidden">
+  <GridBackground />
+
+  <div className="relative container mx-auto max-w-6xl px-6">
+
+    {/* Heading */}
+    <div className="mb-12 text-center">
+
+      <p
+        className="text-xs md:text-lg uppercase tracking-[0.3em] text-[#d955a4] font-bold"
+        style={{
+          fontFamily: "'Montserrat', sans-serif",
+        }}
+      >
+        ABOUT US
+      </p>
+
+      <h2 className="font-sans text-4xl mt-4 md:text-5xl font-bold text-foreground leading-tight">
+        Built for{" "}
+        <span
+          className="mx-2 italic font-medium text-[#5b2b4a]"
+          style={{
+            fontFamily: "'Playfair Display', serif",
+          }}
+        >
+          women
+        </span>{" "}
+        in tech.
+      </h2>
+    </div>
+
+    {/* Cards */}
+    <div className="grid gap-6 md:grid-cols-2">
+
+      {/* VISION */}
+      <motion.div
+        initial={{
+          opacity: 0,
+          x: -70,
+          y: -80,
+          rotate: -3,
+          scale: 0.92,
+        }}
+        whileInView={{
+          opacity: 1,
+          x: 0,
+          y: 0,
+          rotate: 0,
+          scale: 1,
+        }}
+    
+        viewport={{
+          once: true,
+          amount: 0.6,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 90,
+          damping: 18,
+          delay: 0.1,
+        }}
+      >
+        <LborderCard>
+
+          <h3
+            className="text-2xl font-bold text-[#d955a4]"
+            style={{
+              fontFamily: "'Press Start 2P', monospace",
+            }}
+          >
+            Our Vision
+          </h3>
+
+          <p className="mt-4 font-sans text-black leading-relaxed">
+            A world where every girl who dreams in code, design or data
+            has a community, a mentor and a runway to lead.
+            No gatekeeping. Just glow-ups.
+          </p>
+
+        </LborderCard>
+      </motion.div>
+
+      {/* MISSION */}
+      <motion.div
+        initial={{
+          opacity: 0,
+          x: 70,
+          y: 80,
+          rotate: 3,
+          scale: 0.92,
+        }}
+        whileInView={{
+          opacity: 1,
+          x: 0,
+          y: 0,
+          rotate: 0,
+          scale: 1,
+        }}
+ 
+      
+        viewport={{
+          once: true,
+          amount: 0.6,
+        }}
+        transition={{
+          type: "spring",
+          stiffness: 90,
+          damping: 18,
+          delay: 0.2,
+        }}
+      >
+        <LborderCard>
+
+          <h3
+            className="text-2xl font-bold text-[#d955a4]"
+            style={{
+              fontFamily: "'Press Start 2P', monospace",
+            }}
+          >
+            Our Mission
+          </h3>
+
+          <p className="mt-4 font-sans text-black leading-relaxed">
+            To equip 100,000 women in tech across India with the
+            resources, mentorship and confidence to ship the products
+            and lead the teams of tomorrow.
+          </p>
+
+              </LborderCard>
+            </motion.div>
+
           </div>
         </div>
       </section>
 
-      {/* INITIATIVES — bolder, animated, creative cards */}
-      <section className="relative py-20">
-        <div className="container mx-auto max-w-7xl px-6">
-          <SectionHeading
-            eyebrow="Initiatives"
-            title="Programs powering the movement."
-            description="From flagship summits to year-round fellowships, every initiative is designed to push you forward."
-          />
-          <div className="mt-14 grid gap-7 sm:grid-cols-2 lg:grid-cols-3">
-            {initiatives.slice(0, 6).map((i, idx) => {
-              const s = initiativeStyles[i.color] ?? initiativeStyles.pink;
-              return (
-                <Link
-                  key={i.slug}
-                  to="/initiatives/$slug"
-                  params={{ slug: i.slug }}
-                  className="group relative block animate-fade-up"
-                  style={{ animationDelay: `${idx * 0.07}s` }}
-                >
-                  {/* gradient halo */}
-                  <div className={`pointer-events-none absolute -inset-[2px] rounded-[2rem] bg-gradient-to-br ${s.grad} opacity-60 blur-md transition-all duration-500 group-hover:opacity-100 group-hover:blur-lg`} />
 
-                  <div className={`relative h-full overflow-hidden rounded-[1.85rem] bg-white/85 p-7 backdrop-blur-xl ring-1 ${s.ring} shadow-soft transition-all duration-500 group-hover:-translate-y-2 group-hover:shadow-soft`}>
-                    {/* decorative blob */}
-                    <div className={`pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full bg-gradient-to-br ${s.grad} opacity-30 blur-2xl transition-transform duration-700 group-hover:scale-125`} />
-                    {/* big rotating emoji */}
-                    <div className="pointer-events-none absolute -right-2 -top-2 select-none text-7xl opacity-20 transition-all duration-700 group-hover:rotate-12 group-hover:opacity-40">
-                      {s.emoji}
-                    </div>
+      {/* INITIATIVES — scrapbook stacked cards */}
+      <section ref={initiativesSectionRef} className="relative w-full md:min-h-[280vh] py-16 md:py-24 overflow-visible">
+        <style>{`@import url('https://fonts.cdnfonts.com/css/satoshi');`}</style>
+        <div className="relative md:sticky md:top-[10vh] md:h-[76vh] w-full container mx-auto max-w-7xl px-6 flex flex-col justify-start gap-2 md:gap-3">
+          <div className="relative w-full overflow-visible select-none py-0 md:py-1">
+            <div className="relative inline-block overflow-visible pl-2 md:pl-4 mb-4 md:mb-6">
+              {/* Animated Pink Bar */}
+              <motion.div
+                initial={{ scaleX: 0 }}
+                animate={animateBar ? { scaleX: 1 } : { scaleX: 0 }}
+                transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+                style={{ originX: 0 }}
+                className="
+                  absolute
+                  left-[-2rem] md:left-[-4rem]
+                  right-[-1rem] md:right-[-2rem]
+                  top-1/2 -translate-y-1/2
+                  h-[110%]
+                  bg-[#d955a4]/85
+                  z-0
+                "
+              />
 
-                    <div className="relative">
-                      <span className={`inline-block rounded-full ${s.chip} px-3 py-1 text-[10px] font-bold uppercase tracking-widest`}>
-                        Program {String(idx + 1).padStart(2, "0")}
-                      </span>
-                      <h3 className="mt-5 font-serif text-3xl leading-tight">{i.name}</h3>
-                      <p className={`mt-2 text-sm font-semibold bg-gradient-to-r ${s.grad} bg-clip-text text-transparent`}>
-                        {i.tagline}
-                      </p>
-                      <p className="mt-4 text-sm text-muted-foreground line-clamp-3">
-                        {i.description}
-                      </p>
+              {/* Heading */}
+              <motion.h2
+                initial={{ x: -60, opacity: 0 }}
+                animate={animateBar ? { x: 0, opacity: 1 } : { x: -60, opacity: 0 }}
+                transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+                className="relative z-10 font-sans text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-[0.15em] text-gray-900 dark:text-white leading-none"
+              >
+                INITIATIVES
+              </motion.h2>
 
-                      <div className="mt-6 flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-foreground">
-                          Explore
-                          <span className={`inline-block rounded-full bg-gradient-to-br ${s.grad} p-1.5 text-white shadow-soft transition-transform duration-300 group-hover:translate-x-1 group-hover:rotate-[-12deg]`}>
-                            <ArrowRight className="h-3.5 w-3.5" />
-                          </span>
-                        </span>
-                        <span className="text-[10px] uppercase tracking-widest text-muted-foreground">GLT</span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              );
-            })}
+            </div>
           </div>
 
-          <div className="mt-10 text-center">
-            <Link to="/initiatives" className="inline-flex items-center gap-1.5 text-sm font-semibold text-primary hover:underline">
-              See all initiatives <ArrowRight className="h-3.5 w-3.5" />
+          <InitiativesScrapbook scrollProgress={initiativesScrollYProgress} />
+
+          {/* SEE ALL INITIATIVES BUTTON */}
+          <div className="relative z-[100] mt-1 md:mt-2 flex justify-center items-center w-full px-4">
+            <Link
+              to="/initiatives"
+              className="relative inline-block z-[100] transition-transform duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+            >
+              <img
+                src={pixelBtn}
+                alt="See All Initiatives"
+                className="
+                  w-[140px]
+                  sm:w-[160px]
+                  md:w-[180px]
+                  lg:w-[200px]
+                  h-auto
+                  object-contain
+                "
+              />
+
+              <span
+                className="
+                  absolute inset-0
+                  flex items-center justify-center
+                  text-black text-center font-bold
+                  pointer-events-none
+                "
+                style={{
+                  fontFamily: "'Press Start 2P', monospace",
+                  fontSize: "clamp(0.7rem, 1.0vw, 1.1rem)",
+                  letterSpacing: "0.08em",
+                  lineHeight: "1.0",
+                }}
+              >
+                See All <br className="sm:hidden" />
+                Initiatives →
+              </span>
             </Link>
           </div>
-        </div>
-      </section>
+            </div>
+          </section>
 
       {/* SPEAKERS — featured static grid */}
       <section className="relative py-20">
@@ -277,31 +730,7 @@ function HomePage() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="relative py-20">
-        <div className="container mx-auto max-w-6xl px-6">
-          <SectionHeading
-            eyebrow="Stories"
-            title="Glow-ups, in their own words."
-          />
-          <div className="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            {testimonials.map((t, idx) => (
-              <GlassCard
-                key={t.id}
-                glow
-                className="p-6 animate-fade-up"
-                style={{ animationDelay: `${idx * 0.1}s` }}
-              >
-                <div className="text-3xl text-primary/40 font-display leading-none">"</div>
-                <p className="text-sm text-foreground/85">{t.quote}</p>
-                <div className="mt-5 border-t border-primary/10 pt-4">
-                  <div className="font-semibold">{t.name}</div>
-                  <div className="text-xs text-muted-foreground">{t.role}</div>
-                </div>
-              </GlassCard>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialsCarousel />
 
       {/* COLLEGES REACHED */}
       <section className="relative py-20">
@@ -348,7 +777,7 @@ function HomePage() {
             <Marquee key={group.label} reverse={gi % 2 === 1}>
               {group.list.map((p) => {
                 const inner = (
-                  <div className="flex h-24 w-44 shrink-0 items-center justify-center rounded-2xl glass p-4 shadow-soft transition hover:-translate-y-1 hover:shadow-soft">
+                  <div className="flex h-24 w-44 shrink-0 items-center justify-center    glass p-4 shadow-soft transition hover:-translate-y-1 hover:shadow-soft">
                     {p.logo ? (
                       <img src={p.logo} alt={p.name} loading="lazy" className="max-h-14 max-w-[80%] object-contain" />
                     ) : (
@@ -373,6 +802,9 @@ function HomePage() {
           </Link>
         </div>
       </section>
+
+      {/* FAQ */}
+      <FAQ />
 
       {/* CTA */}
       <section className="relative py-24">
