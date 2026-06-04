@@ -7,7 +7,7 @@ import star from "@/assets/stickers/star.png";
 import washiTape from "@/assets/stickers/washi-tape.png";
 import paperClip from "@/assets/stickers/paper-clip.png";
 import smiley from "@/assets/stickers/smiley.png";
-import mascotPresenting from "@/assets/characters/main-mascot/presenting.png";
+import mascotPresenting from "@/assets/main-mascot/presenting.png";
 
 export function Footer() {
   return (

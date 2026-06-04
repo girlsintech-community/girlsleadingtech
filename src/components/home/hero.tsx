@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import type { Variants } from "framer-motion";
 import { Link } from "@tanstack/react-router";
 import { stats } from "@/data/stats";
-import mascot from "@/assets/characters/main-mascot/idle.png";
+import mascot from "@/assets/main-mascot/idle.png";
 import pixelBtn from "@/assets/pixel-button.png";
 
 
@@ -270,8 +270,8 @@ export default function Hero() {
       <InteractivePixelBackground />
 
       {/* LEFT PINK EDGE */}
-<div
-  className="
+    <div
+    className="
     pointer-events-none
     absolute left-0 top-0
     h-full w-[22vw]

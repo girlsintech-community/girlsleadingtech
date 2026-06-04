@@ -1,144 +1,10 @@
 import { useEffect, useState, useRef } from "react";
 import { motion } from "motion/react";
 import { testimonials } from "@/data/community";
-import mascotImpact from "@/assets/characters/main-mascot/showing-impact.png";
+import mascotImpact from "@/assets/main-mascot/showing-impact.png";
+import DotBackground from "@/components/shared/DotBackground";
+import RetroCard from "../shared/RetroCard";
 
-function TestimonialPixelBackground() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d")!;
-    ctx.imageSmoothingEnabled = false;
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      draw();
-    };
-
-    const draw = () => {
-      const { width, height } = canvas;
-      ctx.clearRect(0, 0, width, height);
-      const grid = 28;
-      for (let x = 0; x < width; x += grid) {
-        for (let y = 0; y < height; y += grid) {
-          ctx.fillStyle = "rgba(180, 55, 120, 0.18)";
-          ctx.fillRect(x, y, 2.5, 2.5);
-        }
-      }
-    };
-
-    resize();
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
-  }, []);
-
-  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full z-0 pointer-events-none" />;
-}
-
-interface CardProps {
-  quote: string;
-  name: string;
-  role: string;
-  className?: string;
-  style?: React.CSSProperties;
-}
-
-function TestimonialCard({ quote, name, role, className = "", style }: CardProps) {
-  return (
-    <div
-      className={`
-        flex flex-col 
-        rounded-[16px]
-        overflow-hidden
-        border-2 border-black
-        bg-[#ffc8e3]
-        w-[320px] h-[340px]
-        shrink-0
-        transition-all duration-300 ease-out
-        hover:scale-[1.05] hover:z-30 hover:shadow-[0_20px_40px_rgba(217,85,164,0.25),_0_8px_16px_rgba(0,0,0,0.12)]
-        relative
-        z-10
-        ${className}
-      `}
-      style={{
-        boxShadow: "0 8px 24px rgba(217,85,164,0.12), 0 4px 10px rgba(0,0,0,0.06)",
-        ...style,
-      }}
-    >
-      {/* YELLOW BAR */}
-      <div
-        className="w-full flex items-center shrink-0 bg-[#ffed95] border-b-2 border-black px-4"
-        style={{
-          minHeight: "36px",
-          height: "36px",
-          gap: 8,
-        }}
-      >
-        {["#FF8FAB", "#d955a4", "#f0b158"].map((c, i) => (
-          <span
-            key={i}
-            className="rounded-full shrink-0 border border-black/10"
-            style={{
-              width: 10,
-              height: 10,
-              background: c,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* PINK BODY */}
-      <div
-        className="flex-1 flex flex-col justify-start bg-[#ffc8e3] p-6 sm:p-7 gap-5"
-      >
-        <p
-          className="text-gray-900 font-bold"
-          style={{
-            fontFamily: "'Press Start 2P', monospace",
-            fontWeight: 700,
-            fontSize: "clamp(0.74rem, 1.4vw, 0.84rem)",
-            lineHeight: 1.8,
-            margin: 0,
-          }}
-        >
-          &ldquo;{quote}&rdquo;
-        </p>
-
-        <div className="flex flex-col gap-3">
-          {/* divider */}
-          <div className="w-10 h-[2.5px] bg-[#d955a4] rounded" />
-
-          <div>
-            <p
-              className="text-gray-900 font-bold"
-              style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontWeight: 700,
-                fontSize: "clamp(0.88rem, 1.7vw, 1.1rem)",
-                margin: 0,
-              }}
-            >
-              {name}
-            </p>
-            <p
-              className="text-gray-900 font-normal mt-1"
-              style={{
-                fontFamily: "'Montserrat', sans-serif",
-                fontSize: "clamp(0.76rem, 1.4vw, 0.9rem)",
-                margin: "4px 0 0",
-              }}
-            >
-              {role}
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function TestimonialsMarquee() {
   const containerRef = useRef<HTMLDivElement | null>(null);
@@ -247,13 +113,52 @@ function TestimonialsMarquee() {
       }}
     >
       {marqueeItems.map((card, idx) => (
-        <TestimonialCard
-          key={`${card.id}-${idx}`}
-          quote={card.quote}
-          name={card.name}
-          role={card.role}
-        />
-      ))}
+  <RetroCard key={`${card.id}-${idx}`}>
+    <div className="flex-1 flex flex-col justify-start bg-[#ffc8e3] p-6 sm:p-7 gap-5">
+      <p
+        className="text-gray-900 font-bold"
+        style={{
+          fontFamily: "'Press Start 2P', monospace",
+          fontWeight: 700,
+          fontSize: "clamp(0.74rem, 1.4vw, 0.84rem)",
+          lineHeight: 1.8,
+          margin: 0,
+        }}
+      >
+        &ldquo;{card.quote}&rdquo;
+      </p>
+
+      <div className="flex flex-col gap-3">
+        <div className="w-10 h-[2.5px] bg-[#d955a4] rounded" />
+
+        <div>
+          <p
+            className="text-gray-900 font-bold"
+            style={{
+              fontFamily: "'Montserrat', sans-serif",
+              fontWeight: 700,
+              fontSize: "clamp(0.88rem, 1.7vw, 1.1rem)",
+              margin: 0,
+            }}
+          >
+            {card.name}
+          </p>
+
+          <p
+            className="text-gray-900 font-normal mt-1"
+            style={{
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: "clamp(0.76rem, 1.4vw, 0.9rem)",
+              margin: "4px 0 0",
+            }}
+          >
+            {card.role}
+          </p>
+        </div>
+      </div>
+    </div>
+  </RetroCard>
+))}
     </div>
   );
 }
@@ -262,7 +167,7 @@ export function TestimonialsGrid() {
   return (
     <section className="relative pt-16 md:pt-20 pb-16 md:pb-24 overflow-hidden w-full bg-[#fdf9f5] flex flex-col justify-center">
       {/* Canvas dotted background */}
-      <TestimonialPixelBackground />
+      <DotBackground />
 
       <style>{`
         @keyframes mascot-breathe {

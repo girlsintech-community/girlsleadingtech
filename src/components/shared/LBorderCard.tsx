@@ -1,6 +1,8 @@
+{/* used for vision/mission cards*/}
+
 "use client";
 
-import PixelStar from "./pixelstar";
+import PixelStar from "./PixelStar";
 
 export default function CardFrame({
   children,

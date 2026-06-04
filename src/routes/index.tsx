@@ -1,11 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { motion, useScroll, useMotionValueEvent } from "motion/react";
-import { GlassCard } from "@/components/site/GlassCard";
-import { SectionHeading } from "@/components/site/SectionHeading";
 import { Marquee } from "@/components/site/Marquee";
-import { SpeakerCard } from "@/components/site/SpeakerCard";
-import { ArrowRight, Heart, Users, Sparkle, Star, Flower2, Linkedin } from "lucide-react";
 import FAQ from "@/components/site/FAQ";
 import { stats } from "@/data/stats";
 import { initiatives } from "@/data/initiatives";
@@ -13,17 +9,15 @@ import { speakers, testimonials } from "@/data/community";
 import { communityPartners, industryPartners, ecosystemPartners } from "@/data/partners";
 import { useState } from "react";
 import { colleges } from "@/data/colleges";
-import testimonialCard from "@/assets/testimonial-card.png"
-import LborderCard from "@/components/ui/LborderCard";
+import LBorderCard from "@/components/shared/LBorderCard";
 import { InitiativesScrapbook } from "./initiatives";
 import pixelBtn from "@/assets/pixel-button.png"
-import presenting from "@/assets/characters/main-mascot/presenting.png"
 import { TestimonialsGrid } from "@/components/home/TestimonialsGrid"
 import { PartnersSection } from "@/components/home/PartnersSection"
 import OurStory from "@/components/home/OurStory";
 import VerticalMarquee from "@/components/home/VerticalMarquee";
-import joinUs from "@/assets/characters/main-mascot/join-us.png"
-
+import joinUs from "@/assets/main-mascot/join-us.png"
+import GridBackground from "@/components/shared/GridBackground";
 
 import gallery1 from "@/assets/gallery-1.webp";
 import gallery2 from "@/assets/gallery-2.webp";
@@ -184,88 +178,8 @@ useEffect(() => {
   );
 }
 
-function TestimonialPixelBackground() {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d")!;
-    ctx.imageSmoothingEnabled = false;
-
-    const resize = () => {
-      canvas.width = canvas.offsetWidth;
-      canvas.height = canvas.offsetHeight;
-      draw();
-    };
-
-    const draw = () => {
-      const { width, height } = canvas;
-      ctx.clearRect(0, 0, width, height);
-      const grid = 28;
-      for (let x = 0; x < width; x += grid) {
-        for (let y = 0; y < height; y += grid) {
-          ctx.fillStyle = "rgba(180, 55, 120, 0.18)";
-          ctx.fillRect(x, y, 2.5, 2.5);
-        }
-      }
-    };
-
-    resize();
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
-  }, []);
-
-  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full -z-10" />;
-}
 
 
-{/* grid bg */}
-function GridBackground() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      
-      {/* LEFT GLOW (unchanged) */}
-      <div
-        className="absolute left-[-12%] top-[-10%] h-[120%] w-[35vw] blur-3xl opacity-80"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,120,180,0.28), transparent 75%)",
-        }}
-      />
-
-      {/* RIGHT GLOW (unchanged) */}
-      <div
-        className="absolute right-[-12%] top-[-10%] h-[120%] w-[35vw] blur-3xl opacity-80"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(240,120,255,0.24), transparent 75%)",
-        }}
-      />
-
-      {/* CENTER CREAM GLOW (unchanged) */}
-      <div
-        className="absolute left-1/2 top-1/2 h-[30rem] w-[50rem] -translate-x-1/2 -translate-y-1/2 blur-3xl"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(255,240,190,0.28), transparent 72%)",
-        }}
-      />
-
-      {/* GRID LAYER (added on top but subtle so it doesn't kill glow) */}
-      <div
-        className="absolute inset-0 opacity-60"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(72, 38, 96, 0.13) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(160, 100, 200, 0.13) 1px, transparent 1px)
-          `,
-          backgroundSize: "22px 22px",
-        }}
-      />
-    </div>
-  );
-}
 
 
 // -------- HOME PAGE --------
@@ -334,7 +248,7 @@ function HomePage() {
           delay: 0.1,
         }}
       >
-        <LborderCard>
+        <LBorderCard>
 
           <h3
             className="text-2xl font-bold text-[#d955a4]"
@@ -351,7 +265,7 @@ function HomePage() {
             No gatekeeping. Just glow-ups.
           </p>
 
-        </LborderCard>
+        </LBorderCard>
       </motion.div>
 
       {/* MISSION */}
@@ -383,7 +297,7 @@ function HomePage() {
           delay: 0.2,
         }}
       >
-        <LborderCard>
+        <LBorderCard>
 
           <h3
             className="text-2xl font-bold text-[#d955a4]"
@@ -400,7 +314,7 @@ function HomePage() {
             and lead the teams of tomorrow.
           </p>
 
-              </LborderCard>
+              </LBorderCard>
             </motion.div>
 
           </div>
