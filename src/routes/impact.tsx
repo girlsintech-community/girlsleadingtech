@@ -122,7 +122,7 @@ function ImpactPage() {
             </div>
           ))}
         </div>
-      </div>
+      </div>z
 
       {/* MAP SECTION */}
       <section className="relative z-10 py-24 md:py-[80px] px-6 bg-[#fcf5ef]">
