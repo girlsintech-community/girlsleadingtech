@@ -12,7 +12,7 @@ import smiley from "@/assets/stickers/smiley.png";
 import designerIdle from "@/assets/characters/designer/idle.png";
 import communityIdle from "@/assets/characters/community-girl/idle.png";
 import pixelBtn from "@/assets/pixel-button.png";
- 
+
 export const Route = createFileRoute("/resources/")({
   head: () => ({
     meta: [
