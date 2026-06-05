@@ -318,7 +318,7 @@ export function InitiativesScrapbook({ scrollProgress }: { scrollProgress?: Moti
             >
               <div className="w-full h-full rounded-none overflow-vsisble bg-white ring-1 ring-black/5 flex flex-col">
                 {s.stickers}
-
+,
                 <div className={`h-5 w-full ${s.bar}`} />
 
                 <div className="p-6 flex flex-col h-[calc(100%-8px)] relative justify-between">
