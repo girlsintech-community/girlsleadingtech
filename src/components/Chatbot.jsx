@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const API_ENDPOINT = "/api/chat";
 const LS_KEY = "glt_chatbot_messages";
 
 const FEEDBACK_MAIL =
@@ -192,18 +191,12 @@ export default function Chatbot() {
     setLoading(true);
 
     try {
-      const res = await fetch(API_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: trimmed }),
-      });
-      const data = await res.json();
+      const { handleChatRequest } = await import("@/lib/chat-server");
+      const result = await handleChatRequest({ query: trimmed });
       const responseText =
-        data.text ||
-        data.fallback ||
+        result.text ||
         "Sorry, I couldn't find anything right now. Try asking about Scholarships, Events, or Mentorship.";
 
-      // Strip any leftover em-dashes just in case
       const cleaned = responseText.replace(/\u2014/g, "-");
       setMessages((prev) => [...prev, { role: "assistant", text: cleaned }]);
     } catch {
@@ -324,31 +317,6 @@ export default function Chatbot() {
                 </div>
               </div>
               <div style={{ display: "flex", gap: "6px", alignItems: "center" }}>
-                <a
-                  href={FEEDBACK_MAIL}
-                  title="Suggest a feature or resource"
-                  style={{
-                    background: "rgba(255,255,255,0.06)",
-                    border: "1px solid rgba(168,85,247,0.35)",
-                    borderRadius: "8px",
-                    color: "rgba(255,255,255,0.85)",
-                    padding: "5px 9px",
-                    fontSize: "11px",
-                    textDecoration: "none",
-                    whiteSpace: "nowrap",
-                    transition: "all 0.2s",
-                  }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.background = "rgba(168,85,247,0.25)";
-                    e.currentTarget.style.color = "#fff";
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.background = "rgba(255,255,255,0.06)";
-                    e.currentTarget.style.color = "rgba(255,255,255,0.85)";
-                  }}
-                >
-                  Let us know
-                </a>
                 <button
                   type="button"
                   onClick={clearHistory}
@@ -523,6 +491,40 @@ export default function Chatbot() {
               </button>
             </form>
           </div>
+        )}
+
+        {/* Feedback pill — sits above the chat FAB */}
+        {!open && (
+          <a
+            href="https://docs.google.com/forms/d/e/1FAIpQLSeRE1g3tyUfgZ7UyqH3jGGIkQsJ2jfKlJaumpwGa_tPZeYcJQ/viewform"
+            target="_blank"
+            rel="noreferrer noopener"
+            aria-label="Suggest a feature or resource"
+            style={{
+              background: "rgba(10,8,25,0.88)",
+              border: "1px solid rgba(168,85,247,0.4)",
+              borderRadius: "999px",
+              color: "rgba(255,255,255,0.9)",
+              padding: "8px 16px",
+              fontSize: "12px",
+              fontWeight: 600,
+              textDecoration: "none",
+              whiteSpace: "nowrap",
+              backdropFilter: "blur(12px)",
+              boxShadow: "0 4px 20px rgba(124,58,237,0.25)",
+              transition: "all 0.2s",
+            }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.background = "linear-gradient(135deg, rgba(124,58,237,0.5), rgba(219,39,119,0.35))";
+              e.currentTarget.style.transform = "scale(1.03)";
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.background = "rgba(10,8,25,0.88)";
+              e.currentTarget.style.transform = "scale(1)";
+            }}
+          >
+            DROP A FEEDBACK
+          </a>
         )}
 
         {/* FAB button */}
