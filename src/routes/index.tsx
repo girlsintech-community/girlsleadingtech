@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
-import { motion, useScroll, useMotionValueEvent } from "motion/react";
+import { motion, useScroll, useMotionValueEvent, MotionValue } from "motion/react";
+import { useHydrated } from "@/hooks/use-hydrated";
 import { Marquee } from "@/components/site/Marquee";
 import FAQ from "@/components/site/FAQ";
 import { stats } from "@/data/stats";
@@ -184,25 +185,7 @@ useEffect(() => {
 
 // -------- HOME PAGE --------
 function HomePage() {
-  const initiativesSectionRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: initiativesScrollYProgress } = useScroll({
-    target: initiativesSectionRef,
-    offset: ["start start", "end end"],
-  });
-  
-  const [animateBar, setAnimateBar] = useState(false);
-
-  useMotionValueEvent(initiativesScrollYProgress, "change", (latest) => {
-    if (latest > 0.01 && !animateBar) {
-      setAnimateBar(true);
-    }
-  });
-
-  useEffect(() => {
-    if (initiativesScrollYProgress.get() > 0.01) {
-      setAnimateBar(true);
-    }
-  }, [initiativesScrollYProgress]);
+  const hydrated = useHydrated();
 
   return (
     <>
@@ -377,86 +360,8 @@ function HomePage() {
         </div>
       </section>
 
-      {/* INITIATIVES — scrapbook stacked cards */}
-      <section ref={initiativesSectionRef} className="relative w-full md:min-h-[280vh] py-16 md:py-24 overflow-visible">
-        <style>{`@import url('https://fonts.cdnfonts.com/css/satoshi');`}</style>
-        <div className="relative md:sticky md:top-[10vh] md:h-fit w-full container mx-auto max-w-7xl px-6 flex flex-col justify-start gap-2 md:gap-3">
-          <div className="relative w-full overflow-visible select-none py-0 md:py-1">
-            <div className="relative inline-block overflow-visible pl-2 md:pl-4 mb-4 md:mb-6">
-              {/* Animated Pink Bar */}
-              <motion.div
-                initial={{ scaleX: 0 }}
-                animate={animateBar ? { scaleX: 1 } : { scaleX: 0 }}
-                transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-                style={{ originX: 0 }}
-                className="
-                  absolute
-                  left-[-2rem] md:left-[-4rem]
-                  right-[-1rem] md:right-[-2rem]
-                  top-1/2 -translate-y-1/2
-                  h-[110%]
-                  bg-[#d955a4]/85
-                  z-0
-                "
-              />
-
-              {/* Heading */}
-              <motion.h2
-                initial={{ x: -60, opacity: 0 }}
-                animate={animateBar ? { x: 0, opacity: 1 } : { x: -60, opacity: 0 }}
-                transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-                className="relative z-10 font-sans text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-[0.15em] text-gray-900 dark:text-white leading-none"
-              >
-                INITIATIVES
-              </motion.h2>
-
-            </div>
-          </div>
-
-      
-          <InitiativesScrapbook scrollProgress={initiativesScrollYProgress} />
-  
-
-          {/* SEE ALL INITIATIVES BUTTON */}
-          <div className="relative z-[100] mt-6 md:mt-2 flex justify-center items-center w-full px-4">
-            <Link
-              to="/initiatives"
-              className="relative inline-block z-[100] transition-transform duration-200 hover:scale-105 active:scale-95 cursor-pointer"
-            >
-              <img
-                src={pixelBtn}
-                alt="See All Initiatives"
-                className="
-                  w-[140px]
-                  sm:w-[160px]
-                  md:w-[180px]
-                  lg:w-[200px]
-                  h-auto
-                  object-contain
-                "
-              />
-
-              <span
-                className="
-                  absolute inset-0
-                  flex items-center justify-center
-                  text-black text-center font-bold
-                  pointer-events-none
-                "
-                style={{
-                  fontFamily: "'Press Start 2P', monospace",
-                  fontSize: "clamp(0.7rem, 1.0vw, 1.1rem)",
-                  letterSpacing: "0.08em",
-                  lineHeight: "1.0",
-                }}
-              >
-                See All <br className="sm:hidden" />
-                Initiatives →
-              </span>
-            </Link>
-          </div>
-            </div>
-          </section>
+      {/* INITIATIVES — scroll-linked scrapbook (client-only to avoid Motion hydration errors) */}
+      {hydrated ? <HomeInitiativesScrollSection /> : <HomeInitiativesStaticSection />}
 
       {/* SPEAKERS — featured static grid */}
      <div className="my-10 md:my-16 lg:my-24">
@@ -575,5 +480,102 @@ function HomePage() {
   </div>
 </section>
 </>
+  );
+}
+
+function HomeInitiativesSectionShell({
+  animateBar,
+  scrollProgress,
+}: {
+  animateBar: boolean;
+  scrollProgress?: MotionValue<number>;
+}) {
+  return (
+    <section className="relative w-full md:min-h-[280vh] py-16 md:py-24 overflow-visible">
+      <style>{`@import url('https://fonts.cdnfonts.com/css/satoshi');`}</style>
+      <div className="relative md:sticky md:top-[10vh] md:h-fit w-full container mx-auto max-w-7xl px-6 flex flex-col justify-start gap-2 md:gap-3">
+        <div className="relative w-full overflow-visible select-none py-0 md:py-1">
+          <div className="relative inline-block overflow-visible pl-2 md:pl-4 mb-4 md:mb-6">
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={animateBar ? { scaleX: 1 } : { scaleX: 0 }}
+              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+              style={{ originX: 0 }}
+              className="absolute left-[-2rem] md:left-[-4rem] right-[-1rem] md:right-[-2rem] top-1/2 -translate-y-1/2 h-[110%] bg-[#d955a4]/85 z-0"
+            />
+            <motion.h2
+              initial={{ x: -60, opacity: 0 }}
+              animate={animateBar ? { x: 0, opacity: 1 } : { x: -60, opacity: 0 }}
+              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+              className="relative z-10 font-sans text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-[0.15em] text-gray-900 dark:text-white leading-none"
+            >
+              INITIATIVES
+            </motion.h2>
+          </div>
+        </div>
+
+        <InitiativesScrapbook scrollProgress={scrollProgress} />
+
+        <div className="relative z-[100] mt-6 md:mt-2 flex justify-center items-center w-full px-4">
+          <Link
+            to="/initiatives"
+            className="relative inline-block z-[100] transition-transform duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+          >
+            <img
+              src={pixelBtn}
+              alt="See All Initiatives"
+              className="w-[140px] sm:w-[160px] md:w-[180px] lg:w-[200px] h-auto object-contain"
+            />
+            <span
+              className="absolute inset-0 flex items-center justify-center text-black text-center font-bold pointer-events-none"
+              style={{
+                fontFamily: "'Press Start 2P', monospace",
+                fontSize: "clamp(0.7rem, 1.0vw, 1.1rem)",
+                letterSpacing: "0.08em",
+                lineHeight: "1.0",
+              }}
+            >
+              See All <br className="sm:hidden" />
+              Initiatives →
+            </span>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HomeInitiativesStaticSection() {
+  return <HomeInitiativesSectionShell animateBar={false} />;
+}
+
+function HomeInitiativesScrollSection() {
+  const initiativesSectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: initiativesScrollYProgress } = useScroll({
+    target: initiativesSectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  const [animateBar, setAnimateBar] = useState(false);
+
+  useMotionValueEvent(initiativesScrollYProgress, "change", (latest) => {
+    if (latest > 0.01 && !animateBar) {
+      setAnimateBar(true);
+    }
+  });
+
+  useEffect(() => {
+    if (initiativesScrollYProgress.get() > 0.01) {
+      setAnimateBar(true);
+    }
+  }, [initiativesScrollYProgress]);
+
+  return (
+    <div ref={initiativesSectionRef}>
+      <HomeInitiativesSectionShell
+        animateBar={animateBar}
+        scrollProgress={initiativesScrollYProgress}
+      />
+    </div>
   );
 }
