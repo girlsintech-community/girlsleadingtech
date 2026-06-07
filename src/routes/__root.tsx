@@ -2,8 +2,9 @@ import { createFileRoute, Outlet } from "@tanstack/react-router";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
 import { ScrollToTop } from "@/components/site/ScrollToTop";
+import Chatbot from "@/components/Chatbot";
+import FeedbackButton from "@/components/FeedbackButton";
 import { HeadContent, Scripts, createRootRoute, Link } from "@tanstack/react-router";
-import { CommunityChatbot } from "@/components/site/CommunityChatbot";
 import appCss from "../styles.css?url";
 
 function NotFound() {
@@ -31,15 +32,15 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Girls Leading Tech — Empowering Women in Tech" },
+      { title: "Girls Leading Tech - Empowering Women in Tech" },
       { name: "description", content: "A community of 4000+ women across 1000+ colleges in India, building, learning and leading in tech together." },
       { name: "author", content: "Girls Leading Tech" },
-      { property: "og:title", content: "Girls Leading Tech — Empowering Women in Tech" },
+      { property: "og:title", content: "Girls Leading Tech - Empowering Women in Tech" },
       { property: "og:description", content: "A community of 4000+ women across 1000+ colleges in India, building, learning and leading in tech together." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@GirlLeadingTech" },
-      { name: "twitter:title", content: "Girls Leading Tech — Empowering Women in Tech" },
+      { name: "twitter:title", content: "Girls Leading Tech - Empowering Women in Tech" },
       { name: "twitter:description", content: "A community of 4000+ women across 1000+ colleges in India, building, learning and leading in tech together." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/CiyMXuF1kAWOhNxHxkAiVIP6ons1/social-images/social-1778518491333-unnamed.webp" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/CiyMXuF1kAWOhNxHxkAiVIP6ons1/social-images/social-1778518491333-unnamed.webp" },
@@ -81,8 +82,9 @@ function RootComponent() {
         <Outlet />
       </main>
       <Footer />
-      <CommunityChatbot />
       <ScrollToTop />
+      <Chatbot />
+      <FeedbackButton />
     </>
   );
 }
