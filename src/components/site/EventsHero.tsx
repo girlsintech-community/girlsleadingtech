@@ -6,7 +6,7 @@ import washiTape from "@/assets/stickers/washi-tape.png";
 
 export function EventsHero() {
   return (
-    <div className="relative z-10 pt-32 pb-8 md:pt-40 md:pb-10 w-full">
+    <div className="relative z-10 pt-32 md:pt-40 w-full">
       {/* Ambient Glows */}
       <div className="absolute top-1/2 -left-[5%] w-[300px] h-[400px] md:w-[40vw] md:h-[50vh] bg-[rgba(216,53,141,0.15)] rounded-full blur-[120px] pointer-events-none -translate-y-1/2 z-[-1]" />
       <div className="absolute top-1/2 -right-[5%] w-[300px] h-[400px] md:w-[40vw] md:h-[50vh] bg-[rgba(216,53,141,0.15)] rounded-full blur-[120px] pointer-events-none -translate-y-1/2 z-[-1]" />

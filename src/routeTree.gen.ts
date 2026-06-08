@@ -37,6 +37,7 @@ import { Route as ResourcesArticlesRouteImport } from './routes/resources.articl
 import { Route as InitiativesSlugRouteImport } from './routes/initiatives.$slug'
 import { Route as EventsUpcomingRouteImport } from './routes/events.upcoming'
 import { Route as EventsPastRouteImport } from './routes/events.past'
+import { Route as EventsOngoingRouteImport } from './routes/events.ongoing'
 import { Route as EventsEventIdRouteImport } from './routes/events.$eventId'
 
 const ResourcesRoute = ResourcesRouteImport.update({
@@ -179,6 +180,11 @@ const EventsPastRoute = EventsPastRouteImport.update({
   path: '/past',
   getParentRoute: () => EventsRoute,
 } as any)
+const EventsOngoingRoute = EventsOngoingRouteImport.update({
+  id: '/ongoing',
+  path: '/ongoing',
+  getParentRoute: () => EventsRoute,
+} as any)
 const EventsEventIdRoute = EventsEventIdRouteImport.update({
   id: '/$eventId',
   path: '/$eventId',
@@ -197,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/partners': typeof PartnersRoute
   '/resources': typeof ResourcesRouteWithChildren
   '/events/$eventId': typeof EventsEventIdRoute
+  '/events/ongoing': typeof EventsOngoingRoute
   '/events/past': typeof EventsPastRoute
   '/events/upcoming': typeof EventsUpcomingRoute
   '/initiatives/$slug': typeof InitiativesSlugRoute
@@ -227,6 +234,7 @@ export interface FileRoutesByTo {
   '/join': typeof JoinRoute
   '/partners': typeof PartnersRoute
   '/events/$eventId': typeof EventsEventIdRoute
+  '/events/ongoing': typeof EventsOngoingRoute
   '/events/past': typeof EventsPastRoute
   '/events/upcoming': typeof EventsUpcomingRoute
   '/initiatives/$slug': typeof InitiativesSlugRoute
@@ -259,6 +267,7 @@ export interface FileRoutesById {
   '/partners': typeof PartnersRoute
   '/resources': typeof ResourcesRouteWithChildren
   '/events/$eventId': typeof EventsEventIdRoute
+  '/events/ongoing': typeof EventsOngoingRoute
   '/events/past': typeof EventsPastRoute
   '/events/upcoming': typeof EventsUpcomingRoute
   '/initiatives/$slug': typeof InitiativesSlugRoute
@@ -292,6 +301,7 @@ export interface FileRouteTypes {
     | '/partners'
     | '/resources'
     | '/events/$eventId'
+    | '/events/ongoing'
     | '/events/past'
     | '/events/upcoming'
     | '/initiatives/$slug'
@@ -322,6 +332,7 @@ export interface FileRouteTypes {
     | '/join'
     | '/partners'
     | '/events/$eventId'
+    | '/events/ongoing'
     | '/events/past'
     | '/events/upcoming'
     | '/initiatives/$slug'
@@ -353,6 +364,7 @@ export interface FileRouteTypes {
     | '/partners'
     | '/resources'
     | '/events/$eventId'
+    | '/events/ongoing'
     | '/events/past'
     | '/events/upcoming'
     | '/initiatives/$slug'
@@ -584,6 +596,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EventsPastRouteImport
       parentRoute: typeof EventsRoute
     }
+    '/events/ongoing': {
+      id: '/events/ongoing'
+      path: '/ongoing'
+      fullPath: '/events/ongoing'
+      preLoaderRoute: typeof EventsOngoingRouteImport
+      parentRoute: typeof EventsRoute
+    }
     '/events/$eventId': {
       id: '/events/$eventId'
       path: '/$eventId'
@@ -596,12 +615,14 @@ declare module '@tanstack/react-router' {
 
 interface EventsRouteChildren {
   EventsEventIdRoute: typeof EventsEventIdRoute
+  EventsOngoingRoute: typeof EventsOngoingRoute
   EventsPastRoute: typeof EventsPastRoute
   EventsUpcomingRoute: typeof EventsUpcomingRoute
 }
 
 const EventsRouteChildren: EventsRouteChildren = {
   EventsEventIdRoute: EventsEventIdRoute,
+  EventsOngoingRoute: EventsOngoingRoute,
   EventsPastRoute: EventsPastRoute,
   EventsUpcomingRoute: EventsUpcomingRoute,
 }

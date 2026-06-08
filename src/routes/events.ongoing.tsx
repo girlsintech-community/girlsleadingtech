@@ -5,15 +5,15 @@ import { Calendar, Clock, ArrowRight, Sparkles } from "lucide-react";
 import { useContext } from "react";
 import { EventsSearchContext } from "./events";
 
-export const Route = createFileRoute("/events/upcoming")({
-  component: UpcomingEvents,
+export const Route = createFileRoute("/events/ongoing")({
+  component: OngoingEvents,
 });
 
-function UpcomingEvents() {
+function OngoingEvents() {
   const { search, category } = useContext(EventsSearchContext);
 
   const list = events
-    .filter((e) => e.status === "upcoming")
+    .filter((e) => e.status === "ongoing")
     .filter((e) => {
       if (category !== "All" && e.category !== category) return false;
       if (!search) return true;
@@ -63,7 +63,7 @@ function UpcomingEvents() {
                     </div>
                   )}
                   <span className="absolute left-3 top-3 inline-block rounded-full gradient-primary px-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-white">
-                    Upcoming
+                    Ongoing Live
                   </span>
                 </div>
                 <div className="flex flex-1 flex-col p-5">
@@ -94,7 +94,7 @@ function UpcomingEvents() {
                     )}
                   </div>
                   <span className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-primary">
-                    Details <ArrowRight className="h-3.5 w-3.5" />
+                    Join Now <ArrowRight className="h-3.5 w-3.5" />
                   </span>
                 </div>
               </article>
