@@ -23,7 +23,7 @@ export function Footer() {
             />
           ))}
         </div>
-        <span className="font-['Press_Start_2P',monospace] text-[9px] text-black animate-pulse uppercase tracking-wider hidden sm:inline-block">
+        <span className="font-['Press_Start_2P',monospace] text-sm text-black animate-pulse uppercase tracking-wider hidden sm:inline-block">
           ★ SHIP MORE PRODUCTS ★ EMPOWER THE FUTURE ★ NO GATEKEEPING. JUST GLOW-UPS ★
         </span>
         <div className="flex gap-2">
@@ -67,7 +67,7 @@ export function Footer() {
                       Girls Leading <span className="text-[#d955a4]">Tech</span>
                     </span>
                   </Link>
-                  <p className="mt-4 text-xs font-sans font-medium text-gray-800 leading-relaxed">
+                  <p className="mt-4 text-base font-sans font-medium text-black leading-relaxed">
                     A community empowering 4000+ women across 23+ states to lead in tech. Built with
                     love, code, and dreams.
                   </p>
@@ -110,10 +110,10 @@ export function Footer() {
                 alt="Washi tape sticker"
                 className="absolute -top-6 right-10 w-24 rotate-[6deg] pointer-events-none z-10 select-none transition-transform group-hover/card:scale-105"
               />
-              <h4 className="font-['Press_Start_2P',monospace] text-[9px] uppercase tracking-wider text-black border-b-2 border-black pb-2 mb-4">
+              <h4 className="font-['Press_Start_2P',monospace] text-sm uppercase tracking-wider text-black border-b-2 border-black pb-2 mb-4">
                 Explore
               </h4>
-              <ul className="space-y-2.5 font-sans font-bold text-xs text-gray-800">
+              <ul className="space-y-3 font-sans font-semibold text-base text-black">
                 <li>
                   <Link
                     to="/impact"
@@ -175,10 +175,10 @@ export function Footer() {
                 alt="Paper clip sticker"
                 className="absolute -top-10 right-6 w-16 rotate-[12deg] pointer-events-none z-10 select-none transition-transform group-hover/card:scale-110"
               />
-              <h4 className="font-['Press_Start_2P',monospace] text-[9px] uppercase tracking-wider text-black border-b-2 border-black pb-2 mb-4">
+              <h4 className="font-['Press_Start_2P',monospace] text-sm uppercase tracking-wider text-black border-b-2 border-black pb-2 mb-4">
                 Programs
               </h4>
-              <ul className="space-y-1.5 font-sans font-bold text-[11px] text-gray-800 max-h-[190px] overflow-y-auto pr-1 no-scrollbar">
+              <ul className="space-y-2.5 font-sans font-semibold text-base text-black max-h-[220px] overflow-y-auto pr-1 no-scrollbar">
                 {programLinks.map((p) => (
                   <li key={p.name}>
                     {p.url ? (
@@ -214,10 +214,10 @@ export function Footer() {
                 alt="Star sticker"
                 className="absolute -top-7 -right-5 w-12 rotate-[15deg] pointer-events-none z-10 select-none transition-transform group-hover/card:scale-110"
               />
-              <h4 className="font-['Press_Start_2P',monospace] text-[9px] uppercase tracking-wider text-black border-b-2 border-black pb-2 mb-4">
+              <h4 className="font-['Press_Start_2P',monospace] text-sm uppercase tracking-wider text-black border-b-2 border-black pb-2 mb-4">
                 Get Involved
               </h4>
-              <ul className="space-y-2.5 font-sans font-bold text-xs text-gray-800">
+              <ul className="space-y-3 font-sans font-semibold text-base text-black">
                 <li>
                   <Link
                     to="/join"
@@ -250,11 +250,11 @@ export function Footer() {
         </div>
 
         {/* Footer bottom bar with copyright and meta-info */}
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t-2 border-black pt-8 text-center text-xs font-bold text-gray-800 md:flex-row relative z-10">
+        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t-2 border-black pt-8 text-center text-base font-semibold text-black md:flex-row relative z-10">
           <p className="font-['Montserrat',sans-serif]">
             © {new Date().getFullYear()} Girls Leading Tech. Made with 💖 for the next generation.
           </p>
-          <p className="font-['Press_Start_2P',monospace] text-[8px] uppercase tracking-wide text-gray-600">
+          <p className="font-['Press_Start_2P',monospace] text-xs uppercase tracking-wider text-black/80">
             Empowering women in tech
           </p>
         </div>
