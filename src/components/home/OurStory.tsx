@@ -1,9 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { motion } from "motion/react";
 import { Sparkles, Compass, Star, Heart } from "lucide-react";
-import ourStoryImg from "@/assets/characters/main-mascot/our-story.png";
-import pixelStarImg from "@/assets/pixelstar.png";
-
+import ourStoryImg from "@/assets/main-mascot/our-story.png";
 // Import stickers from assets
 import smileySticker from "@/assets/stickers/smiley.png";
 import starSticker from "@/assets/stickers/star.png";
