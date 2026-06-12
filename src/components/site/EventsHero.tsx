@@ -1,12 +1,12 @@
 import { motion } from "motion/react";
-import presentingMascot from "@/assets/main-mascot/presenting.png";
+import pointingMascot from "@/assets/main-mascot/pointing.png";
 import organizerIdle from "@/assets/main-mascot/idle.png";
 import starSticker from "@/assets/stickers/star.png";
 import washiTape from "@/assets/stickers/washi-tape.png";
 
 export function EventsHero() {
   return (
-    <div className="relative z-10 pt-32 pb-8 md:pt-40 md:pb-10 w-full">
+    <div className="relative z-10 pt-32 md:pt-40 w-full">
       {/* Ambient Glows */}
       <div className="absolute top-1/2 -left-[5%] w-[300px] h-[400px] md:w-[40vw] md:h-[50vh] bg-[rgba(216,53,141,0.15)] rounded-full blur-[120px] pointer-events-none -translate-y-1/2 z-[-1]" />
       <div className="absolute top-1/2 -right-[5%] w-[300px] h-[400px] md:w-[40vw] md:h-[50vh] bg-[rgba(216,53,141,0.15)] rounded-full blur-[120px] pointer-events-none -translate-y-1/2 z-[-1]" />
@@ -31,7 +31,7 @@ export function EventsHero() {
             transition={{ duration: 0.6, delay: 0.2, type: "spring", bounce: 0.4 }}
             className="hidden md:block w-36 lg:w-48 shrink-0 z-20"
           >
-            <img src={presentingMascot} alt="Mascot" className="w-full h-auto object-contain drop-shadow-xl" />
+            <img src={pointingMascot} alt="Mascot pointing" className="w-full h-auto object-contain drop-shadow-xl" />
           </motion.div>
           
           {/* Center text composition */}

@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
-import { motion, useScroll, useMotionValueEvent } from "motion/react";
+import { motion, useScroll, useMotionValueEvent, MotionValue } from "motion/react";
+import { useHydrated } from "@/hooks/use-hydrated";
 import { Marquee } from "@/components/site/Marquee";
 import FAQ from "@/components/site/FAQ";
 import { stats } from "@/data/stats";
@@ -22,6 +23,7 @@ import { Heart, Sparkle, Star } from "lucide-react";
 import VerticalMarquee from "@/components/home/VerticalMarquee";
 import joinUs from "@/assets/main-mascot/join-us.png"
 import GridBackground from "@/components/shared/GridBackground";
+import SpeakersShowcase from "@/components/home/SpeakersShowcase";
 
 import gallery1 from "@/assets/gallery-1.webp";
 import gallery2 from "@/assets/gallery-2.webp";
@@ -207,10 +209,26 @@ function HomePage() {
       setAnimateBar(true);
     }
   }, [initiativesScrollYProgress]);
+  const hydrated = useHydrated();
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 450) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
     <>
-      <Hero />
+      <div id="home-top">
+        <Hero />
+      </div>
 
       {/* WHY WE EXIST / OUR STORY */}
       <section className="relative py-24 pb-12 overflow-hidden bg-[#FFFBF7]">
@@ -223,7 +241,7 @@ function HomePage() {
       <OurJourney />
 
       {/* WHY JOIN US — scrapbook cards */}
-      <section ref={initiativesSectionRef} className="relative w-full py-16 md:py-24 overflow-visible bg-[#fdf9f5]">
+      <section ref={initiativesSectionRef} className="relative w-full py-16 md:py-24 overflow-hidden bg-[#fdf9f5]">
         <style>{`@import url('https://fonts.cdnfonts.com/css/satoshi');`}</style>
         <div className="relative w-full container mx-auto max-w-7xl px-6 flex flex-col justify-start gap-2 md:gap-3">
           <div className="relative w-full overflow-visible select-none py-0 md:py-1">
@@ -263,7 +281,69 @@ function HomePage() {
         </div>
       </section>
 
+      {/* PICTURES SECTION */}
+      <section className="relative py-20 overflow-hidden">
+        <GridBackground />
+        
+        <div className="relative z-10 container mx-auto max-w-7xl px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-[35%_1fr] gap-10 lg:gap-16 items-center">
+            
+            {/* TEXT COLUMN */}
+            <div className="flex flex-col justify-center text-left">
+              <p
+                className="text-xs md:text-sm uppercase tracking-[0.3em] text-[#d955a4] font-bold"
+                style={{
+                  fontFamily: "'Montserrat', sans-serif",
+                }}
+              >
+                COMMUNITY MOMENTS
+              </p>
 
+              <h2 className="font-sans text-4xl xl:text-5xl font-bold text-foreground leading-tight mt-4">
+                Celebrating every{" "}
+                <span
+                  className="mx-2 italic font-medium text-[#5b2b4a]"
+                  style={{
+                    fontFamily: "'Playfair Display', serif",
+                  }}
+                >
+                  step
+                </span>{" "}
+                forward.
+              </h2>
+
+              <p className="mt-4 font-sans text-muted-foreground text-sm leading-relaxed test-center">
+                A glimpse at the colleges where GLT members lead chapters and hackathons.
+              </p>
+            </div>
+
+            {/* MARQUEES CONTAINER */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-[400px] md:h-[550px] overflow-hidden relative">
+              {/* Fade masks */}
+              <div className="absolute top-0 left-0 right-0 h-16 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
+              <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
+              
+              {/* Marquee 1 (Upwards) */}
+              <div className="h-full overflow-hidden">
+                <VerticalMarquee images={galleryImages} direction="up" speed={1.2} />
+              </div>
+              
+              {/* Marquee 2 (Downwards) - hidden on mobile, visible on tablet and desktop */}
+              <div className="h-full overflow-hidden hidden md:block">
+                <VerticalMarquee images={galleryImages} direction="down" speed={0.8} />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* INITIATIVES — scroll-linked scrapbook (client-only to avoid Motion hydration errors) */}
+      {hydrated ? <HomeInitiativesScrollSection /> : <HomeInitiativesStaticSection />}
+
+      {/* SPEAKERS — featured static grid */}
+     <div className="my-10 md:my-16 lg:my-24">
+          <SpeakersShowcase />
+      </div>
         
 
       {/* COLLEGES REACHED */}
@@ -283,17 +363,18 @@ function HomePage() {
       <FAQ />
 
       {/* CTA */}
-      <section className="relative py-16 md:py-24 bg-[#d955a4] overflow-visible mt-12">
-        {/* Scalloped top border matching scrapbook reference image */}
-        <div className="absolute top-0 left-0 w-full overflow-visible z-20 pointer-events-none -translate-y-[99%]">
-          <svg 
-            viewBox="0 0 1200 40" 
-            preserveAspectRatio="none" 
-            className="w-full h-[32px] md:h-[42px] text-[#d955a4] fill-current"
-          >
-            <path d="M 0 40 Q 60 0, 120 40 Q 180 0, 240 40 Q 300 0, 360 40 Q 420 0, 480 40 Q 540 0, 600 40 Q 660 0, 720 40 Q 780 0, 840 40 Q 900 0, 960 40 Q 1020 0, 1080 40 Q 1140 0, 1200 40 L 1200 41 L 0 41 Z" />
-          </svg>
-        </div>
+      <div className="w-full overflow-hidden pt-12 -mt-12">
+        <section className="relative py-16 md:py-24 bg-[#d955a4] overflow-visible mt-12">
+          {/* Scalloped top border matching scrapbook reference image */}
+          <div className="absolute top-0 left-0 w-full overflow-visible z-20 pointer-events-none -translate-y-[99%]">
+            <svg 
+              viewBox="0 0 1200 40" 
+              preserveAspectRatio="none" 
+              className="w-full h-[32px] md:h-[42px] text-[#d955a4] fill-current"
+            >
+              <path d="M 0 40 Q 60 0, 120 40 Q 180 0, 240 40 Q 300 0, 360 40 Q 420 0, 480 40 Q 540 0, 600 40 Q 660 0, 720 40 Q 780 0, 840 40 Q 900 0, 960 40 Q 1020 0, 1080 40 Q 1140 0, 1200 40 L 1200 41 L 0 41 Z" />
+            </svg>
+          </div>
 
         {/* Background Scrapbook Glows and Doodles */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
@@ -453,6 +534,201 @@ function HomePage() {
           </motion.div>
         </div>
       </section>
+      </div>
+
+      {/* Mobile-only Feedback Link right before footer */}
+      <div className="md:hidden w-full text-center py-6 bg-[#FFFBF7] border-t border-black/5">
+        <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSeRE1g3tyUfgZ7UyqH3jGGIkQsJ2jfKlJaumpwGa_tPZeYcJQ/viewform"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="inline-flex items-center gap-1.5 text-xs text-[#d955a4] hover:underline font-bold font-sans"
+        >
+          <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+          <span>Write us a feedback</span>
+        </a>
+      </div>
+
+      {/* Reposition/Resize Chatbot, prevent horizontal scroll, and Hide default suggestion pill */}
+      <style>{`
+        /* Prevent horizontal overflow causing cream bar on right end */
+        html, body {
+          overflow-x: hidden;
+          max-width: 100vw;
+          width: 100%;
+        }
+        /* Hide old feedback pill */
+        a:not(.glt-feedback-btn)[href*="docs.google.com"],
+        a[aria-label="Suggest a feature or resource"],
+        div[style*="position: fixed"] a[href*="docs.google.com"],
+        #glt-chatbot-toggle + a {
+          display: none !important;
+        }
+        /* Style ChatbotFAB */
+        #glt-chatbot-toggle {
+          width: 44px !important;
+          height: 44px !important;
+          font-size: 18px !important;
+          box-shadow: 0 4px 15px rgba(124,58,237,0.3) !important;
+        }
+        /* Accessibility High Contrast styles if enabled */
+        .accessibility-high-contrast {
+          filter: contrast(1.18);
+        }
+        /* Feedback Button styling */
+        .glt-feedback-btn {
+          position: fixed;
+          right: 0;
+          top: 50%;
+          z-index: 9999;
+          transform: translate(50%, -50%) rotate(-90deg) translateY(-30%);
+          transform-origin: center;
+          transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s;
+        }
+        .glt-feedback-btn:hover {
+          transform: translate(50%, -50%) rotate(-90deg) translateY(-50%);
+        }
+      `}</style>
+
+      {/* Scroll to Top Button */}
+      {showScrollTop && (
+        <button
+          onClick={() => document.getElementById("home-top")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+          className="fixed bottom-[80px] right-[24px] md:bottom-[24px] md:right-[80px] z-[9999] flex items-center justify-center w-11 h-11 bg-white border-2 border-black rounded-full shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:bg-[#ffeef2] active:translate-y-0 active:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all cursor-pointer pointer-events-auto"
+          aria-label="Scroll to top"
+        >
+          <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <path d="m18 15-6-6-6 6" />
+          </svg>
+        </button>
+      )}
+
+      {/* Floating Rotated Feedback Button */}
+      <a
+        href="https://docs.google.com/forms/d/e/1FAIpQLSeRE1g3tyUfgZ7UyqH3jGGIkQsJ2jfKlJaumpwGa_tPZeYcJQ/viewform"
+        target="_blank"
+        rel="noreferrer noopener"
+        className="glt-feedback-btn pointer-events-auto hidden md:flex items-center gap-2 px-4 py-2.5 bg-[#ffed95] border-2 border-r-0 border-black shadow-[-2px_2px_0px_rgba(0,0,0,1)] hover:bg-[#ffeef2] cursor-pointer font-bold text-xs uppercase rounded-t-lg"
+        style={{ fontFamily: "'Satoshi', sans-serif" }}
+      >
+        <svg className="w-4 h-4 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+        </svg>
+        <span>Feedback</span>
+      </a>
+
+      {/* Accessibility Button */}
+      <button
+        onClick={() => {}}
+        className="fixed bottom-[24px] left-[24px] z-[9999] flex items-center justify-center w-11 h-11 bg-white border-2 border-black rounded-full shadow-[2.5px_2.5px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:bg-[#ffeef2] active:translate-y-0 active:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all cursor-pointer pointer-events-auto"
+        aria-label="Accessibility Options"
+      >
+        <svg className="w-5 h-5 text-black" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="5" r="1" />
+          <path d="m9 20 3-6 3 6" />
+          <path d="m6 8 6 2 6-2" />
+          <path d="M12 10v4" />
+        </svg>
+      </button>
 </>
+  );
+}
+
+function HomeInitiativesSectionShell({
+  animateBar,
+  scrollProgress,
+}: {
+  animateBar: boolean;
+  scrollProgress?: MotionValue<number>;
+}) {
+  return (
+    <section className="relative w-full md:min-h-[280vh] py-16 md:py-24 overflow-hidden">
+      <style>{`@import url('https://fonts.cdnfonts.com/css/satoshi');`}</style>
+      <div className="relative md:sticky md:top-[10vh] md:h-fit w-full container mx-auto max-w-7xl px-6 flex flex-col justify-start gap-2 md:gap-3">
+        <div className="relative w-full overflow-visible select-none py-0 md:py-1">
+          <div className="relative inline-block overflow-visible pl-2 md:pl-4 mb-4 md:mb-6">
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={animateBar ? { scaleX: 1 } : { scaleX: 0 }}
+              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+              style={{ originX: 0 }}
+              className="absolute left-[-2rem] md:left-[-4rem] right-[-1rem] md:right-[-2rem] top-1/2 -translate-y-1/2 h-[110%] bg-[#d955a4]/85 z-0"
+            />
+            <motion.h2
+              initial={{ x: -60, opacity: 0 }}
+              animate={animateBar ? { x: 0, opacity: 1 } : { x: -60, opacity: 0 }}
+              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
+              className="relative z-10 font-sans text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-[0.15em] text-gray-900 dark:text-white leading-none"
+            >
+              INITIATIVES
+            </motion.h2>
+          </div>
+        </div>
+
+        <InitiativesScrapbook scrollProgress={scrollProgress} />
+
+        <div className="relative z-[100] mt-6 md:mt-2 flex justify-center items-center w-full px-4">
+          <Link
+            to="/initiatives"
+            className="relative inline-block z-[100] transition-transform duration-200 hover:scale-105 active:scale-95 cursor-pointer"
+          >
+            <img
+              src={pixelBtn}
+              alt="See All Initiatives"
+              className="w-[140px] sm:w-[160px] md:w-[180px] lg:w-[200px] h-auto object-contain"
+            />
+            <span
+              className="absolute inset-0 flex items-center justify-center text-black text-center font-bold pointer-events-none"
+              style={{
+                fontFamily: "'Press Start 2P', monospace",
+                fontSize: "clamp(0.7rem, 1.0vw, 1.1rem)",
+                letterSpacing: "0.08em",
+                lineHeight: "1.0",
+              }}
+            >
+              See All <br className="sm:hidden" />
+              Initiatives →
+            </span>
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function HomeInitiativesStaticSection() {
+  return <HomeInitiativesSectionShell animateBar={false} />;
+}
+
+function HomeInitiativesScrollSection() {
+  const initiativesSectionRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress: initiativesScrollYProgress } = useScroll({
+    target: initiativesSectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  const [animateBar, setAnimateBar] = useState(false);
+
+  useMotionValueEvent(initiativesScrollYProgress, "change", (latest) => {
+    if (latest > 0.01 && !animateBar) {
+      setAnimateBar(true);
+    }
+  });
+
+  useEffect(() => {
+    if (initiativesScrollYProgress.get() > 0.01) {
+      setAnimateBar(true);
+    }
+  }, [initiativesScrollYProgress]);
+
+  return (
+    <div ref={initiativesSectionRef}>
+      <HomeInitiativesSectionShell
+        animateBar={animateBar}
+        scrollProgress={initiativesScrollYProgress}
+      />
+    </div>
   );
 }

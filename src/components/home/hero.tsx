@@ -308,7 +308,7 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative z-10 flex flex-col items-center max-w-[1400]px">
+      <div className="relative z-10 flex flex-col items-center max-w-[1400]px pt-10 sm:pt-14 md:pt-18 lg:pt-24">
         {/* HERO TEXT */}
         <HeroText />
 

@@ -21,7 +21,8 @@ export interface Event {
   speakerCompany?: string;
   posterImage?: string;
   summary?: string;
-  status: "upcoming" | "past";
+  status: "upcoming" | "past" | "ongoing";
+  category?: string;
 }
 
 export interface Scholarship {

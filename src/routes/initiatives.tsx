@@ -5,7 +5,7 @@ import { GlassCard } from "@/components/site/GlassCard";
 import { initiatives } from "@/data/initiatives";
 import { ArrowRight } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { motion, useScroll, useTransform, useMotionValueEvent, MotionValue } from "motion/react";
+import { motion, useMotionValueEvent, MotionValue, useMotionValue } from "motion/react";
 import star from "@/assets/stickers/star.png"
 import washiTape from "@/assets/stickers/washi-tape.png"
 import paperClip from "@/assets/stickers/paper-clip.png"
@@ -181,13 +181,8 @@ const desktopPositions = [
 ];
 
 export function InitiativesScrapbook({ scrollProgress }: { scrollProgress?: MotionValue<number> }) {
-  const localRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: localScrollYProgress } = useScroll({
-    target: localRef,
-    offset: ["start start", "end end"],
-  });
-
-  const activeScrollY = scrollProgress || localScrollYProgress;
+  const fallbackProgress = useMotionValue(0);
+  const activeScrollY = scrollProgress ?? fallbackProgress;
 
   const [visibleCount, setVisibleCount] = useState(0);
   const [activeIdx, setActiveIdx] = useState(3);
@@ -316,9 +311,8 @@ export function InitiativesScrapbook({ scrollProgress }: { scrollProgress?: Moti
                 transitionDelay: `${delay}ms`,
               }}
             >
-              <div className="w-full h-full rounded-none overflow-vsisble bg-white ring-1 ring-black/5 flex flex-col">
+              <div className="w-full h-full rounded-none overflow-visible bg-white ring-1 ring-black/5 flex flex-col">
                 {s.stickers}
-,
                 <div className={`h-5 w-full ${s.bar}`} />
 
                 <div className="p-6 flex flex-col h-[calc(100%-8px)] relative justify-between">

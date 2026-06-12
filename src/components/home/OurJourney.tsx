@@ -4,13 +4,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import pixelStarImg from "@/assets/pixelstar.png";
 
-// Import gallery photos from assets
-import gallery1 from "@/assets/gallery-1.webp";
-import gallery2 from "@/assets/gallery-2.webp";
-import gallery3 from "@/assets/gallery-3.webp";
-import gallery4 from "@/assets/gallery-4.webp";
-import gallery5 from "@/assets/gallery-5.webp";
-
 // Import actual timeline mascots t1 to t5
 import t1 from "@/assets/timeline/t1.png";
 import t2 from "@/assets/timeline/t2.png";
@@ -20,52 +13,40 @@ import t5 from "@/assets/timeline/t5.png";
 
 interface MilestoneCard {
   date: string;
-  subtitle: string;
   title: string;
   description: string;
-  image: string;
   mascot: string;
 }
 
 const milestones: MilestoneCard[] = [
   {
     date: "June 2024",
-    subtitle: "THE BEGINNING",
-    title: "Girls in Tech Begins",
-    description: "Started with a small WhatsApp group created after a session attended by just a handful of girls.",
-    image: gallery1,
+    title: "The Beginning",
+    description: "It began with just 5 girls attending a WTM session, sparking a vision for a community for girls in STEM.",
     mascot: t1,
   },
   {
     date: "Diwali 2024",
-    subtitle: "COMMUNITY LAUNCH",
-    title: "Opening the Doors",
-    description: "The community expanded beyond personal networks and welcomed girls from across India.",
-    image: gallery2,
+    title: "The Community Launch",
+    description: "Girls in Tech officially opened its doors to girls across India, and within weeks, over 500 girls had joined the movement.",
     mascot: t2,
   },
   {
     date: "December 2024",
-    subtitle: "1,000+ MEMBERS",
-    title: "A Growing Movement",
-    description: "What started as a small initiative became a support network of 1,000+ ambitious builders and dreamers.",
-    image: gallery3,
+    title: "Momentum Takes Off",
+    description: "In just a few months, the community doubled from 500 to 1000 members, proving how many girls were looking for a space to build, lead and learn.",
     mascot: t3,
   },
   {
     date: "April 2025",
-    subtitle: "A NEW IDENTITY",
     title: "Girls Leading Tech",
-    description: "The community evolved from Girls in Tech to Girls Leading Tech, reflecting a bigger vision and stronger mission.",
-    image: gallery4,
+    description: "As the vision expanded beyond opportunity sharing, Girls in Tech became Girls Leading Tech. We also began launching our own initiatives, events, and programs for the community.",
     mascot: t4,
   },
   {
-    date: "2025",
-    subtitle: "JUST GETTING STARTED",
+    date: "Aug  2025",
     title: "3,000+ Girls & Growing",
-    description: "3,000+ girls, dozens of volunteers, multiple initiatives, and a future still being written.",
-    image: gallery5,
+    description: "From mentorship cohorts and fellowships to hackathons, learning programs, and community-led initiatives, Girls Leading Tech continues empowering thousands of girls to rise together.",
     mascot: t5,
   },
 ];
@@ -78,22 +59,23 @@ export default function OurJourney() {
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
+    offset: ["start start", "end end"],
   });
 
   // Calculate horizontal translation for 6 slides:
   // 6 slides total = 600vw.
   // We translate from 0% to -83.333% (which translates 5 slides out of the viewport)
-  // Animation happens when scroll progress is between 0.08 and 0.92
-  const x = useTransform(scrollYProgress, [0.08, 0.92], ["0%", "-83.333%"]);
+  // Animation happens when scroll progress is between 0.05 and 0.95
+  const x = useTransform(scrollYProgress, [0.05, 0.95], ["0%", "-83.333%"]);
 
-  // Hook to monitor scroll progress and set active card indicator
+  // Hook to monitor scroll progress and set active card indicator for controls/dots
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    if (latest < 0.08) {
+    if (latest < 0.05) {
       setActiveCard(0);
-    } else if (latest > 0.92) {
+    } else if (latest > 0.95) {
       setActiveCard(5); // Concluding slide is index 5
     } else {
-      const relativeProgress = (latest - 0.08) / (0.92 - 0.08);
+      const relativeProgress = (latest - 0.05) / (0.95 - 0.05);
       const index = Math.min(5, Math.max(0, Math.round(relativeProgress * 5)));
       setActiveCard(index);
     }
@@ -106,10 +88,11 @@ export default function OurJourney() {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     
     const containerTop = rect.top + scrollTop;
+    const stickyHeight = window.innerHeight * 0.82;
     const totalScrollable = rect.height - window.innerHeight;
     
-    // Map index [0..5] to the scroll range [0.08, 0.92]
-    const progress = 0.08 + (index / 5) * (0.92 - 0.08);
+    // Map index [0..5] to the scroll range [0.05, 0.95]
+    const progress = 0.05 + (index / 5) * (0.95 - 0.05);
     const targetScroll = containerTop + progress * totalScrollable;
     
     window.scrollTo({
@@ -134,13 +117,13 @@ export default function OurJourney() {
   };
 
   return (
-    <div ref={containerRef} className="relative h-[600vh] bg-[#FFF2B2] z-10 w-full overflow-visible">
+    <div ref={containerRef} className="relative h-[300vh] bg-[#ffed95] z-10 w-full overflow-visible -mt-8 md:-mt-12 lg:-mt-16">
       
-      {/* Sticky viewport content */}
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col justify-between z-10 py-3 pb-3 md:py-6 md:pb-4 bg-[#FFF2B2]">
+      {/* Sticky viewport content - Increased height to provide vertical breathing room */}
+      <div className="sticky top-0 h-[80vh] md:h-[82vh] lg:h-[85vh] overflow-hidden flex flex-col justify-between z-10 pt-16 md:pt-20 pb-4 bg-[#ffed95]">
         
         {/* Sticky decorative pixel stars in background */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.6] z-0">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.4] z-0">
           <motion.img
             src={pixelStarImg}
             alt="pixel star 1"
@@ -175,104 +158,72 @@ export default function OurJourney() {
           />
         </div>
 
-        {/* Scrollable horizontal track */}
-        <div className="flex-grow flex items-center overflow-hidden">
+        {/* Scrollable horizontal track - Common layout with pb-12/16 ensuring a clean gap before controls */}
+        <div className="flex-grow flex items-center overflow-hidden pb-12 md:pb-16 z-10">
           <motion.div style={{ x }} className="flex h-full w-[600vw] select-none">
             
             {/* Slides 1-5: The Milestones */}
             {milestones.map((card, idx) => {
               const isLastMascot = idx === 4;
-              const mascotMobileClass = isLastMascot 
-                ? "w-44 h-44 sm:w-52 sm:h-52 object-contain" 
-                : "w-32 h-32 sm:w-36 sm:h-36 object-contain";
-              const mascotDesktopClass = isLastMascot
-                ? "md:w-52 md:h-52 lg:w-72 lg:h-72 xl:w-[320px] xl:h-[320px] object-contain transition-transform duration-300 hover:scale-105"
-                : "md:w-36 md:h-36 lg:w-56 lg:h-56 xl:w-64 xl:h-64 object-contain transition-transform duration-300 hover:scale-105";
-
               return (
                 <div
                   key={idx}
-                  className="w-screen h-full flex-shrink-0 flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-24 xl:px-32 relative"
+                  className="w-screen h-full flex-shrink-0 flex flex-col items-center justify-center px-6 sm:px-12 md:px-24 text-center relative"
                 >
-                  {/* Content Container */}
-                  <div className="max-w-[90vw] md:max-w-[85vw] lg:max-w-[80vw] w-full flex flex-col md:flex-row items-center justify-between gap-4 md:gap-12 lg:gap-16 z-10 relative">
+                  {/* Content Container (Mascot and Texts Stacked Vertically & Centered) */}
+                  <div className="max-w-2xl w-full flex flex-col items-center justify-center relative">
                     
-                    {/* Mascot for mobile screens only (centered at the top) */}
-                    <div className="w-full flex justify-center md:hidden mb-2">
+                    {/* Fixed Mascot Zone - Consistent sizing with absolute contain bounds */}
+                    <div className="w-32 h-32 md:w-44 md:h-44 flex-shrink-0 flex items-center justify-center overflow-hidden">
                       <img
                         src={card.mascot}
-                        alt="Mascot Mobile"
-                        className={mascotMobileClass}
+                        alt="Mascot"
+                        className={
+                          isLastMascot
+                            ? "w-32 h-32 sm:w-40 sm:h-40 md:w-44 md:h-44 object-contain"
+                            : "w-24 h-24 sm:w-32 sm:h-32 md:w-36 md:h-36 object-contain"
+                        }
                       />
                     </div>
 
-                    {/* Two-Column Grid on Mobile, normal flex elements on tablet/desktop */}
-                    <div className="w-full grid grid-cols-2 gap-4 items-center md:contents">
-                      
-                      {/* Left Side: Mascot, Date, Heading & Story */}
-                      <div className="w-full flex flex-col justify-center text-left pt-0 md:w-[50%] lg:w-[52%] xl:w-[55%]">
-                        {/* Mascot for tablet & desktop screens only */}
-                        <div className="hidden md:flex justify-start mb-2 md:mb-3 md:-ml-4 lg:-ml-8 xl:-ml-12">
-                          <img
-                            src={card.mascot}
-                            alt="Mascot Desktop"
-                            className={mascotDesktopClass}
-                          />
-                        </div>
+                    {/* Spacing: Mascot -> Date */}
+                    <div className="h-4 md:h-6" />
 
-                      <div className="space-y-1 sm:space-y-1.5 md:space-y-2.5">
-                        {/* Date Heading */}
-                        <h2 
-                          className="text-[#24101F] text-lg sm:text-xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase tracking-tight leading-none"
-                          style={{ fontFamily: "'Montserrat', sans-serif" }}
-                        >
-                          {card.date}
-                        </h2>
-                        {/* Subheading (Title) */}
-                        <h3 
-                          className="text-[#d955a4] text-[10px] sm:text-xs md:text-base lg:text-lg xl:text-xl font-extrabold tracking-tight"
-                          style={{ fontFamily: "'Montserrat', sans-serif" }}
-                        >
-                          {highlightNumbers(card.title)}
-                        </h3>
-                        {/* Description */}
-                        <p 
-                          className="text-[#24101F]/85 text-[10px] sm:text-xs md:text-base lg:text-lg xl:text-xl leading-relaxed max-w-xl lg:max-w-2xl"
-                          style={{ fontFamily: "'Satoshi', sans-serif" }}
-                        >
-                          {highlightNumbers(card.description)}
-                        </p>
-                      </div>
-                    </div>
+                    {/* Date Heading */}
+                    <h2 className="text-gray-900 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight leading-none font-sans">
+                      {card.date}
+                    </h2>
+                    
+                    {/* Spacing: Date -> Title */}
+                    <div className="h-2 md:h-3" />
 
-                    {/* Right Side: Normal Image */}
-                    <div className="w-full flex justify-center items-center md:w-[45%] md:relative md:-translate-y-8 mt-0 md:mt-0 lg:w-[42%] xl:w-[40%]">
-                      <div className="w-[100px] sm:w-[130px] md:w-[200px] lg:w-[280px] xl:w-[320px] aspect-square rounded-[16px] md:rounded-[24px] border-[2px] md:border-[5px] border-white shadow-2xl overflow-hidden bg-[#FFF2B2] flex-shrink-0">
-                        <img
-                          src={card.image}
-                          alt={card.title}
-                          className="w-full h-full object-cover filter saturate-[0.9] select-none pointer-events-none"
-                          draggable={false}
-                        />
-                      </div>
-                    </div>
+                    {/* Subheading (Title - Large typography) */}
+                    <h3 className="text-[#d955a4] text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold tracking-tight font-sans text-center">
+                      {highlightNumbers(card.title)}
+                    </h3>
+                    
+                    {/* Spacing: Title -> Content */}
+                    <div className="h-3 md:h-5" />
 
+                    {/* Description (Paragraph - Large typography) */}
+                    <p className="text-gray-900 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed max-w-xl sm:max-w-2xl md:max-w-3xl font-sans font-bold text-center">
+                      {highlightNumbers(card.description)}
+                    </p>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
 
             {/* Slide 6: Concluding Tag (Our Journey Continues With You) */}
-            <div className="w-screen h-full flex-shrink-0 flex items-center justify-center px-4 sm:px-8 md:px-16 lg:px-24 relative">
-              <div className="max-w-4xl w-full flex flex-col items-center text-center justify-center gap-4 md:gap-8 z-10 relative">
+            <div className="w-screen h-full flex-shrink-0 flex items-center justify-center px-6 sm:px-12 md:px-24 relative">
+              <div className="max-w-2xl w-full flex flex-col items-center text-center justify-center relative">
                 
                 {/* Paper plane icon */}
                 <motion.div
                   initial={{ scale: 0, opacity: 0, y: 15 }}
                   whileInView={{ scale: 1, opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  className="text-[#d955a4] mb-1 flex items-center justify-center"
+                  className="text-[#d955a4] flex items-center justify-center"
                 >
                   <svg
                     viewBox="0 0 24 24"
@@ -281,7 +232,7 @@ export default function OurJourney() {
                     strokeWidth="1.8"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className="w-12 h-12 sm:w-20 sm:h-20 md:w-32 md:h-32 text-[#d955a4] filter drop-shadow-[0_4px_12px_rgba(217,85,164,0.25)]"
+                    className="w-10 h-10 sm:w-16 sm:h-16 md:w-20 md:h-20 text-[#d955a4] filter drop-shadow-[0_4px_12px_rgba(217,85,164,0.25)]"
                     style={{ transform: "rotate(-15deg)" }}
                   >
                     <path d="M22 2L2 12L11 13L22 2Z" fill="currentColor" fillOpacity="0.1" />
@@ -290,61 +241,58 @@ export default function OurJourney() {
                   </svg>
                 </motion.div>
 
+                {/* Spacing: Icon -> Capsule */}
+                <div className="h-4 md:h-6" />
+
                 {/* Capsule tag */}
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   whileInView={{ scale: 1, opacity: 1 }}
                   viewport={{ once: true }}
-                  className="rounded-full bg-[#d955a4]/10 px-6 py-2.5 md:px-12 md:py-5 border border-[#d955a4]/30 shadow-lg"
+                  className="rounded-full bg-[#d955a4]/10 px-6 py-2 md:px-8 md:py-3 border border-[#d955a4]/30 shadow-md"
                 >
-                  <h3 
-                    className="text-sm sm:text-xl md:text-2xl lg:text-3xl font-black text-[#d955a4] uppercase tracking-widest leading-none font-sans"
-                    style={{ fontFamily: "'Montserrat', sans-serif" }}
-                  >
+                  <h3 className="text-xs sm:text-sm md:text-base lg:text-lg font-bold text-[#d955a4] uppercase tracking-widest leading-none font-sans">
                     Our Journey Continues With You
                   </h3>
                 </motion.div>
 
+                {/* Spacing: Capsule -> Content */}
+                <div className="h-4 md:h-6" />
+
                 {/* Concluding subtext */}
-                <motion.p
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  className="text-xs sm:text-base md:text-lg lg:text-xl text-[#24101F]/80 font-medium max-w-xl mt-1 md:mt-2 leading-relaxed font-sans"
-                  style={{ fontFamily: "'Satoshi', sans-serif" }}
-                >
+                <p className="text-gray-900 text-sm sm:text-base md:text-lg font-bold max-w-xl leading-relaxed font-sans">
                   Together, we're building a future where every girl in tech can thrive.
-                </motion.p>
+                </p>
               </div>
             </div>
 
           </motion.div>
         </div>
 
-        {/* Centered Controls Overlay at the bottom */}
-        <div className="w-full flex flex-col items-center justify-center gap-2 md:gap-3 pb-2 md:pb-4 z-20 select-none">
+        {/* Footer Navigation Controls - Structured cleanly in the normal flex flow */}
+        <div className="w-full flex flex-col items-center justify-center gap-2 md:gap-3 pb-3 md:pb-4 z-20 select-none">
           
           {/* Navigation Arrows */}
           <div className="flex items-center gap-4 md:gap-6">
             <button
               onClick={() => activeCard > 0 && scrollToSlide(activeCard - 1)}
               disabled={activeCard === 0}
-              className={`w-11 h-8 md:w-14 md:h-10 border-2 border-[#d955a4] bg-white flex items-center justify-center transition-all cursor-pointer rounded-none shadow-[2px_2px_0px_rgba(217,85,164,1)] ${
-                activeCard === 0 ? "opacity-40 cursor-not-allowed shadow-none" : "hover:bg-[#ffeaf5] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(217,85,164,1)]"
+              className={`w-11 h-8 md:w-14 md:h-10 border-2 border-black bg-white flex items-center justify-center transition-all cursor-pointer rounded-none shadow-[2px_2px_0px_rgba(0,0,0,1)] ${
+                activeCard === 0 ? "opacity-30 cursor-not-allowed shadow-none" : "hover:bg-[#ffeaf5] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(0,0,0,1)]"
               }`}
               aria-label="Previous slide"
             >
-              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-[#d955a4] stroke-[2.5]" />
+              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 text-black stroke-[2.5]" />
             </button>
             <button
               onClick={() => activeCard < 5 && scrollToSlide(activeCard + 1)}
               disabled={activeCard === 5}
-              className={`w-11 h-8 md:w-14 md:h-10 border-2 border-[#d955a4] bg-white flex items-center justify-center transition-all cursor-pointer rounded-none shadow-[2px_2px_0px_rgba(217,85,164,1)] ${
-                activeCard === 5 ? "opacity-40 cursor-not-allowed shadow-none" : "hover:bg-[#ffeaf5] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(217,85,164,1)]"
+              className={`w-11 h-8 md:w-14 md:h-10 border-2 border-black bg-white flex items-center justify-center transition-all cursor-pointer rounded-none shadow-[2px_2px_0px_rgba(0,0,0,1)] ${
+                activeCard === 5 ? "opacity-30 cursor-not-allowed shadow-none" : "hover:bg-[#ffeaf5] active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(0,0,0,1)]"
               }`}
               aria-label="Next slide"
             >
-              <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-[#d955a4] stroke-[2.5]" />
+              <ChevronRight className="w-5 h-5 md:w-6 md:h-6 text-black stroke-[2.5]" />
             </button>
           </div>
 
@@ -372,6 +320,72 @@ export default function OurJourney() {
 
         </div>
 
+      </div>
+
+      {/* Decorative Wave Divider at the bottom of the timeline scroll track */}
+      <div className="absolute bottom-0 left-0 w-full h-[120px] md:h-[160px] z-20 pointer-events-none overflow-visible bg-transparent">
+        {/* Layered SVG Waves */}
+        <svg 
+          viewBox="0 0 1440 160" 
+          preserveAspectRatio="none" 
+          className="absolute inset-0 w-full h-full"
+        >
+          {/* Wave 1: Blush Pink */}
+          <path d="M 0 90 Q 360 30 720 100 T 1440 80 L 1440 160 L 0 160 Z" fill="#ffc8e3" />
+          {/* Wave 2: Soft Yellow Accent */}
+          <path d="M 0 110 Q 320 50 720 120 T 1440 95 L 1440 160 L 0 160 Z" fill="#fff4d2" />
+          {/* Wave 3: Cream (Seamless bottom blend) */}
+          <path d="M 0 130 Q 400 80 800 145 T 1440 120 L 1440 160 L 0 160 Z" fill="#fdf9f5" />
+        </svg>
+
+        {/* Handwritten Story Transition Overlay */}
+        <div className="absolute inset-0 w-full h-full flex items-center justify-between px-8 sm:px-16 md:px-24 lg:px-36 select-none overflow-visible">
+          {/* Left Text */}
+          <div className="flex flex-col items-start translate-y-[-20px] md:translate-y-[-30px]">
+            <span 
+              className="text-[#24101F]/60 text-lg md:text-2xl font-bold italic opacity-75"
+              style={{ fontFamily: "'Caveat', cursive" }}
+            >
+              Our Story
+            </span>
+            <div className="w-12 h-[2px] bg-[#24101F]/30 mt-1 rounded-full" />
+          </div>
+
+          {/* Loop doodle arrow */}
+          <div className="flex-grow flex items-center justify-center translate-y-[-10px] md:translate-y-[-20px] opacity-40">
+            <svg 
+              viewBox="0 0 100 30" 
+              className="w-16 sm:w-24 md:w-32 h-auto text-[#24101F]"
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round"
+            >
+              <path d="M 10 15 C 30 5, 40 25, 60 15 C 70 10, 80 10, 90 15 M 82 8 L 90 15 L 82 22" />
+            </svg>
+          </div>
+
+          {/* Right Text */}
+          <div className="flex flex-col items-end translate-y-[20px] md:translate-y-[10px]">
+            <span 
+              className="text-[#d955a4] text-2xl md:text-4xl font-extrabold tracking-wide transform rotate-[-2deg] drop-shadow-sm"
+              style={{ fontFamily: "'Caveat', cursive" }}
+            >
+              Your Story
+            </span>
+            <span 
+              className="text-[#24101F]/70 text-[10px] md:text-xs font-semibold tracking-wider uppercase mt-1"
+              style={{ fontFamily: "'Montserrat', sans-serif" }}
+            >
+              Begins Next
+            </span>
+          </div>
+        </div>
+
+        {/* Load Caveat Font */}
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');
+        `}</style>
       </div>
 
     </div>

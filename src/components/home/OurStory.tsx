@@ -92,18 +92,18 @@ export default function OurStory() {
 
       if (isMobile) {
         // straight vertical lines on phone (connecting center-to-center, staying on the left)
-        // curve to center for the final segment to node 4
+        // straight vertical/diagonal line for the final segment to node 4
         setSegments({
           d1: `M ${x1} ${y1} L ${x1} ${y2}`,
           d2: `M ${x2} ${y2} L ${x2} ${y3}`,
-          d3: `M ${x3} ${y3} C ${x3} ${y3 + dy3 * 0.45}, ${x4} ${y4 - dy3 * 0.45}, ${x4} ${y4}`
+          d3: `M ${x3} ${y3} L ${x4} ${y4}`
         });
       } else {
         // curved lines on tablet & desktop (connecting center-to-center)
         setSegments({
-          d1: `M ${x1} ${y1} C ${x1} ${y1 + dy1 * 0.45}, ${x2} ${y2 - dy1 * 0.45}, ${x2} ${y2}`,
-          d2: `M ${x2} ${y2} C ${x2} ${y2 + dy2 * 0.45}, ${x3} ${y3 - dy2 * 0.45}, ${x3} ${y3}`,
-          d3: `M ${x3} ${y3} C ${x3} ${y3 + dy3 * 0.45}, ${x4} ${y4 - dy3 * 0.45}, ${x4} ${y4}`
+          d1: `M ${x1} ${y1} C ${x1} ${y1 + dy1 * 0.3}, ${x2} ${y2 - dy1 * 0.3}, ${x2} ${y2}`,
+          d2: `M ${x2} ${y2} C ${x2} ${y2 + dy2 * 0.3}, ${x3} ${y3 - dy2 * 0.3}, ${x3} ${y3}`,
+          d3: `M ${x3} ${y3} C ${x3} ${y3 + dy3 * 0.3}, ${x4} ${y4 - dy3 * 0.3}, ${x4} ${y4}`
         });
       }
     };
@@ -129,7 +129,7 @@ export default function OurStory() {
       {/* Floating yellow scrapbook emoji stickers */}
       <motion.div
         className="hidden md:flex absolute w-12 h-12 z-10 select-none pointer-events-none"
-        style={{ left: "4%", top: "35%" }}
+        style={{ left: "14%", top: "35%" }}
         animate={{ y: [0, -6, 0] }}
         transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
       >
@@ -138,7 +138,7 @@ export default function OurStory() {
 
       <motion.div
         className="hidden md:flex absolute w-12 h-12 z-10 select-none pointer-events-none"
-        style={{ right: "5%", top: "65%" }}
+        style={{ right: "14%", top: "65%" }}
         animate={{ y: [0, 6, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       >
@@ -222,25 +222,25 @@ export default function OurStory() {
           )}
         </svg>
 
-        {/* Pixel Flying Elements (Stars) along the curved path (visible on tablet & desktop only) */}
-        <div className="hidden md:block absolute inset-0 pointer-events-none">
+        {/* Pixel Flying Elements (Stars) along the curved path (visible on all screens) */}
+        <div className="absolute inset-0 pointer-events-none">
           
           {/* Retro small pixel colored squares */}
           <motion.div
-            className="absolute w-2.5 h-2.5 bg-[#ffed95] opacity-70 border border-black/10"
-            style={{ left: "20%", top: "35%" }}
+            className="absolute w-2.5 h-2.5 bg-[#ffed95] opacity-50 md:opacity-70 border border-black/10"
+            style={{ left: "22%", top: "25%" }}
             animate={{ y: [0, -12, 0], rotate: [0, 45, 90, 180, 360] }}
             transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
           />
           <motion.div
-            className="absolute w-2.5 h-2.5 bg-[#f0b158] opacity-60"
-            style={{ left: "75%", top: "52%" }}
+            className="absolute w-2.5 h-2.5 bg-[#f0b158] opacity-40 md:opacity-60"
+            style={{ left: "78%", top: "48%" }}
             animate={{ y: [0, 10, 0], rotate: [0, -45, -90, -180, -360] }}
             transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
           />
           <motion.div
-            className="absolute w-2 h-2 bg-[#FF8FAB] opacity-50"
-            style={{ left: "48%", top: "80%" }}
+            className="absolute w-2 h-2 bg-[#FF8FAB] opacity-30 md:opacity-50"
+            style={{ left: "45%", top: "72%" }}
             animate={{ y: [0, -8, 0] }}
             transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -250,10 +250,10 @@ export default function OurStory() {
         <motion.div
           onViewportEnter={() => setVisibleSteps(prev => ({ ...prev, step1: true }))}
           viewport={{ once: true, amount: 0.25 }}
-          className="relative flex flex-col md:flex-row items-stretch min-h-[220px] mb-24 md:mb-32 z-10"
+          className="relative flex flex-col md:flex-row items-stretch min-h-[220px] md:min-h-[170px] mb-24 md:mb-14 lg:mb-18 z-10"
         >
-          {/* Circular Node with pulsing animation (aligned left on mobile, left-[15%] on desktop/tablet) */}
-          <div ref={node1Ref} className="absolute left-[10px] md:left-[15%] top-4 z-20">
+          {/* Circular Node with pulsing animation (aligned left on mobile, left-[20%] on tablet, left-[15%] on desktop) */}
+          <div ref={node1Ref} className="absolute left-[10px] md:left-[20%] lg:left-[15%] top-4 z-20">
             <motion.div
               initial={{ scale: 0 }}
               animate={visibleSteps.step1 ? { scale: 1 } : { scale: 0 }}
@@ -276,7 +276,7 @@ export default function OurStory() {
             initial={{ opacity: 0, x: 30 }}
             animate={visibleSteps.step1 ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-full pl-14 md:pl-[42%] lg:pl-[46%] md:pr-[2%] flex flex-col md:flex-row gap-6 md:gap-10 lg:gap-16 items-center md:items-start text-left"
+            className="w-full pl-14 md:pl-[45%] lg:pl-[40%] md:pr-[2%] flex flex-col lg:flex-row gap-6 lg:gap-16 items-center lg:items-start text-left"
           >
             <div className="flex-1 pt-1.5 min-w-[300px] max-w-[480px]">
               <h4 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white font-sans tracking-tight">
@@ -302,10 +302,10 @@ export default function OurStory() {
         <motion.div
           onViewportEnter={() => setVisibleSteps(prev => ({ ...prev, step2: true }))}
           viewport={{ once: true, amount: 0.25 }}
-          className="relative flex flex-col md:flex-row items-stretch min-h-[160px] mb-24 md:mb-32 z-10"
+          className="relative flex flex-col md:flex-row items-stretch min-h-[160px] md:min-h-[120px] mb-24 md:mb-20 lg:mb-24 z-10"
         >
           {/* Circular Node with pulsing animation */}
-          <div ref={node2Ref} className="absolute left-[10px] md:left-auto md:right-[15%] top-4 z-20">
+          <div ref={node2Ref} className="absolute left-[10px] md:left-auto md:right-[20%] lg:right-[15%] top-4 z-20">
             <motion.div
               initial={{ scale: 0 }}
               animate={visibleSteps.step2 ? { scale: 1 } : { scale: 0 }}
@@ -328,14 +328,14 @@ export default function OurStory() {
             initial={{ opacity: 0, x: -30 }}
             animate={visibleSteps.step2 ? { opacity: 1, x: 0 } : { opacity: 0, x: -30 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-full pl-14 md:pl-[2%] md:pr-[46%] lg:pr-[52%] text-left md:text-right flex flex-col items-start md:items-end justify-start pt-1.5"
+            className="w-full pl-14 md:pl-[2%] md:pr-[49%] lg:pr-[44%] text-left md:text-right flex flex-col items-start md:items-end justify-start pt-1.5 md:-mt-8 lg:-mt-4"
           >
             <div className="max-w-[200px] sm:max-w-[220px] md:max-w-[260px] lg:max-w-[340px]">
               <h4 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white font-sans tracking-tight">
-                A small community was born
+                Built more than a community
               </h4>
               <p className="mt-3 text-sm md:text-base text-gray-600 dark:text-gray-300 font-sans leading-relaxed font-semibold">
-                What began as a WhatsApp group for a handful of girls became a place for learning, support, and connection.
+                Created a place where girls find support, mentorship, friendships, and the confidence to pursue bigger dreams.
               </p>
             </div>
           </motion.div>
@@ -345,10 +345,10 @@ export default function OurStory() {
         <motion.div
           onViewportEnter={() => setVisibleSteps(prev => ({ ...prev, step3: true }))}
           viewport={{ once: true, amount: 0.25 }}
-          className="relative flex flex-col md:flex-row items-stretch min-h-[160px] mb-12 md:mb-16 z-10"
+          className="relative flex flex-col md:flex-row items-stretch min-h-[160px] md:min-h-[120px] mb-12 md:mb-10 lg:mb-12 z-10"
         >
           {/* Circular Node with pulsing animation */}
-          <div ref={node3Ref} className="absolute left-[10px] md:left-[15%] top-4 z-20">
+          <div ref={node3Ref} className="absolute left-[10px] md:left-[20%] lg:left-[15%] top-4 z-20">
             <motion.div
               initial={{ scale: 0 }}
               animate={visibleSteps.step3 ? { scale: 1 } : { scale: 0 }}
@@ -371,7 +371,7 @@ export default function OurStory() {
             initial={{ opacity: 0, x: 30 }}
             animate={visibleSteps.step3 ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="w-full pl-14 md:pl-[46%] lg:pl-[52%] md:pr-[2%] text-left pt-1.5"
+            className="w-full pl-14 md:pl-[45%] lg:pl-[44%] md:pr-[2%] text-left pt-1.5"
           >
             <div className="max-w-[200px] sm:max-w-[220px] md:max-w-[260px] lg:max-w-[340px]">
               <h4 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white font-sans tracking-tight">
@@ -388,10 +388,10 @@ export default function OurStory() {
         <motion.div
           onViewportEnter={() => setVisibleSteps(prev => ({ ...prev, step4: true }))}
           viewport={{ once: true, amount: 0.25 }}
-          className="relative flex flex-col items-center justify-center min-h-[60px] mt-16 md:mt-24 z-10"
+          className="relative flex flex-col items-start md:items-center justify-center z-10 pl-[10px] md:pl-0 mt-16 md:mt-12 lg:mt-16"
         >
-          {/* Circular Node with pulsing animation, centered */}
-          <div ref={node4Ref} className="relative z-20">
+          {/* Circular Node with pulsing animation, centered on desktop, left on mobile */}
+          <div ref={node4Ref} className="relative z-20 md:mx-auto">
             <motion.div
               initial={{ scale: 0 }}
               animate={visibleSteps.step4 ? { scale: 1 } : { scale: 0 }}
@@ -407,10 +407,18 @@ export default function OurStory() {
                 <Heart className="w-4 h-4 fill-[#24101F]" />
               </div>
             </motion.div>
-
-            
           </div>
         </motion.div>
+
+        {/* HOW IT'S GOING Text header (centered on desktop/tablet, left-aligned on mobile) */}
+        <div className="w-full flex justify-start md:justify-center mt-12 md:mt-16 pl-[10px] md:pl-0 select-none z-10 relative">
+          <p
+            className="text-xs md:text-sm uppercase tracking-[0.3em] text-[#d955a4] font-bold"
+            style={{ fontFamily: "'Montserrat', sans-serif" }}
+          >
+            HOW IT'S GOING
+          </p>
+        </div>
 
       </div>
 
