@@ -88,8 +88,7 @@ export default function SpeakersShowcase() {
 
 
   return (
-    <div className="container mx-auto max-w-6xl px-6 flex flex-col items-center mt-0
-      ">
+    <div className="container mx-auto max-w-6xl px-6 flex flex-col items-center justify-center -mt-10 md:-mt-16 lg:-mt-24 py-4 md:py-8 select-none">
 
       {/* SECTION TITLE */}
       <div className="mb-10 md:mb-14 text-center">

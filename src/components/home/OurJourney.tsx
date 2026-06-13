@@ -145,7 +145,7 @@ export default function OurJourney() {
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap');`}</style>
 
       {/* Sticky viewport — fullscreen height for correct sticky pinning */}
-      <div className="sticky top-0 h-screen overflow-hidden flex flex-col z-10 bg-[#ffed95]">
+      <div className="sticky top-0 h-screen lg:h-[105vh] overflow-hidden flex flex-col z-10 bg-[#ffed95]">
 
         {/* Decorative pixel stars */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.4] z-0">
@@ -178,51 +178,68 @@ export default function OurJourney() {
         {/* Centered content area — compact vertical group in the middle of the screen */}
         <div className="relative z-10 flex flex-col items-center justify-center flex-1 overflow-hidden">
 
+          {/* HOW IT'S GOING Text header (sticky, stays in place while horizontal slides move) */}
+          <div className="w-full flex justify-center mb-6 select-none z-10">
+            <p
+              className="text-xs md:text-sm uppercase tracking-[0.3em] text-[#d955a4] font-bold text-center"
+              style={{ fontFamily: "'Montserrat', sans-serif" }}
+            >
+              HOW IT'S GOING
+            </p>
+          </div>
+
           {/* Horizontal sliding track */}
           <div className="w-full overflow-hidden">
             <motion.div style={{ x }} className="flex w-[600vw] select-none">
 
               {/* Slides 1–5: Milestone cards */}
-              {milestones.map((card, idx) => (
-                <div
-                  key={idx}
-                  className="w-screen flex-shrink-0 flex flex-col items-center justify-center px-6 sm:px-12 md:px-24 text-center"
-                >
-                  <div className="flex flex-col items-center gap-0 max-w-2xl w-full">
+              {milestones.map((card, idx) => {
+                const isFifthSlide = idx === 4;
+                const mascotSizeClasses = isFifthSlide
+                  ? "w-48 h-48 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72"
+                  : "w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 lg:w-56 lg:h-56";
 
-                    {/* Mascot — larger on all breakpoints */}
-                    <div className="w-36 h-36 sm:w-44 sm:h-44 md:w-52 md:h-52 lg:w-60 lg:h-60 flex-shrink-0 flex items-center justify-center">
-                      <img
-                        src={card.mascot}
-                        alt="Timeline mascot"
-                        className="w-full h-full object-contain"
-                      />
+                return (
+                  <div
+                    key={idx}
+                    className="w-screen flex-shrink-0 flex flex-col items-center justify-center px-6 sm:px-12 md:px-24 text-center"
+                  >
+                    <div className="flex flex-col items-center gap-0 max-w-2xl w-full">
+
+                      {/* Mascot — larger on all breakpoints */}
+                      <div className={`${mascotSizeClasses} flex-shrink-0 flex items-center justify-center`}>
+                        <img
+                          src={card.mascot}
+                          alt="Timeline mascot"
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+
+                      {/* Date */}
+                      <div className="mt-4 md:mt-5">
+                        <h2 className="text-gray-900 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight leading-none font-sans">
+                          {card.date}
+                        </h2>
+                      </div>
+
+                      {/* Title */}
+                      <div className="mt-2 md:mt-3">
+                        <h3 className="text-[#d955a4] text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold tracking-tight font-sans text-center">
+                          {highlightNumbers(card.title)}
+                        </h3>
+                      </div>
+
+                      {/* Description */}
+                      <div className="mt-3 md:mt-4">
+                        <p className="text-gray-900 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed max-w-md sm:max-w-xl md:max-w-2xl font-sans font-bold text-center">
+                          {highlightNumbers(card.description)}
+                        </p>
+                      </div>
+
                     </div>
-
-                    {/* Date */}
-                    <div className="mt-4 md:mt-5">
-                      <h2 className="text-gray-900 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-black uppercase tracking-tight leading-none font-sans">
-                        {card.date}
-                      </h2>
-                    </div>
-
-                    {/* Title */}
-                    <div className="mt-2 md:mt-3">
-                      <h3 className="text-[#d955a4] text-base sm:text-lg md:text-xl lg:text-2xl font-extrabold tracking-tight font-sans text-center">
-                        {highlightNumbers(card.title)}
-                      </h3>
-                    </div>
-
-                    {/* Description */}
-                    <div className="mt-3 md:mt-4">
-                      <p className="text-gray-900 text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed max-w-md sm:max-w-xl md:max-w-2xl font-sans font-bold text-center">
-                        {highlightNumbers(card.description)}
-                      </p>
-                    </div>
-
                   </div>
-                </div>
-              ))}
+                );
+              })}
 
               {/* Slide 6: Concluding slide */}
               <div className="w-screen flex-shrink-0 flex flex-col items-center justify-center px-6 sm:px-12 md:px-24 text-center">
@@ -260,7 +277,7 @@ export default function OurJourney() {
           </div>
 
           {/* Navigation controls — sits below the track, within the centered content area */}
-          <div className="flex flex-col items-center gap-3 mt-6 md:mt-8 z-20 select-none">
+          <div className="flex flex-col items-center gap-3 mt-6 md:mt-8 lg:mt-2 z-20 select-none">
 
             {/* Arrows */}
             <div className="flex items-center gap-4 md:gap-6">

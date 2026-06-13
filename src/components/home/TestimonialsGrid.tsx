@@ -4,6 +4,9 @@ import { testimonials } from "@/data/community";
 import mascotImpact from "@/assets/main-mascot/showing-impact.png";
 import GridBackground from "@/components/shared/GridBackground";
 import RetroCard from "../shared/RetroCard";
+import srinayanaImg from "@/assets/video-testimonials/Srinayana-Mandalapu.png";
+import varshaImg from "@/assets/video-testimonials/Varsha-Dewangan.png";
+import nehaImg from "@/assets/video-testimonials/A.Neha-Sabari- Sree.png";
 
 
 function TestimonialsMarquee() {
@@ -120,7 +123,7 @@ function TestimonialsMarquee() {
         style={{
           fontFamily: "'Press Start 2P', monospace",
           fontWeight: 700,
-          fontSize: "clamp(0.74rem, 1.4vw, 0.84rem)",
+          fontSize: "clamp(0.65rem, 1.2vw, 0.70rem)",
           lineHeight: 1.8,
           margin: 0,
         }}
@@ -137,7 +140,7 @@ function TestimonialsMarquee() {
             style={{
               fontFamily: "'Montserrat', sans-serif",
               fontWeight: 700,
-              fontSize: "clamp(0.88rem, 1.7vw, 1.1rem)",
+              fontSize: "clamp(0.76rem, 1.4vw, 0.9rem)",
               margin: 0,
             }}
           >
@@ -148,7 +151,7 @@ function TestimonialsMarquee() {
             className="text-gray-900 font-normal mt-1"
             style={{
               fontFamily: "'Montserrat', sans-serif",
-              fontSize: "clamp(0.76rem, 1.4vw, 0.9rem)",
+              fontSize: "clamp(0.65rem, 1.2vw, 0.85rem)",
               margin: "4px 0 0",
             }}
           >
@@ -167,18 +170,27 @@ export function TestimonialsGrid() {
   const videoTestimonials = [
     {
       id: 1,
-      name: "Anjali Mehta",
+      name: "Srinayana Mandalapu",
       role: "Open Source Contributor & Dev",
+      videoUrl: "https://drive.google.com/file/d/16REYn5cVvj4I6YOcBIczlNEMbLKmfh9J/view?usp=sharing",
+      image: srinayanaImg,
+      objectPosition: "center",
     },
     {
       id: 2,
-      name: "Tanvi Roy",
+      name: "Varsha Dewangan",
       role: "GLT Fellowship Alumna",
+      videoUrl: "https://drive.google.com/drive/folders/11lHNQviYvT7fDhDMYZRWbVVgDgvt6Sbv",
+      image: varshaImg,
+      objectPosition: "center 30%",
     },
     {
       id: 3,
-      name: "Ishita Deshmukh",
+      name: "A. Neha Sabari Sree",
       role: "Hackathon Organizer",
+      videoUrl: "https://drive.google.com/file/d/1T9WVbX0wYEEAYUtsQKpAxVdhcDo42VLQ/view?usp=sharing",
+      image: nehaImg,
+      objectPosition: "center",
     },
   ];
 
@@ -289,38 +301,48 @@ export function TestimonialsGrid() {
                 </span>
               </div>
 
-              {/* Video Square Placeholder - aspect-video instead of aspect-square */}
-              <div className="w-full aspect-video bg-transparent border-2 border-dashed border-black/15 rounded-lg flex items-center justify-center relative overflow-hidden group/video cursor-pointer">
-                <div className="absolute inset-0 bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:16px_16px] opacity-[0.04]" />
+              {/* Clickable video placeholder showing screenshot */}
+              <div
+                onClick={() => window.open(item.videoUrl, "_blank")}
+                className="w-full aspect-video bg-transparent border-2 border-black rounded-lg flex items-center justify-center relative overflow-hidden group/video cursor-pointer"
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ objectPosition: item.objectPosition }}
+                />
                 
-                {/* Retro Play Button */}
-                <div className="w-14 h-14 rounded-full bg-white border-2 border-black flex items-center justify-center shadow-[3px_3px_0px_rgba(0,0,0,1)] group-hover/video:-translate-y-0.5 group-hover/video:shadow-[4px_4px_0px_rgba(0,0,0,1)] transition-all duration-200 z-10">
-                  <svg className="w-5 h-5 text-black fill-black ml-0.5" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
+                <div className="absolute inset-0 bg-[radial-gradient(#000000_1px,transparent_1px)] [background-size:16px_16px] opacity-[0.04]" />
 
-                <div className="absolute inset-x-0 bottom-0 bg-black/40 py-2 text-center translate-y-full group-hover/video:translate-y-0 transition-transform duration-200">
+                <div className="absolute inset-x-0 bottom-0 bg-black/40 py-2 text-center translate-y-full group-hover/video:translate-y-0 transition-transform duration-200 z-10">
                   <span className="text-[10px] font-mono text-white font-bold tracking-wider uppercase">
                     Play Video
                   </span>
                 </div>
               </div>
 
-              {/* Name and Designation */}
-              <div className="mt-4 flex flex-col gap-1 text-left">
+              {/* Name and Play Button */}
+              <div className="mt-4 flex items-center justify-between w-full gap-4">
                 <h4
                   className="font-sans font-bold text-gray-900 text-lg leading-tight"
                   style={{ fontFamily: "'Montserrat', sans-serif" }}
                 >
                   {item.name}
                 </h4>
-                <p
-                  className="font-sans text-xs text-gray-600 font-medium"
-                  style={{ fontFamily: "'Montserrat', sans-serif" }}
+
+                {/* Retro Play Button positioned on the right of name */}
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    window.open(item.videoUrl, "_blank");
+                  }}
+                  className="w-14 h-14 rounded-full bg-white border-2 border-black flex items-center justify-center shadow-[3px_3px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[4px_4px_0px_rgba(0,0,0,1)] active:translate-y-0.5 active:shadow-[1px_1px_0px_rgba(0,0,0,1)] transition-all duration-200 shrink-0 z-10"
                 >
-                  {item.role}
-                </p>
+                  <svg className="w-5 h-5 text-black fill-black ml-0.5" viewBox="0 0 24 24">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </button>
               </div>
             </div>
           ))}

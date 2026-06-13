@@ -410,16 +410,6 @@ export default function OurStory() {
           </div>
         </motion.div>
 
-        {/* HOW IT'S GOING Text header (centered on desktop/tablet, left-aligned on mobile) */}
-        <div className="w-full flex justify-start md:justify-center mt-12 md:mt-16 pl-[10px] md:pl-0 select-none z-10 relative">
-          <p
-            className="text-xs md:text-sm uppercase tracking-[0.3em] text-[#d955a4] font-bold"
-            style={{ fontFamily: "'Montserrat', sans-serif" }}
-          >
-            HOW IT'S GOING
-          </p>
-        </div>
-
       </div>
 
     </div>
