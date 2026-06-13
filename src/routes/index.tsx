@@ -298,7 +298,7 @@ function HomePage() {
 
 
        {/* WHY JOIN US — scrapbook cards */}
-      <section ref={initiativesSectionRef} className="relative w-full py-16 md:py-24 overflow-hidden bg-[#fdf9f5]">
+      <section ref={initiativesSectionRef} className="relative w-full py-16 md:py-24 overflow-visible bg-[#fdf9f5]">
         <style>{`@import url('https://fonts.cdnfonts.com/css/satoshi');`}</style>
         <div className="relative w-full container mx-auto max-w-7xl px-6 flex flex-col justify-start gap-2 md:gap-3">
           <div className="relative w-full overflow-visible select-none py-0 md:py-1">
