@@ -156,8 +156,12 @@ function PeoplePage() {
             >
               <div>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border-2 border-black bg-[#ffed95] text-lg font-bold text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
-                    {p.name.charAt(0)}
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-black bg-[#ffed95] text-lg font-bold text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                    {p.image ? (
+                      <img src={p.image} alt={p.name} loading="lazy" className="h-full w-full object-cover" />
+                    ) : (
+                      p.name.charAt(0)
+                    )}
                   </div>
                   <div>
                     <h3 className="font-display text-lg font-bold leading-tight text-gray-900 group-hover:text-[#d955a4] transition-colors">
