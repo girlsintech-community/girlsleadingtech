@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import MemberProfileCard from "@/components/site/MemberProfileCard";
 import type { TeamMember } from "@/data/types";
-import washiTapeSticker from "@/assets/stickers/washi-tape.png";
 
 interface TeamShowcaseProps {
   filteredTeam: TeamMember[];
@@ -35,77 +34,22 @@ export default function TeamShowcase({ filteredTeam }: TeamShowcaseProps) {
         {/* LEFT COLUMN — MEET THE TEAM Header + Description */}
         <div className="w-full lg:w-[35%] lg:sticky lg:top-32 flex flex-col justify-center pt-4">
           {/* MEET text block */}
-          <div className="relative inline-block mb-8">
-            <h2
-              className="
-                font-['Anton']
-                uppercase
-                text-black
-                leading-[0.85]
-                tracking-[-0.03em]
-                select-none
-                pointer-events-none
-                text-[5.5rem]
-                sm:text-[7rem]
-                md:text-[8.5rem]
-                lg:text-[9rem]
-                relative
-                z-0
-              "
-            >
-              MEET
-            </h2>
+          <div className="relative min-h-[140px] sm:min-h-[180px] md:min-h-[220px] lg:min-h-[260px] flex items-center justify-center md:justify-start w-full mb-6">
+            <div className="relative inline-block mx-auto md:mx-0">
+              <h2 className="font-['Anton'] uppercase text-black leading-none tracking-[-0.02em] select-none pointer-events-none text-[6.5rem] sm:text-[7rem] md:text-[6rem] lg:text-[10rem] xl:text-[12rem] relative z-0">
+                MEET
+              </h2>
 
-            {/* THE TEAM pink label — positioned to overlap bottom-right of MEET */}
-            <div
-              className="
-                absolute
-                z-10
-                bottom-[2%]
-                right-[-5%]
-                sm:right-[-8%]
-                md:right-[-10%]
-                lg:right-[-12%]
-                rotate-[-8deg]
-                bg-[#d955a4]
-                px-4
-                sm:px-5
-                md:px-6
-                py-1.5
-                shadow-lg
-                whitespace-nowrap
-              "
-            >
-              <span
-                className="
-                  font-['Anton']
-                  uppercase
-                  text-black
-                  leading-none
-                  text-lg
-                  sm:text-xl
-                  md:text-2xl
-                  lg:text-[1.7rem]
-                "
-              >
-                THE TEAM
-              </span>
+              <div className="absolute z-10 bottom-[5%] right-[-5%] sm:right-[-6%] md:right-[-10%] lg:right-[-12%] rotate-[-8deg] bg-[#d955a4] px-3 sm:px-4 md:px-5 py-1 shadow-lg whitespace-nowrap">
+                <span className="font-['Anton'] uppercase text-black leading-none text-base sm:text-lg md:text-xl lg:text-2xl">
+                  THE TEAM
+                </span>
+              </div>
             </div>
-
-            {/* Washi tape decorative sticker */}
-            <img
-              src={washiTapeSticker}
-              alt=""
-              className="absolute -top-4 -right-2 w-12 h-12 object-contain rotate-[15deg] pointer-events-none select-none z-20 hidden md:block"
-            />
           </div>
 
-          {/* Description */}
-          <p
-            className="text-base sm:text-lg text-gray-500 leading-relaxed max-w-sm"
-            style={{ fontFamily: "'Satoshi', sans-serif" }}
-          >
-            The builders, designers, and community leaders powering Girls Leading Tech every day.
+          <p className="font-sans text-base md:text-lg text-zinc-400 mt-2 md:mt-3 max-w-xs md:max-w-sm text-center md:text-left mx-auto md:mx-0 leading-relaxed">
+            Meet the core crew building Girls Leading Tech — mentors, organizers, contributors and volunteers united by purpose.
           </p>
         </div>
 
