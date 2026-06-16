@@ -137,7 +137,7 @@ function EventsLayout() {
                     className={cn(
                       "px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 border",
                       category === cat
-                        ? "bg-gradient-to-r from-[#d955a4] to-[#ff7eb3] text-white border-transparent shadow-[0_4px_14px_rgba(217,85,164,0.35)]"
+                        ? "bg-[#ffed95] text-black border-transparent shadow-sm"
                         : "bg-white text-gray-700 border-pink-200 hover:bg-pink-50/50"
                     )}
                     style={{ fontFamily: "'Montserrat', sans-serif" }}
@@ -149,15 +149,15 @@ function EventsLayout() {
             </div>
 
             {/* 3-Way Toggle */}
-            <div className="bg-white/80 backdrop-blur-md border border-gray-100 flex p-1.5 rounded-full shadow-sm">
+            <div className="bg-white/80 backdrop-blur-md border border-gray-100 flex p-1.5 rounded-sm shadow-sm">
               <Link
                 to="/events/ongoing"
                 resetScroll={false}
                 onClick={handleScrollToGrid}
                 className={cn(
-                  "flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300",
+                  "flex items-center gap-2 rounded-sm px-5 py-2.5 text-sm font-bold transition-all duration-300",
                   isOngoing
-                    ? "bg-gradient-to-r from-[#d955a4] to-[#ff7eb3] text-white shadow-[0_4px_14px_rgba(217,85,164,0.35)]"
+                    ? "bg-[#ffed95] text-black shadow-sm"
                     : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/50"
                 )}
                 style={{ fontFamily: "'Montserrat', sans-serif" }}
@@ -169,9 +169,9 @@ function EventsLayout() {
                 resetScroll={false}
                 onClick={handleScrollToGrid}
                 className={cn(
-                  "flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300",
+                  "flex items-center gap-2 rounded-sm px-5 py-2.5 text-sm font-bold transition-all duration-300",
                   isUpcoming
-                    ? "bg-gradient-to-r from-[#d955a4] to-[#ff7eb3] text-white shadow-[0_4px_14px_rgba(217,85,164,0.35)]"
+                    ? "bg-[#ffed95] text-black shadow-sm"
                     : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/50"
                 )}
                 style={{ fontFamily: "'Montserrat', sans-serif" }}
@@ -183,9 +183,9 @@ function EventsLayout() {
                 resetScroll={false}
                 onClick={handleScrollToGrid}
                 className={cn(
-                  "flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-bold transition-all duration-300",
+                  "flex items-center gap-2 rounded-sm px-5 py-2.5 text-sm font-bold transition-all duration-300",
                   isPast
-                    ? "bg-gradient-to-r from-[#d955a4] to-[#ff7eb3] text-white shadow-[0_4px_14px_rgba(217,85,164,0.35)]"
+                    ? "bg-[#ffed95] text-black shadow-sm"
                     : "text-slate-500 hover:text-slate-900 hover:bg-slate-100/50"
                 )}
                 style={{ fontFamily: "'Montserrat', sans-serif" }}
@@ -200,7 +200,7 @@ function EventsLayout() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.7 }}
-            className="relative w-full overflow-hidden border-y-[2px] border-[#d955a4] py-3 mt-10 bg-white/40"
+            className="relative w-full overflow-hidden bg-[#ffc2da] border-y-[1.5px] border-black py-2 mt-10"
           >
             <div className="ticker-run">
               {[...Array(4)].map((_, i) => (
@@ -211,12 +211,12 @@ function EventsLayout() {
                   ].map((t) => (
                     <div key={t} className="flex items-center">
                       <span
-                        className="text-[#d955a4] font-black text-[10px] md:text-xs tracking-[0.15em] md:tracking-[0.2em] uppercase mx-3 md:mx-6"
-                        style={{ fontFamily: "'Montserrat', sans-serif" }}
+                        className="text-black font-bold text-[10px] md:text-xs tracking-[0.15em] md:tracking-[0.2em] uppercase"
+                        style={{ fontFamily: "'Montserrat', sans-serif", textShadow: "0 0 12px rgba(255,255,255,0.9), 0 0 4px rgba(255,255,255,0.5)" }}
                       >
                         {t}
                       </span>
-                      <span className="text-[#ffed95] text-lg mx-2 md:mx-4">✦</span>
+                      <span className="text-black text-lg mx-6 md:mx-10" style={{ textShadow: "0 0 12px rgba(255,255,255,0.9), 0 0 4px rgba(255,255,255,0.5)" }}>✦</span>
                     </div>
                   ))}
                 </div>

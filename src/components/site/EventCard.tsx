@@ -2,8 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { Calendar, Clock, Play, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const rotations = [-2, 1.5, -1, 2, -1.5, 2.5];
-
 export function EventCard({
   event,
   thumb,
@@ -19,18 +17,9 @@ export function EventCard({
   isHighlighted?: boolean;
   index: number;
 }) {
-  const rot = rotations[index % rotations.length] ?? 0;
-  
-  const dateObj = new Date(event.date);
-  const monthStr = dateObj.toLocaleDateString("en-US", { month: "short" }).toUpperCase();
-  const dateNum = dateObj.getDate();
-
   return (
     <div
-      className="relative group h-full transition-all duration-400 ease-out z-10 hover:z-50 hover:scale-[1.03] hover:!rotate-0 pt-4"
-      style={{
-        transform: `rotate(${rot}deg)`,
-      }}
+      className="relative group h-full transition-all duration-400 ease-out z-10 hover:z-50 hover:scale-[1.03] pt-4"
     >
       <Link to="/events/$eventId" params={{ eventId: event.id }} className="block h-full">
         <article
@@ -55,15 +44,7 @@ export function EventCard({
               </div>
             )}
             
-            {/* Calendar Tear-off */}
-            <div className="absolute top-4 left-4 bg-white rounded-lg shadow-md overflow-hidden w-12 text-center flex flex-col border border-gray-100 z-20">
-              <div className="bg-[#d955a4] text-white text-[9px] font-bold uppercase tracking-widest py-1" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                {monthStr}
-              </div>
-              <div className="text-gray-900 font-black text-lg py-1 leading-none" style={{ fontFamily: "'Montserrat', sans-serif" }}>
-                {dateNum}
-              </div>
-            </div>
+
 
             {/* Badges */}
             {!isUpcoming && (

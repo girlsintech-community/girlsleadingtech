@@ -38,7 +38,7 @@ function UpcomingEvents() {
         </p>
         <Link 
           to="/events/past"
-          className="px-6 py-2.5 rounded-full border-2 border-pink-400 text-pink-500 font-semibold hover:bg-pink-50 transition-colors"
+          className="px-6 py-2.5 rounded-full bg-[#ffed95] text-black font-semibold shadow-sm hover:bg-[#fde047] hover:shadow-md transition-all duration-300"
           style={{ fontFamily: "'Montserrat', sans-serif" }}
         >
           Explore Past Events
