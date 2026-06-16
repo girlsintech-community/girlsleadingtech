@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
 import pointingMascot from "@/assets/main-mascot/pointing.png";
-import organizerIdle from "@/assets/main-mascot/idle.png";
+import eventsMascot from "@/assets/characters/community-girl/event-mascot.png";
 import starSticker from "@/assets/stickers/star.png";
 import washiTape from "@/assets/stickers/washi-tape.png";
 
@@ -68,7 +68,7 @@ export function EventsHero() {
             transition={{ duration: 0.6, delay: 0.3, type: "spring", bounce: 0.4 }}
             className="hidden md:block w-36 lg:w-48 shrink-0 z-20 self-end mb-4"
           >
-            <img src={organizerIdle} alt="Organizer" className="w-full h-auto object-contain drop-shadow-xl" />
+            <img src={eventsMascot} alt="Events Mascot" className="w-full h-auto object-contain drop-shadow-xl" />
           </motion.div>
         </div>
 
