@@ -148,6 +148,18 @@ import img_team_vaishnavi_iyer from "@/assets/team/vaishnavi-iyer.jpg";
 import img_team_vijay_laxmi from "@/assets/team/vijay-laxmi.jpg";
 import img_team_yashika_garg from "@/assets/team/yashika-garg.jpg";
 
+import img_pf_andrew_ng from "@/assets/people/andrew-ng.jpg";
+import img_pf_naval_ravikant from "@/assets/people/naval-ravikant.webp";
+import img_pf_sam_altman from "@/assets/people/sam-altman.jpg";
+import img_pf_reshma_saujani from "@/assets/people/reshma-saujani.jpg";
+import img_pf_cassidy_williams from "@/assets/people/cassidy-williams.png";
+import img_pf_kelsey_hightower from "@/assets/people/kelsey-hightower.jpg";
+import img_pf_lex_fridman from "@/assets/people/lex-fridman.webp";
+import img_pf_lenny_rachitsky from "@/assets/people/lenny-rachitsky.webp";
+import img_pf_fei_fei_li from "@/assets/people/fei-fei-li.jpg";
+import img_pf_tracy_chou from "@/assets/people/tracy-chou.jpg";
+import img_pf_sahil_lavingia from "@/assets/people/sahil-lavingia.jpg";
+import img_pf_anthony_fu from "@/assets/people/anthony-fu.jpg";
 
 export const speakers: Speaker[] = [
   { id: "s1", name: "Kavya Choudhary", designation: "Scholars'2024", company: "WE by Google TalentSprint", linkedin: "https://www.linkedin.com/in/kavya1610/", image: spk_kavya },
@@ -452,18 +464,18 @@ export const testimonials: Testimonial[] = [
 ];
 
 export const peopleToFollow: PersonToFollow[] = [
-  { id: "pf1", name: "Andrew Ng", domain: "AI / ML", linkedin: "https://www.linkedin.com/in/andrewyng/", summary: "Co-founder of Coursera and DeepLearning.AI. One of the most influential voices in modern AI.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Andrew_Ng_at_TechCrunch_Disrupt_SF_2017.jpg/400px-Andrew_Ng_at_TechCrunch_Disrupt_SF_2017.jpg" },
-  { id: "pf2", name: "Naval Ravikant", domain: "Finance & Business", twitter: "https://x.com/naval", summary: "AngelList founder. Sharp essays on wealth, leverage and the long game.", image: "https://upload.wikimedia.org/wikipedia/commons/5/55/Naval_Ravikant_%28cropped%29.jpg" },
-  { id: "pf3", name: "Sam Altman", domain: "AI / Startups", twitter: "https://x.com/sama", summary: "CEO of OpenAI. Pragmatic takes on building startups and the future of AI.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Meeting_with_Masayoshi_Son_and_Sam_Altman_%28February_3%2C_2025%29_%283x4_cropped_on_Altman%29.jpg/400px-Meeting_with_Masayoshi_Son_and_Sam_Altman_%28February_3%2C_2025%29_%283x4_cropped_on_Altman%29.jpg" },
-  { id: "pf4", name: "Reshma Saujani", domain: "Women in Tech", linkedin: "https://www.linkedin.com/in/reshmasaujani/", summary: "Founder of Girls Who Code. Author and tireless advocate for girls in STEM.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/2018-prathamusa-reshma-saujani.jpg/400px-2018-prathamusa-reshma-saujani.jpg" },
-  { id: "pf5", name: "Cassidy Williams", domain: "Frontend / DevRel", twitter: "https://x.com/cassidoo", summary: "Engineer, educator and one of the warmest voices in frontend.", image: "https://api.dicebear.com/9.x/initials/svg?seed=Cassidy%20Williams&backgroundColor=f8c8d8,e8a87c,c9a0dc,87a878,e85d3a&textColor=ffffff&fontWeight=700" },
-  { id: "pf6", name: "Kelsey Hightower", domain: "DevOps / Cloud", twitter: "https://x.com/kelseyhightower", summary: "Kubernetes legend. Generous teacher of distributed systems.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Kelsey_Hightower_%28cropped%2C_brightened%29.png/400px-Kelsey_Hightower_%28cropped%2C_brightened%29.png" },
-  { id: "pf7", name: "Lex Fridman", domain: "AI / Podcasts", twitter: "https://x.com/lexfridman", summary: "MIT researcher and podcaster exploring AI, science and life.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Lex_Fridman_teaching_at_MIT_in_2018.png/400px-Lex_Fridman_teaching_at_MIT_in_2018.png" },
-  { id: "pf8", name: "Lenny Rachitsky", domain: "Product", linkedin: "https://www.linkedin.com/in/lennyrachitsky/", summary: "Ex-Airbnb PM running the most-read product newsletter on the internet.", image: "https://api.dicebear.com/9.x/initials/svg?seed=Lenny%20Rachitsky&backgroundColor=f8c8d8,e8a87c,c9a0dc,87a878,e85d3a&textColor=ffffff&fontWeight=700" },
-  { id: "pf9", name: "Fei-Fei Li", domain: "AI / ML", linkedin: "https://www.linkedin.com/in/fei-fei-li-4541247/", summary: "Stanford AI lab co-director. Pioneer of computer vision and ImageNet.", image: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/Fei-Fei_Li_at_AI_for_Good_2017.jpg/400px-Fei-Fei_Li_at_AI_for_Good_2017.jpg" },
-  { id: "pf10", name: "Tracy Chou", domain: "Engineering / Founders", twitter: "https://x.com/triketora", summary: "Founder of Block Party. Vocal advocate for diversity in tech.", image: "https://api.dicebear.com/9.x/initials/svg?seed=Tracy%20Chou&backgroundColor=f8c8d8,e8a87c,c9a0dc,87a878,e85d3a&textColor=ffffff&fontWeight=700" },
-  { id: "pf11", name: "Sahil Lavingia", domain: "Indie Founders", twitter: "https://x.com/shl", summary: "Founder of Gumroad. Honest writing on indie founding and creative work.", image: "https://pbs.twimg.com/profile_images/1701128842596773888/lP3kZj7s_400x400.jpg" },
-  { id: "pf12", name: "Anthony Fu", domain: "Open Source", twitter: "https://x.com/antfu7", summary: "Vue/Vite/UnoCSS core team. Prolific open-source maintainer.", image: "https://api.dicebear.com/9.x/initials/svg?seed=Anthony%20Fu&backgroundColor=f8c8d8,e8a87c,c9a0dc,87a878,e85d3a&textColor=ffffff&fontWeight=700" },
+  { id: "pf1", name: "Andrew Ng", domain: "AI / ML", linkedin: "https://www.linkedin.com/in/andrewyng/", summary: "Co-founder of Coursera and DeepLearning.AI. One of the most influential voices in modern AI.", image: img_pf_andrew_ng },
+  { id: "pf2", name: "Naval Ravikant", domain: "Finance & Business", twitter: "https://x.com/naval", summary: "AngelList founder. Sharp essays on wealth, leverage and the long game.", image: img_pf_naval_ravikant },
+  { id: "pf3", name: "Sam Altman", domain: "AI / Startups", twitter: "https://x.com/sama", summary: "CEO of OpenAI. Pragmatic takes on building startups and the future of AI.", image: img_pf_sam_altman },
+  { id: "pf4", name: "Reshma Saujani", domain: "Women in Tech", linkedin: "https://www.linkedin.com/in/reshmasaujani/", summary: "Founder of Girls Who Code. Author and tireless advocate for girls in STEM.", image: img_pf_reshma_saujani },
+  { id: "pf5", name: "Cassidy Williams", domain: "Frontend / DevRel", twitter: "https://x.com/cassidoo", summary: "Engineer, educator and one of the warmest voices in frontend.", image: img_pf_cassidy_williams },
+  { id: "pf6", name: "Kelsey Hightower", domain: "DevOps / Cloud", twitter: "https://x.com/kelseyhightower", summary: "Kubernetes legend. Generous teacher of distributed systems.", image: img_pf_kelsey_hightower },
+  { id: "pf7", name: "Lex Fridman", domain: "AI / Podcasts", twitter: "https://x.com/lexfridman", summary: "MIT researcher and podcaster exploring AI, science and life.", image: img_pf_lex_fridman },
+  { id: "pf8", name: "Lenny Rachitsky", domain: "Product", linkedin: "https://www.linkedin.com/in/lennyrachitsky/", summary: "Ex-Airbnb PM running the most-read product newsletter on the internet.", image: img_pf_lenny_rachitsky },
+  { id: "pf9", name: "Fei-Fei Li", domain: "AI / ML", linkedin: "https://www.linkedin.com/in/fei-fei-li-4541247/", summary: "Stanford AI lab co-director. Pioneer of computer vision and ImageNet.", image: img_pf_fei_fei_li },
+  { id: "pf10", name: "Tracy Chou", domain: "Engineering / Founders", twitter: "https://x.com/triketora", summary: "Founder of Block Party. Vocal advocate for diversity in tech.", image: img_pf_tracy_chou },
+  { id: "pf11", name: "Sahil Lavingia", domain: "Indie Founders", twitter: "https://x.com/shl", summary: "Founder of Gumroad. Honest writing on indie founding and creative work.", image: img_pf_sahil_lavingia },
+  { id: "pf12", name: "Anthony Fu", domain: "Open Source", twitter: "https://x.com/antfu7", summary: "Vue/Vite/UnoCSS core team. Prolific open-source maintainer.", image: img_pf_anthony_fu },
 ];
 
 export const placeholderResources: Record<string, Resource[]> = {

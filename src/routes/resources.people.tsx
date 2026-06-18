@@ -155,19 +155,19 @@ function PeoplePage() {
               style={{ animationDelay: `${(i % 9) * 0.05}s` }}
             >
               <div>
-                <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-black bg-[#ffed95] text-lg font-bold text-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 border-black bg-[#ffed95] text-2xl font-bold text-black shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                     {p.image ? (
                       <img src={p.image} alt={p.name} loading="lazy" className="h-full w-full object-cover" />
                     ) : (
                       p.name.charAt(0)
                     )}
                   </div>
-                  <div>
+                  <div className="pt-1.5">
                     <h3 className="font-display text-lg font-bold leading-tight text-gray-900 group-hover:text-[#d955a4] transition-colors">
                       {p.name}
                     </h3>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#d955a4]">
+                    <span className="mt-2 inline-block rounded-full bg-pink-100 text-pink-700 px-2.5 py-0.5 text-[10px] font-extrabold uppercase tracking-wider">
                       {p.domain}
                     </span>
                   </div>
