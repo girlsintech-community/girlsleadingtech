@@ -102,7 +102,15 @@ import spk_yajur_bajaj from "@/assets/speakers/yajur-bajaj.webp";
 import spk_yashaswini_vismaya from "@/assets/speakers/yashaswini-vismaya.webp";
 import spk_yashika_kukkar from "@/assets/speakers/yashika-kukkar.webp";
 import spk_yog_disha from "@/assets/speakers/yog-disha.webp";
-
+import spk_ridhy from "@/assets/speakers/ridhy-arora.webp";
+import spk_sravya from "@/assets/speakers/sravya-uppalapati.webp";
+import spk_angel from "@/assets/speakers/angel-sharma.webp";
+import spk_anshika from "@/assets/speakers/anshika-agarwal.webp";
+import spk_diya from "@/assets/speakers/diya-parelkar.webp";
+import spk_garima from "@/assets/speakers/garima-sahu.webp";
+import spk_garimajha from "@/assets/speakers/garima-jha.webp";
+import spk_danish from "@/assets/speakers/mohammad-danish.webp";
+import spk_sweta from "@/assets/speakers/sweta-pandey.webp";
 
 import img_contrib_aakanksha_singh from "@/assets/contributors/aakanksha-singh.jpg";
 import img_contrib_aarushi_chottani from "@/assets/contributors/aarushi-chottani.png";
@@ -154,7 +162,7 @@ import img_pf_sahil_lavingia from "@/assets/people/sahil-lavingia.jpg";
 import img_pf_anthony_fu from "@/assets/people/anthony-fu.jpg";
 
 export const speakers: Speaker[] = [
-  { id: "s1", name: "Kavya Choudhary", designation: "Scholars'2024", company: "WE by Google TalentSprint", linkedin: "https://www.linkedin.com/in/ridhy-arora-097784258/", image: spk_kavya },
+  { id: "s1", name: "Kavya Choudhary", designation: "Scholars'2024", company: "WE by Google TalentSprint", linkedin: "https://www.linkedin.com/in/kavya1610/", image: spk_kavya },
   { id: "s2", name: "Jigisha Arora", designation: "STEP Intern", company: "Google", linkedin: "https://www.linkedin.com/in/jigisha-arora-212ab5256/", image: spk_jigisha_arora },
   { id: "s3", name: "Nishant Singhal", designation: "GSoC'23 Contributor", company: "Google", linkedin: "https://www.linkedin.com/in/nishant-singhal19/", image: spk_nishant_singhal },
   { id: "s4", name: "Divina Pooja John", designation: "Software Engineer", company: "Google", linkedin: "https://www.linkedin.com/in/divina-john/", image: spk_divina_pooja_john },
@@ -175,7 +183,7 @@ export const speakers: Speaker[] = [
   { id: "s19", name: "Shilpi Mitra", designation: "Principle Software Engineer Manager", company: "Microsoft", linkedin: "https://www.linkedin.com/in/shilpimitra/", image: spk_shilpi_mitra },
   { id: "s20", name: "Dr. Naga Swathi T.j", designation: "Global Senior Director", company: "SAP", linkedin: "https://www.linkedin.com/in/drnagaswathitj/", image: spk_naga_swathi },
   { id: "s21", name: "Madhu Sathvik", designation: "Founder", company: "Satwa Yoga", linkedin: "https://www.facebook.com/madhu.sathvik/", image: spk_madhu_sathvik },
-  { id: "s22", name: "Urvashi Agarwal", designation: "Intern", company: "Drdo", linkedin: "https://www.linkedin.com/in/garimajha25/", image: spk_urvashi_agarwal },
+  { id: "s22", name: "Urvashi Agarwal", designation: "Mentee", company: "Codess Cafe", linkedin: "https://www.linkedin.com/in/uraviva/", image: spk_urvashi_agarwal },
   { id: "s23", name: "Deeksha Pandey", designation: "SDE III", company: "Google", linkedin: "https://www.linkedin.com/in/deekshapandey16/", image: spk_deeksha_pandey },
   { id: "s24", name: "Siddhi Gupta", designation: "Scholar", company: "Amazon Future Engineer", linkedin: "https://www.linkedin.com/in/siddhiguptas/", image: spk_siddhi_gupta },
   { id: "s25", name: "Akanksha Buchke", designation: "Intuit", company: "Senior Software Engineer", linkedin: "https://www.linkedin.com/in/akanksha-buchke/", image: spk_akanksha_buchke },
@@ -184,7 +192,7 @@ export const speakers: Speaker[] = [
   { id: "s28", name: "Chinmayi D.s", designation: "Mentee", company: "Lfx", linkedin: "https://www.linkedin.com/in/chinmayi-d-s-2608b0263/", image: spk_chinmayi },
   { id: "s29", name: "Aarushi Chottani", designation: "Director", company: "Outreach Debate", linkedin: "https://www.linkedin.com/in/aarushi-chottani-80b861322/", image: spk_aarushi_chottani },
   { id: "s30", name: "Pranav Bhat", designation: "Esoc@Skytime Ethindia'24 Winner", company: "", linkedin: "https://www.linkedin.com/in/pranav-bhat-966003195/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B0zFh%2FMa9RsOiFwG3sD4txg%3D%3D", image: spk_pranav_bhat },
-  { id: "s31", name: "Preksha Mahajan", designation: "SWE Intern", company: "Nielson Salesforce", linkedin: "https://www.linkedin.com/in/anshika-aggarwal-704847249/", image: spk_preksha_mahajan },
+  { id: "s31", name: "Preksha Mahajan", designation: "SWE Intern", company: "Nielson", linkedin: "https://www.linkedin.com/in/preksha-mahajan-090359214/", image: spk_preksha_mahajan },
   { id: "s32", name: "Aunshka Srivastava", designation: "SWE Intern", company: "Microsoft", linkedin: "https://www.linkedin.com/in/anushka-srivastava-798540255/?lipi=urn%3Ali%3Apage%3Ad_flagship3_people_connections%3B0zFh%2FMa9RsOiFwG3sD4txg%3D%3D", image: spk_anushka_srivastava },
   { id: "s33", name: "Khushi Panwar", designation: "Ambassador", company: "Women Techmakers", linkedin: "https://www.linkedin.com/in/smilewithkhushi/", image: spk_khushi_panwar },
   { id: "s34", name: "Yog Disha", designation: "Founder", company: "Satva Yoga Centre", linkedin: "https://www.linkedin.com/in/yog-disha-589476118/", image: spk_yog_disha },
@@ -246,7 +254,7 @@ export const speakers: Speaker[] = [
   { id: "s90", name: "Aprajita Verma", designation: "Frontend Architect", company: "Mycom", linkedin: "https://www.linkedin.com/in/aprajita-verma-19522814a/", image: spk_aprajita_verma },
   { id: "s91", name: "Ajitha Sindhe", designation: "Program Manager", company: "Code4govtech", linkedin: "https://www.linkedin.com/in/ajitha-sindhe-63623b105/", image: spk_ajitha_sindhe },
   { id: "s92", name: "Anushka Priyadarshi", designation: "Upcoming Intern", company: "Sprinklr", linkedin: "https://www.linkedin.com/in/anushka-priyadarshi/", image: spk_anushka_priyadarshi },
-  { id: "s93", name: "Kritika Dhima", designation: "LinkedIn Coachin Mentee", company: "LinkedIn", linkedin: "https://www.linkedin.com/in/kritika-dhiman-a23104290/", image: spk_kritika_dhima },
+  { id: "s93", name: "Kritika Dhiman", designation: "LinkedIn Coachin Mentee", company: "LinkedIn", linkedin: "https://www.linkedin.com/in/kritika-dhiman-a23104290/", image: spk_kritika_dhima },
   { id: "s94", name: "Bhagyasrie M Masorkar", designation: "Digital Transformatoin Leader", company: "Sify Technologies Ltd", linkedin: "https://www.linkedin.com/in/bhagyashree-masurkar/", image: spk_bhagyasrie_m_masorkar },
   { id: "s95", name: "Su Jella", designation: "Executive Leader", company: "Nano Insights", linkedin: "https://www.linkedin.com/in/sujella/", image: spk_su_jella },
   { id: "s96", name: "Madhura Das", designation: "Founder & CEO", company: "Aspire for Her", linkedin: "https://www.linkedin.com/in/madhura-dasgupta-sinha/", image: spk_madhura_das },
@@ -257,6 +265,16 @@ export const speakers: Speaker[] = [
   { id: "s101", name: "Yashaswini Vismaya", designation: "Agent AI Engineer", company: "Ltimindtree", linkedin: "https://www.linkedin.com/in/yash-vis/", image: spk_yashaswini_vismaya },
   { id: "s102", name: "Bobbie Carlton", designation: "Founder", company: "Innovation Women", linkedin: "https://www.linkedin.com/in/bobbiecarlton/", image: spk_bobbie_carlton },
   { id: "s103", name: "Sashi Gundala", designation: "Director", company: "Aspire India", linkedin: "https://www.linkedin.com/in/sashigundala/", image: spk_sashi_gundala },
+  { id: "s104", name: "Ridhy Arora", designation: "Scholars'2024", company: "WE by Google TalentSprint", linkedin: "https://www.linkedin.com/in/ridhy-arora-097784258/", image: spk_ridhy },
+  { id: "s105", name: "Sravya Uppalavapati", designation: "Scholars'2024", company: "WE by Google TalentSprint", linkedin: "https://www.linkedin.com/in/sravyauppalapati16/", image: spk_sravya },
+  {id:  "s106", name: "Angel Sharma", designation: "GSOC'24 Mentor", company: "Google", linkedin: "https://www.linkedin.com/in/angel-sharma-2a5240260/", image: spk_angel },
+  {id:  "s107", name: "Anshika Aggarwal", designation: "Intern", company: "Salesforce", linkedin: "https://www.linkedin.com/in/anshika-aggarwal-704847249/", image: spk_anshika },
+  {id:  "s108", name: "Diya Parelkar", designation: "2024 Winner", company: "Smart India Hackathon", linkedin: " https://www.linkedin.com/in/diya-parelkar?utm_source=share_via&utm_content=profile&utm_medium=member_android", image: spk_diya },
+  {id:  "s109", name: "Garima Sahu", designation: "Linkedin CoachIn Mentee", company: "Linkedin", linkedin: "https://www.linkedin.com/in/garima-sahu-84649a322/", image: spk_garima },
+  {id:  "s110", name: "Mohammad Danish", designation: "Web3 Enthusiast", company: "", linkedin: "", image: spk_danish },
+  {id:  "s111", name: "Garima Jha", designation: "Intern", company: "DRDO", linkedin: "https://www.linkedin.com/in/garimajha25/", image: spk_garimajha },
+  {id:  "s112", name: "Sweta Pandey", designation: "Mentee", company: "Codess Cafe", linkedin: "https://www.linkedin.com/in/sweta-pandey-37178a22b/", image: spk_sweta }
+
 ];
 
 export const events: Event[] = realEvents.length ? realEvents : [
