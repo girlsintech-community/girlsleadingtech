@@ -67,7 +67,7 @@ export function Footer() {
                     </span>
                   </Link>
                   <p className="mt-3 text-base font-sans font-medium text-black leading-relaxed">
-                    A community empowering 3000+ women across 23+ states to lead in tech. Built with
+                    A community empowering 4000+ women across 23+ states to lead in tech. Built with
                     love, code, and dreams.
                   </p>
                 </div>
