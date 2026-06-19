@@ -115,50 +115,32 @@ export function Footer() {
                 </h4>
                 <ul className="grid grid-cols-2 gap-x-4 gap-y-2 font-sans font-semibold text-sm text-black">
                   <li>
-                    <Link
-                      to="/impact"
-                      className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform"
-                    >
+                    <Link to="/impact" className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform">
                       <span className="text-[#d955a4]">↳</span> Impact
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to="/resources"
-                      className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform"
-                    >
+                    <Link to="/resources" className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform">
                       <span className="text-[#d955a4]">↳</span> Resources
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to="/events"
-                      className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform"
-                    >
+                    <Link to="/events" className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform">
                       <span className="text-[#d955a4]">↳</span> Events
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to="/initiatives"
-                      className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform"
-                    >
+                    <Link to="/initiatives" className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform">
                       <span className="text-[#d955a4]">↳</span> Initiatives
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to="/humans"
-                      className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform"
-                    >
+                    <Link to="/humans" className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform">
                       <span className="text-[#d955a4]">↳</span> Humans
                     </Link>
                   </li>
                   <li>
-                    <Link
-                      to="/partners"
-                      className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform"
-                    >
+                    <Link to="/partners" className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform">
                       <span className="text-[#d955a4]">↳</span> Partners
                     </Link>
                   </li>
@@ -174,29 +156,19 @@ export function Footer() {
                 </h4>
                 <ul className="space-y-1.5 font-sans font-semibold text-sm text-black max-h-[85px] overflow-y-auto pr-1 no-scrollbar">
                   <li>
-                    <Link
-                      to="/join"
-                      className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform"
-                    >
+                    <Link to="/join" className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform">
                       <span className="text-[#d955a4]">↳</span> Join the tribe
                     </Link>
                   </li>
                   <li>
-                    <a
-                      href="mailto:girlsleadingtech@gmail.com"
-                      className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform break-all"
-                    >
+                    <a href="mailto:girlsleadingtech@gmail.com" className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform break-all">
                       <span className="text-[#d955a4]">↳</span> Email Us
                     </a>
                   </li>
                   <li>
-                    <a
-                      href={socials.newsletter}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform"
-                    >
-                      <span className="text-[#d955a4]">↳</span> Sub newsletter
+                    {/* CHANGED: "Sub newsletter" → full label */}
+                    <a href={socials.newsletter} target="_blank" rel="noopener noreferrer" className="hover:text-[#d955a4] transition-all flex items-center gap-1.5 hover:translate-x-1 duration-150 transform">
+                      <span className="text-[#d955a4]">↳</span> Subscribe to Newsletter
                     </a>
                   </li>
                 </ul>
@@ -211,28 +183,37 @@ export function Footer() {
                 Programs
               </h4>
               <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5 font-sans font-semibold text-sm text-black">
-                {programLinks.map((p) => (
-                  <li key={p.name}>
-                    {p.url ? (
-                      <a
-                        href={p.url}
-                        className="hover:text-[#d955a4] transition-all flex items-center gap-1 hover:translate-x-0.5 duration-150 transform"
-                      >
-                        <span className="text-[#d955a4] text-xs">↳</span> {p.name}
-                      </a>
-                    ) : (
-                      <span className="text-gray-600/70 flex items-center gap-1">
-                        <span className="text-gray-400">↳</span> {p.name}
-                      </span>
-                    )}
-                  </li>
-                ))}
+                {programLinks.map((p) => {
+                  // CHANGED: shorten long program names for display only
+                  const displayName =
+                    p.name === "GLT Mentorship Program" ? "Mentorship" :
+                    p.name === "Machine Learning Cohort" ? "ML Cohort" :
+                    p.name;
+
+                  return (
+                    <li key={p.name}>
+                      {p.url ? (
+                        <a
+                          href={p.url}
+                          className="hover:text-[#d955a4] transition-all flex items-center gap-1 hover:translate-x-0.5 duration-150 transform"
+                          title={p.name}
+                        >
+                          <span className="text-[#d955a4] text-xs">↳</span> {displayName}
+                        </a>
+                      ) : (
+                        <span className="text-gray-600/70 flex items-center gap-1" title={p.name}>
+                          <span className="text-gray-400">↳</span> {displayName}
+                        </span>
+                      )}
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           </div>
         </div>
 
-        {/* Footer bottom bar with copyright and meta-info */}
+        {/* Footer bottom bar */}
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t-2 border-black pt-4 text-center text-base font-semibold text-black md:flex-row relative z-10 -translate-y-3">
           <p className="font-['Montserrat',sans-serif]">
             © {new Date().getFullYear()} Girls Leading Tech. Made with <Heart className="h-4 w-4 fill-[#d955a4] stroke-[#d955a4] inline-block align-middle mx-1" /> for the next generation.
