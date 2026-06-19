@@ -40,6 +40,7 @@ export interface Scholarship {
   benefit: string;
   eligibility: string;
   openDate: string;
+  keywords?: string[];
 }
 
 export interface Hackathon {
@@ -51,6 +52,7 @@ export interface Hackathon {
   eligibility: string;
   duration: string;
   openDate: string;
+  keywords?: string[];
 }
 
 export interface Resource {
@@ -62,6 +64,7 @@ export interface Resource {
   authorLinkedin?: string;
   description?: string;
   image?: string;
+  keywords?: string[];
 }
 
 export interface PersonToFollow {
