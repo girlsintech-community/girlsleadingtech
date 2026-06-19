@@ -2,7 +2,6 @@ export interface Timestamp {
   time: string;
   title: string;
 }
-
 export interface Speaker {
   id: string;
   name: string;
@@ -11,7 +10,6 @@ export interface Speaker {
   linkedin?: string;
   image?: string;
 }
-
 export interface Event {
   id: string;
   title: string;
@@ -31,7 +29,6 @@ export interface Event {
   category?: string;
   timestamps?: Timestamp[];
 }
-
 export interface Scholarship {
   id: string;
   title: string;
@@ -41,7 +38,6 @@ export interface Scholarship {
   eligibility: string;
   openDate: string;
 }
-
 export interface Hackathon {
   id: string;
   name: string;
@@ -52,7 +48,6 @@ export interface Hackathon {
   duration: string;
   openDate: string;
 }
-
 export interface Resource {
   id: string;
   title: string;
@@ -63,7 +58,6 @@ export interface Resource {
   description?: string;
   image?: string;
 }
-
 export interface PersonToFollow {
   id: string;
   name: string;
@@ -75,22 +69,22 @@ export interface PersonToFollow {
   summary?: string;
   image?: string;
 }
-
 export interface TeamMember {
   id: string;
   name: string;
   image?: string;
   linkedin?: string;
+  twitter?: string;
   city?: string;
   state?: string;
   role?: string;
+  description?: string; // what they've contributed to the community — shown on card hover
+  status?: "current" | "past"; // defaults to "current" if not set
 }
-
 export interface Mentor extends TeamMember {
   designation: string;
   company: string;
 }
-
 export interface Initiative {
   slug: string;
   name: string;
@@ -100,7 +94,6 @@ export interface Initiative {
   color: "pink" | "lavender" | "peach" | "rose" | "violet";
   icon?: string;
 }
-
 export interface Partner {
   id: string;
   name: string;
@@ -108,7 +101,6 @@ export interface Partner {
   url?: string;
   type: "community" | "sponsor";
 }
-
 export interface Testimonial {
   id: string;
   quote: string;

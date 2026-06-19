@@ -357,7 +357,15 @@ export const getEvent = (id: string) => events.find((e) => e.id === id);
 export const team: TeamMember[] = [
   { id: "t1", name: "Manik", role: "Partnerships & Sponsorships", city: "Ambala City", state: "Haryana", linkedin: "https://www.linkedin.com/in/mrmanik/", image: img_team_manik },
   { id: "t2", name: "Vaishnavi Iyer", role: "Resource", city: "Bangalore", state: "Karnataka", linkedin: "https://www.linkedin.com/in/vaishnaviiyerms", image: img_team_vaishnavi_iyer },
-  { id: "t3", name: "Vijay Laxmi", role: "Speaker Outreaching", city: "Delhi", linkedin: "https://www.linkedin.com/in/laxmi-vijay/", image: img_team_vijay_laxmi },
+ {
+  id: "t3",
+  name: "Vijay Laxmi",
+  role: "Speaker Outreaching",
+  city: "Delhi",
+  linkedin: "https://www.linkedin.com/in/laxmi-vijay/",
+  image: img_team_vijay_laxmi,
+  description: "The voice behind GLT's incredible speaker lineup — Vijay reaches out, builds relationships, and brings inspiring women in tech to our stage.",
+},
   { id: "t4", name: "Ananya Agarwal", role: "Design", city: "Mumbai", state: "Maharashtra", linkedin: "https://www.linkedin.com/in/ananya-agarwal-861317290/", image: img_team_ananya_agarwal },
   { id: "t5", name: "Mahi Awasthi", role: "Content Creation", city: "Derabassi", state: "Punjab", linkedin: "https://www.linkedin.com/in/mahiawasthi/", image: img_team_mahi_awasthi },
   { id: "t6", name: "Yashika garg", role: "Social Media & PR", city: "Abohar", state: "Punjab", linkedin: "https://www.linkedin.com/in/yashika-garg-37baa2290", image: img_team_yashika_garg },
