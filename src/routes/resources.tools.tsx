@@ -16,6 +16,15 @@ export const Route = createFileRoute("/resources/tools")({
   component: ToolsPage,
 });
 
+function getLogoUrl(link: string): string | null {
+  try {
+    const domain = new URL(link).hostname;
+    return `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+  } catch {
+    return null;
+  }
+}
+
 function GridBackground() {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -68,10 +77,10 @@ function ToolsPage() {
       {/* HERO BANNER SECTION */}
       <section className="relative pt-32 pb-12 px-6 z-10">
         <div className="container mx-auto max-w-6xl relative">
-          
+
           {/* Main Hero Card Container */}
           <div className="relative bg-[#FFF8EF] border-2 border-black rounded-[24px] pt-16 pb-8 px-6 md:pt-20 md:pb-12 md:px-12 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] overflow-visible">
-            
+
             {/* Top Bar Window control */}
             <div className="absolute top-0 left-0 right-0 h-10 bg-[#FFD166] border-b-2 border-black flex items-center justify-between px-4 rounded-t-[22px] select-none z-10">
               <div className="flex gap-1.5">
@@ -99,9 +108,9 @@ function ToolsPage() {
 
             {/* Soft decorative inner glow */}
             <div className="absolute -right-10 -top-10 w-48 h-48 bg-[#ffed95]/20 rounded-full blur-3xl pointer-events-none" />
-            
+
             <div className="flex flex-col-reverse md:flex-row items-center md:items-stretch justify-between gap-8 md:gap-12 relative z-10">
-              
+
               {/* Heading Content */}
               <div className="flex-1 text-center md:text-left flex flex-col justify-center animate-fade-up">
                 <p
@@ -117,7 +126,7 @@ function ToolsPage() {
                   Productivity, AI, design and dev tools we recommend to every builder in our community.
                 </p>
               </div>
-              
+
               {/* Layout Spacer on Desktop */}
               <div className="hidden md:block w-[180px] lg:w-[240px] shrink-0" />
             </div>
@@ -148,19 +157,34 @@ function ToolsPage() {
       <section className="relative z-10 container mx-auto max-w-6xl px-6 pb-24 pt-4">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {tools.map((r, idx) => {
+            const logoUrl = getLogoUrl(r.link);
+
             const CardInner = (
               <GlassCard
                 strong
                 className="group relative h-full bg-[#fffdf9]/95 border-2 border-black rounded-[20px] p-6 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-300 ease-out hover:-translate-y-1.5 hover:-translate-x-0.5 hover:shadow-[8px_8px_0px_0px_#d955a4] hover:bg-[#fffdf9] cursor-pointer flex flex-col justify-between"
               >
                 <div>
-                  <div className="flex items-start justify-between gap-3">
+                  {/* Logo + Category Row */}
+                  <div className="flex items-center gap-3 mb-4">
+                    {logoUrl && (
+                      <img
+                        src={logoUrl}
+                        alt={`${r.title} logo`}
+                        width={36}
+                        height={36}
+                        className="w-9 h-9 rounded-lg border border-gray-100 bg-white p-1 object-contain flex-shrink-0"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = "none";
+                        }}
+                      />
+                    )}
                     <span className="inline-block rounded-full bg-pink-100 text-pink-700 px-3 py-1 text-[10px] font-bold uppercase tracking-wider">
                       {r.category}
                     </span>
                   </div>
-                  
-                  <h3 className="mt-4 font-display text-xl font-bold leading-tight text-gray-900 group-hover:text-[#d955a4] transition-colors">
+
+                  <h3 className="font-display text-xl font-bold leading-tight text-gray-900 group-hover:text-[#d955a4] transition-colors">
                     {r.title}
                   </h3>
 
@@ -179,7 +203,10 @@ function ToolsPage() {
 
                 {r.link && (
                   <div className="mt-6 flex items-center justify-between pt-4 border-t border-gray-100/50">
-                    <span className="text-xs font-bold uppercase tracking-widest text-[#d955a4] flex items-center gap-1.5 group-hover:text-[#d955a4] transition-colors" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                    <span
+                      className="text-xs font-bold uppercase tracking-widest text-[#d955a4] flex items-center gap-1.5 group-hover:text-[#d955a4] transition-colors"
+                      style={{ fontFamily: "'Montserrat', sans-serif" }}
+                    >
                       Get Tool
                       <ExternalLink className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
