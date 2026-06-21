@@ -125,7 +125,7 @@ import img_contrib_kashika_gupta from "@/assets/contributors/kashika-gupta.jpg";
 import img_contrib_kashish_mahendra_sonawane from "@/assets/contributors/kashish-mahendra-sonawane.jpeg";
 import img_contrib_lakshya_s from "@/assets/contributors/lakshya-s.jpg";
 import img_contrib_mahak from "@/assets/contributors/mahak.jpg";
-import img_contrib_pathan_sama_khan from "@/assets/contributors/pathan-sama-khan.JPG";
+import img_contrib_pathan_sama_khan from "@/assets/contributors/pathan-sama-khan.jpg";
 import img_contrib_ragini_pandey from "@/assets/contributors/ragini-pandey.jpg";
 import img_contrib_simran_parween from "@/assets/contributors/simran-parween.jpg";
 import img_contrib_swagita_parida from "@/assets/contributors/swagita-parida.jpg";
