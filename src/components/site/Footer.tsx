@@ -216,7 +216,15 @@ export function Footer() {
         {/* Footer bottom bar */}
         <div className="mt-8 flex flex-col items-center justify-between gap-4 border-t-2 border-black pt-4 text-center text-base font-semibold text-black md:flex-row relative z-10 -translate-y-3">
           <p className="font-['Montserrat',sans-serif]">
-            © {new Date().getFullYear()} Girls Leading Tech. Made with <Heart className="h-4 w-4 fill-[#d955a4] stroke-[#d955a4] inline-block align-middle mx-1" /> for the next generation.
+            © {new Date().getFullYear()} Girls Leading Tech. Made with{" "}
+            <Link
+              to="/secret-admin"
+              aria-label="Admin"
+              className="inline-block align-middle mx-1 cursor-pointer"
+            >
+              <Heart className="h-4 w-4 fill-[#d955a4] stroke-[#d955a4] inline-block align-middle transition-transform hover:scale-125" />
+            </Link>{" "}
+            for the next generation.
           </p>
           <p className="font-['Press_Start_2P',monospace] text-xs uppercase tracking-wider text-black/80">
             Empowering women in tech
