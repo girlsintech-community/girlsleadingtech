@@ -1,367 +1,282 @@
 /**
- * AccessibilityWidget.tsx
- * Drop-in floating accessibility toolbar for Girls Leading Tech.
+ * AccessibilityWidget.tsx — Girls Leading Tech
+ * Fully inline styles — no Tailwind dependency, works anywhere.
  *
- * Features:
- *  - Font size increase / decrease
- *  - High contrast mode
- *  - Grayscale mode
- *  - Highlight all links
- *  - Stop animations / motion
- *  - Readable font (switches to a dyslexia-friendly sans-serif)
- *  - Reset all
- *
- * Usage:
- *   1. Import and place <AccessibilityWidget /> once in your root layout
- *      (e.g. src/components/shared/AccessibilityWidget.tsx, then add to RootLayout)
- *   2. No props needed — it manages everything via CSS classes on <html>.
+ * Rendered via a React portal directly into document.body so that
+ * `position: fixed` is always relative to the viewport — never broken
+ * by an ancestor with transform / filter / backdrop-filter / will-change
+ * / contain, which would otherwise create a new containing block and
+ * silently relocate the widget away from the bottom-left corner.
  */
-
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 
-// ─── Icons (inline SVGs so no extra dependency) ──────────────────────────────
+// ─── CSS injected once into <head> ───────────────────────────────────────────
+const A11Y_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&display=swap');
 
-const IconA = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
-    <text x="3" y="18" fontSize="16" fontWeight="bold" stroke="none" fill="currentColor">A</text>
-  </svg>
-);
-
-const IconContrast = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-    <path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 18V4a8 8 0 0 1 0 16z" />
-  </svg>
-);
-
-const IconGrayscale = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="w-5 h-5">
-    <circle cx="12" cy="12" r="9" />
-    <path d="M12 3v18M8 5.3C9 6.5 9.5 8 9.5 9.5S9 12.5 8 13.7M16 5.3C15 6.5 14.5 8 14.5 9.5s.5 3 1.5 4.2" />
-  </svg>
-);
-
-const IconLink = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
-    <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-    <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-  </svg>
-);
-
-const IconNoMotion = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
-    <circle cx="12" cy="12" r="9" />
-    <line x1="9" y1="9" x2="15" y2="15" />
-    <line x1="15" y1="9" x2="9" y2="15" />
-  </svg>
-);
-
-const IconFont = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-    <path d="M9.6 16L12 9l2.4 7H9.6zM11 4L4 20h2l1.5-4h9l1.5 4h2L13 4h-2z" />
-  </svg>
-);
-
-const IconReset = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="w-5 h-5">
-    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-    <path d="M3 3v5h5" />
-  </svg>
-);
-
-const IconClose = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} className="w-4 h-4">
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-);
-
-const IconAccessibility = () => (
-  <svg viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-    <circle cx="12" cy="4" r="2" />
-    <path d="M12 7c-4 0-7 1.5-7 1.5l1 2s2.5-1 6-1 6 1 6 1l1-2S16 7 12 7z" />
-    <path d="M8.5 10.5L7 20h2l1.5-5 1.5 5 1.5-5 1.5 5h2l-1.5-9.5" />
-  </svg>
-);
-
-// ─── CSS injected into <head> once ──────────────────────────────────────────
-
-const A11Y_STYLES = `
-  /* High Contrast */
-  html.a11y-contrast {
-    filter: contrast(150%);
-  }
-  html.a11y-contrast body {
-    background: #000 !important;
+  html.a11y-dark *:not(script):not(style):not(#glt-a11y-widget):not(#glt-a11y-widget *) {
+    background-color: #000 !important;
     color: #fff !important;
+    border-color: #555 !important;
   }
-  html.a11y-contrast a { color: #ff0 !important; }
-  html.a11y-contrast button { border: 2px solid #fff !important; }
+  html.a11y-dark a:not(#glt-a11y-widget a) { color: #ffff00 !important; }
+  html.a11y-dark img { filter: brightness(0.8); }
 
-  /* Grayscale */
-  html.a11y-grayscale {
-    filter: grayscale(100%);
+  html.a11y-light *:not(script):not(style):not(#glt-a11y-widget):not(#glt-a11y-widget *) {
+    background-color: #fffff0 !important;
+    color: #111 !important;
   }
+  html.a11y-light a:not(#glt-a11y-widget a) { color: #00008b !important; text-decoration: underline !important; }
 
-  /* Highlight links */
-  html.a11y-links a {
-    outline: 2px solid #d955a4 !important;
+  html.a11y-invert { filter: invert(1) hue-rotate(180deg); }
+  html.a11y-invert img, html.a11y-invert video { filter: invert(1) hue-rotate(180deg); }
+  html.a11y-invert #glt-a11y-widget { filter: invert(1) hue-rotate(180deg); }
+
+  html.a11y-gray { filter: grayscale(100%); }
+  html.a11y-gray #glt-a11y-widget { filter: grayscale(0); }
+
+  html.a11y-links a:not(#glt-a11y-widget a) {
+    outline: 3px solid #d955a4 !important;
     outline-offset: 2px !important;
-    background: rgba(217, 85, 164, 0.08) !important;
-    border-radius: 2px !important;
+    background: rgba(217,85,164,0.1) !important;
+    border-radius: 3px !important;
+    text-decoration: underline !important;
   }
 
-  /* Stop animations */
   html.a11y-no-motion *,
   html.a11y-no-motion *::before,
   html.a11y-no-motion *::after {
-    animation-duration: 0.001ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    animation: none !important;
+    transition: none !important;
     scroll-behavior: auto !important;
   }
 
-  /* Readable / dyslexia-friendly font */
-  html.a11y-readable * {
-    font-family: 'Atkinson Hyperlegible', 'Arial', sans-serif !important;
-    letter-spacing: 0.02em !important;
+  html.a11y-font *:not(#glt-a11y-widget):not(#glt-a11y-widget *) {
+    font-family: 'Atkinson Hyperlegible', Arial, sans-serif !important;
     word-spacing: 0.1em !important;
-    line-height: 1.7 !important;
+  }
+
+  html.a11y-lh1 *:not(#glt-a11y-widget):not(#glt-a11y-widget *) { line-height: 1.9 !important; }
+  html.a11y-lh2 *:not(#glt-a11y-widget):not(#glt-a11y-widget *) { line-height: 2.4 !important; }
+
+  html.a11y-ls1 *:not(#glt-a11y-widget):not(#glt-a11y-widget *) { letter-spacing: 0.06em !important; }
+  html.a11y-ls2 *:not(#glt-a11y-widget):not(#glt-a11y-widget *) { letter-spacing: 0.13em !important; }
+
+  html.a11y-cursor, html.a11y-cursor * {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Cpath fill='black' stroke='white' stroke-width='1.5' d='M4 0l16 12-7 1-4 8L4 0z'/%3E%3C/svg%3E") 0 0, auto !important;
+  }
+
+  /* widget always renders normally, pinned to viewport via portal */
+  #glt-a11y-widget {
+    all: initial;
+    position: fixed !important;
+    bottom: 24px !important;
+    left: 24px !important;
+    z-index: 2147483647 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+    font-family: system-ui, sans-serif !important;
   }
 `;
 
-function injectStyles() {
-  if (document.getElementById("a11y-widget-styles")) return;
-  const style = document.createElement("style");
-  style.id = "a11y-widget-styles";
-  style.textContent = A11Y_STYLES;
-  document.head.appendChild(style);
+function injectCSS() {
+  if (document.getElementById("glt-a11y-css")) return;
+  const s = document.createElement("style");
+  s.id = "glt-a11y-css";
+  s.textContent = A11Y_CSS;
+  document.head.appendChild(s);
 }
 
-// ─── State helpers ───────────────────────────────────────────────────────────
-
-type State = {
-  fontSize: number;       // delta from base, e.g. +2 means root is base+2px
-  contrast: boolean;
-  grayscale: boolean;
+// ─── State ───────────────────────────────────────────────────────────────────
+type Contrast = "none" | "dark" | "light" | "invert";
+type St = {
+  fontSize: number;
+  contrast: Contrast;
+  gray: boolean;
   links: boolean;
   noMotion: boolean;
-  readable: boolean;
+  font: boolean;
+  cursor: boolean;
+  lineHeight: number;
+  letterSpacing: number;
+};
+const DEF: St = {
+  fontSize: 0, contrast: "none", gray: false,
+  links: false, noMotion: false, font: false,
+  cursor: false, lineHeight: 0, letterSpacing: 0,
 };
 
-const DEFAULT_STATE: State = {
-  fontSize: 0,
-  contrast: false,
-  grayscale: false,
-  links: false,
-  noMotion: false,
-  readable: false,
+function applyState(s: St) {
+  const h = document.documentElement;
+  h.style.fontSize = s.fontSize === 0 ? "" : `${16 + s.fontSize * 2}px`;
+  h.classList.toggle("a11y-dark",     s.contrast === "dark");
+  h.classList.toggle("a11y-light",    s.contrast === "light");
+  h.classList.toggle("a11y-invert",   s.contrast === "invert");
+  h.classList.toggle("a11y-gray",     s.gray && s.contrast === "none");
+  h.classList.toggle("a11y-links",    s.links);
+  h.classList.toggle("a11y-no-motion",s.noMotion);
+  h.classList.toggle("a11y-font",     s.font);
+  h.classList.toggle("a11y-cursor",   s.cursor);
+  h.classList.toggle("a11y-lh1",      s.lineHeight === 1);
+  h.classList.toggle("a11y-lh2",      s.lineHeight === 2);
+  h.classList.toggle("a11y-ls1",      s.letterSpacing === 1);
+  h.classList.toggle("a11y-ls2",      s.letterSpacing === 2);
+}
+
+function save(s: St) { try { sessionStorage.setItem("glt-a11y", JSON.stringify(s)); } catch {} }
+function load(): St {
+  try { const r = sessionStorage.getItem("glt-a11y"); if (r) return { ...DEF, ...JSON.parse(r) }; } catch {}
+  return { ...DEF };
+}
+
+// ─── Shared style tokens ─────────────────────────────────────────────────────
+const PINK = "#d955a4";
+const BTN_BASE: React.CSSProperties = {
+  display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+  gap: 4, padding: "9px 6px", border: "2px solid #e0e0e0", borderRadius: 12,
+  background: "#fff", color: "#444", fontSize: 11, fontWeight: 600,
+  cursor: "pointer", transition: "all 0.12s", fontFamily: "system-ui, sans-serif",
+  lineHeight: 1.2,
+};
+const BTN_ACTIVE: React.CSSProperties = {
+  ...BTN_BASE, background: PINK, color: "#fff", border: `2px solid #000`,
 };
 
-const BASE_FONT_SIZE = 16; // px
-
-function applyState(state: State) {
-  const html = document.documentElement;
-
-  // Font size
-  html.style.fontSize = `${BASE_FONT_SIZE + state.fontSize}px`;
-
-  // Toggle classes
-  html.classList.toggle("a11y-contrast", state.contrast);
-  html.classList.toggle("a11y-grayscale", state.grayscale && !state.contrast);
-  html.classList.toggle("a11y-links", state.links);
-  html.classList.toggle("a11y-no-motion", state.noMotion);
-  html.classList.toggle("a11y-readable", state.readable);
-}
-
-function saveState(state: State) {
-  try {
-    sessionStorage.setItem("a11y-state", JSON.stringify(state));
-  } catch {}
-}
-
-function loadState(): State {
-  try {
-    const raw = sessionStorage.getItem("a11y-state");
-    if (raw) return { ...DEFAULT_STATE, ...JSON.parse(raw) };
-  } catch {}
-  return DEFAULT_STATE;
-}
-
-// ─── Widget component ────────────────────────────────────────────────────────
-
+// ─── Component ───────────────────────────────────────────────────────────────
 export default function AccessibilityWidget() {
   const [open, setOpen] = useState(false);
-  const [state, setState] = useState<State>(DEFAULT_STATE);
-  const panelRef = useRef<HTMLDivElement>(null);
+  const [st, setSt] = useState<St>(DEF);
+  const [mounted, setMounted] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
-  // Load saved state on mount
   useEffect(() => {
-    injectStyles();
-    const saved = loadState();
-    setState(saved);
+    setMounted(true); // ensures document.body exists (SSR-safe)
+    injectCSS();
+    const saved = load();
+    setSt(saved);
     applyState(saved);
   }, []);
 
-  // Apply + save whenever state changes
-  useEffect(() => {
-    applyState(state);
-    saveState(state);
-  }, [state]);
+  useEffect(() => { applyState(st); save(st); }, [st]);
 
-  // Close panel on outside click
   useEffect(() => {
     if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
-        setOpen(false);
-      }
+    const fn = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
+    document.addEventListener("mousedown", fn);
+    return () => document.removeEventListener("mousedown", fn);
   }, [open]);
 
-  const toggle = (key: keyof Omit<State, "fontSize">) =>
-    setState((s) => ({ ...s, [key]: !s[key] }));
+  const patch = (p: Partial<St>) => setSt(s => ({ ...s, ...p }));
+  const toggleContrast = (m: Contrast) => patch({ contrast: st.contrast === m ? "none" : m, gray: false });
+  const cycle = (key: "lineHeight" | "letterSpacing", max = 2) =>
+    patch({ [key]: st[key] >= max ? 0 : st[key] + 1 });
+  const reset = () => { setSt({ ...DEF }); applyState({ ...DEF }); save({ ...DEF }); };
+  const hasChanges = JSON.stringify(st) !== JSON.stringify(DEF);
 
-  const changeFontSize = (delta: number) =>
-    setState((s) => ({
-      ...s,
-      fontSize: Math.max(-4, Math.min(8, s.fontSize + delta)),
-    }));
+  if (!mounted) return null; // avoid SSR mismatch — portal target only exists client-side
 
-  const reset = () => {
-    const fresh = { ...DEFAULT_STATE };
-    setState(fresh);
-    applyState(fresh);
-    saveState(fresh);
-  };
+  const widget = (
+    <div id="glt-a11y-widget" ref={ref}>
 
-  const hasChanges =
-    state.fontSize !== 0 ||
-    state.contrast ||
-    state.grayscale ||
-    state.links ||
-    state.noMotion ||
-    state.readable;
-
-  return (
-    <div
-      ref={panelRef}
-      className="fixed bottom-6 left-6 z-[9999] flex flex-col items-start gap-3"
-      role="region"
-      aria-label="Accessibility options"
-    >
-      {/* Panel */}
+      {/* ── Panel ── */}
       {open && (
-        <div
-          className="
-            bg-white border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-            rounded-2xl w-72 overflow-hidden
-          "
-          role="dialog"
-          aria-modal="false"
-          aria-label="Accessibility settings"
-        >
+        <div style={{
+          width: 296, background: "#fff", border: "2px solid #000",
+          borderRadius: 18, boxShadow: "4px 4px 0 rgba(0,0,0,1)",
+          overflow: "hidden", marginBottom: 8,
+          fontFamily: "system-ui, sans-serif",
+        }}>
           {/* Header */}
-          <div className="flex items-center justify-between bg-[#d955a4] px-4 py-3">
-            <div className="flex items-center gap-2">
-              <IconAccessibility />
-              <span className="font-bold text-white text-sm tracking-wide">
-                Accessibility
-              </span>
+          <div style={{ background: PINK, padding: "11px 14px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <AccessIcon size={20} color="#fff" />
+              <span style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>Accessibility</span>
             </div>
-            <button
-              onClick={() => setOpen(false)}
-              className="text-white hover:text-white/70 transition-colors"
-              aria-label="Close accessibility panel"
-            >
-              <IconClose />
+            <button onClick={() => setOpen(false)} aria-label="Close accessibility panel"
+              style={{ background: "none", border: "none", color: "#fff", cursor: "pointer", padding: 2, display: "flex" }}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth={2.5} width={16} height={16}>
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
             </button>
           </div>
 
-          <div className="p-4 space-y-3">
+          <div style={{ padding: 14, display: "flex", flexDirection: "column", gap: 12 }}>
 
-            {/* Font size */}
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-400 mb-2">
-                Text Size
-              </p>
-              <div className="flex items-center gap-2">
+            {/* Text size */}
+            <Group label="Text Size">
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <button
-                  onClick={() => changeFontSize(-2)}
-                  disabled={state.fontSize <= -4}
-                  className="flex-1 py-2 border-2 border-black font-bold text-lg hover:bg-zinc-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors rounded-lg"
-                  aria-label="Decrease font size"
-                >
-                  A<span className="text-xs align-super">−</span>
-                </button>
-                <span className="text-sm font-semibold text-zinc-500 w-10 text-center">
-                  {state.fontSize === 0 ? "Default" : `${state.fontSize > 0 ? "+" : ""}${state.fontSize}px`}
+                  onClick={() => patch({ fontSize: Math.max(0, st.fontSize - 1) })}
+                  disabled={st.fontSize <= 0}
+                  style={{ ...BTN_BASE, flex: 1, flexDirection: "row", fontSize: 14, fontWeight: 900, padding: "9px 0", opacity: st.fontSize <= 0 ? 0.35 : 1 }}
+                >A<sup style={{ fontSize: 10 }}>−</sup></button>
+                <span style={{ fontSize: 11, color: "#888", width: 54, textAlign: "center" }}>
+                  {st.fontSize === 0 ? "Default" : `+${st.fontSize * 2}px`}
                 </span>
                 <button
-                  onClick={() => changeFontSize(2)}
-                  disabled={state.fontSize >= 8}
-                  className="flex-1 py-2 border-2 border-black font-bold text-lg hover:bg-zinc-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors rounded-lg"
-                  aria-label="Increase font size"
-                >
-                  A<span className="text-sm align-super">+</span>
-                </button>
+                  onClick={() => patch({ fontSize: Math.min(3, st.fontSize + 1) })}
+                  disabled={st.fontSize >= 3}
+                  style={{ ...BTN_BASE, flex: 1, flexDirection: "row", fontSize: 14, fontWeight: 900, padding: "9px 0", opacity: st.fontSize >= 3 ? 0.35 : 1 }}
+                >A<sup style={{ fontSize: 10 }}>+</sup></button>
               </div>
-            </div>
+            </Group>
 
-            {/* Toggle options */}
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-widest text-zinc-400 mb-2">
-                Display
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                <ToggleBtn
-                  label="High Contrast"
-                  icon={<IconContrast />}
-                  active={state.contrast}
-                  onClick={() => toggle("contrast")}
+            {/* Contrast */}
+            <Group label="Contrast">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6 }}>
+                <Btn icon="◑" label="Dark"   active={st.contrast==="dark"}   onClick={() => toggleContrast("dark")} />
+                <Btn icon="☀" label="Light"  active={st.contrast==="light"}  onClick={() => toggleContrast("light")} />
+                <Btn icon="⊙" label="Invert" active={st.contrast==="invert"} onClick={() => toggleContrast("invert")} />
+              </div>
+            </Group>
+
+            {/* Display */}
+            <Group label="Display">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                <Btn icon="◐" label="Grayscale"       active={st.gray}     onClick={() => patch({ gray: !st.gray, contrast: "none" })} />
+                <Btn icon="🔗" label="Highlight Links" active={st.links}    onClick={() => patch({ links: !st.links })} />
+                <Btn icon="⊗" label="Stop Motion"     active={st.noMotion} onClick={() => patch({ noMotion: !st.noMotion })} />
+                <Btn icon="↖" label="Big Cursor"      active={st.cursor}   onClick={() => patch({ cursor: !st.cursor })} />
+              </div>
+            </Group>
+
+            {/* Reading */}
+            <Group label="Reading">
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                <Btn icon="Aa" label="Readable Font"
+                  active={st.font} onClick={() => patch({ font: !st.font })}
+                  style={{ gridColumn: "1 / -1" }} />
+                <Btn
+                  icon="↕"
+                  label={st.lineHeight === 0 ? "Line Height" : st.lineHeight === 1 ? "Line Height +" : "Line Height ++"}
+                  active={st.lineHeight > 0}
+                  onClick={() => cycle("lineHeight")}
                 />
-                <ToggleBtn
-                  label="Grayscale"
-                  icon={<IconGrayscale />}
-                  active={state.grayscale}
-                  onClick={() => toggle("grayscale")}
-                  disabled={state.contrast}
-                />
-                <ToggleBtn
-                  label="Highlight Links"
-                  icon={<IconLink />}
-                  active={state.links}
-                  onClick={() => toggle("links")}
-                />
-                <ToggleBtn
-                  label="Stop Motion"
-                  icon={<IconNoMotion />}
-                  active={state.noMotion}
-                  onClick={() => toggle("noMotion")}
-                />
-                <ToggleBtn
-                  label="Readable Font"
-                  icon={<IconFont />}
-                  active={state.readable}
-                  onClick={() => toggle("readable")}
-                  className="col-span-2"
+                <Btn
+                  icon="↔"
+                  label={st.letterSpacing === 0 ? "Letter Space" : st.letterSpacing === 1 ? "Letter Space +" : "Letter Space ++"}
+                  active={st.letterSpacing > 0}
+                  onClick={() => cycle("letterSpacing")}
                 />
               </div>
-            </div>
+            </Group>
 
             {/* Reset */}
             {hasChanges && (
-              <button
-                onClick={reset}
-                className="
-                  w-full flex items-center justify-center gap-2
-                  py-2 border-2 border-black rounded-lg
-                  text-sm font-semibold text-zinc-600
-                  hover:bg-zinc-100 transition-colors
-                "
-              >
-                <IconReset />
+              <button onClick={reset} style={{
+                width: "100%", display: "flex", alignItems: "center", justifyContent: "center",
+                gap: 6, padding: "9px 0", border: "2px solid #ccc", borderRadius: 10,
+                background: "#fafafa", fontSize: 12, fontWeight: 600, color: "#555",
+                cursor: "pointer", fontFamily: "system-ui, sans-serif",
+              }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} width={13} height={13}>
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" />
+                </svg>
                 Reset all
               </button>
             )}
@@ -369,71 +284,76 @@ export default function AccessibilityWidget() {
         </div>
       )}
 
-      {/* Trigger button */}
+      {/* ── Trigger button ── */}
       <button
-        onClick={() => setOpen((o) => !o)}
-        className="
-          relative
-          h-14 w-14 rounded-full
-          bg-[#d955a4] text-white
-          border-2 border-black
-          shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]
-          hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]
-          hover:-translate-y-0.5
-          active:translate-y-0 active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)]
-          transition-all duration-150
-          flex items-center justify-center
-        "
-        aria-label="Open accessibility options"
+        onClick={() => setOpen(o => !o)}
+        aria-label={open ? "Close accessibility options" : "Open accessibility options"}
         aria-expanded={open}
-        aria-haspopup="dialog"
+        style={{
+          width: 52, height: 52, borderRadius: "50%",
+          background: PINK, color: "#fff",
+          border: "2px solid #000",
+          boxShadow: "3px 3px 0 rgba(0,0,0,1)",
+          cursor: "pointer",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          position: "relative",
+        }}
       >
-        <IconAccessibility />
-        {/* Dot indicator when something is active */}
+        <AccessIcon size={24} color="#fff" />
         {hasChanges && (
-          <span className="absolute top-1 left-1 w-3 h-3 bg-[#ffed95] border border-black rounded-full" />
+          <span style={{
+            position: "absolute", top: 2, right: 2,
+            width: 11, height: 11, borderRadius: "50%",
+            background: "#ffed95", border: "1.5px solid #000",
+          }} />
         )}
       </button>
     </div>
   );
+
+  // Portal straight into <body> so position:fixed is always relative to the
+  // viewport, regardless of any ancestor's transform/filter/backdrop-filter/
+  // will-change/contain set by Navbar, Footer, page wrappers, etc.
+  return createPortal(widget, document.body);
 }
 
-// ─── Toggle button ─────────────────────────────────────────────────────────
+// ─── Sub-components ──────────────────────────────────────────────────────────
 
-function ToggleBtn({
-  label,
-  icon,
-  active,
-  onClick,
-  disabled = false,
-  className = "",
+function Group({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <p style={{ margin: "0 0 6px", fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "#aaa", fontFamily: "system-ui, sans-serif" }}>
+        {label}
+      </p>
+      {children}
+    </div>
+  );
+}
+
+function Btn({
+  icon, label, active, onClick, style = {},
 }: {
-  label: string;
-  icon: React.ReactNode;
-  active: boolean;
-  onClick: () => void;
-  disabled?: boolean;
-  className?: string;
+  icon: string; label: string; active: boolean;
+  onClick: () => void; style?: React.CSSProperties;
 }) {
   return (
     <button
       onClick={onClick}
-      disabled={disabled}
       aria-pressed={active}
-      className={`
-        flex items-center gap-2 px-3 py-2.5
-        border-2 rounded-xl text-left text-sm font-semibold
-        transition-all duration-150
-        ${active
-          ? "bg-[#d955a4] border-black text-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
-          : "bg-white border-black/20 text-zinc-700 hover:border-black hover:bg-zinc-50"
-        }
-        ${disabled ? "opacity-40 cursor-not-allowed" : "cursor-pointer"}
-        ${className}
-      `}
+      style={{ ...(active ? BTN_ACTIVE : BTN_BASE), ...style }}
     >
-      <span className="shrink-0">{icon}</span>
-      <span className="leading-tight">{label}</span>
+      <span style={{ fontSize: 15 }}>{icon}</span>
+      <span style={{ textAlign: "center", lineHeight: 1.3 }}>{label}</span>
     </button>
+  );
+}
+
+function AccessIcon({ size = 24, color = "currentColor" }: { size?: number; color?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill={color} width={size} height={size}>
+      <circle cx="12" cy="4" r="2" />
+      <path d="M19 9.5C17.3 9 14.8 8.5 12 8.5S6.7 9 5 9.5L4 11.5c1.8-.4 4.5-.8 8-.8s6.2.4 8 .8L19 9.5z" />
+      <path d="M9 11.5l-1.5 9h2l1.5-5 1.5 5 1.5-5 1.5 5h2L16 11.5" />
+    </svg>
   );
 }

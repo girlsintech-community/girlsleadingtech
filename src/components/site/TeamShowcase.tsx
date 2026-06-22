@@ -1,6 +1,6 @@
-import { useState, useMemo, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { motion } from "motion/react";
-import { ChevronUp, ChevronDown, Heart } from "lucide-react";
+import { Heart } from "lucide-react";
 import MemberProfileCard from "@/components/site/MemberProfileCard";
 import type { TeamMember } from "@/data/types";
 
@@ -8,7 +8,8 @@ interface TeamShowcaseProps {
   filteredTeam: TeamMember[];
 }
 
-const CARDS_PER_PAGE = 6;
+// Fixed viewport height for the scrollable grid (roughly 2 rows + breathing room)
+const SCROLL_AREA_HEIGHT = "min(70vh, 720px)";
 
 // Sliding-pill tab switcher — matches the gradient pill pattern on the site
 function StatusTabs({
@@ -88,13 +89,7 @@ function AlumniBanner() {
 }
 
 export default function TeamShowcase({ filteredTeam }: TeamShowcaseProps) {
-  const [page, setPage] = useState(0);
   const [statusTab, setStatusTab] = useState<"current" | "past">("current");
-
-  // Reset to page 0 whenever tab changes
-  useEffect(() => {
-    setPage(0);
-  }, [statusTab]);
 
   const currentMembers = useMemo(
     () => filteredTeam.filter((m) => (m.status ?? "current") === "current"),
@@ -107,17 +102,6 @@ export default function TeamShowcase({ filteredTeam }: TeamShowcaseProps) {
   );
 
   const statusFilteredTeam = statusTab === "current" ? currentMembers : pastMembers;
-
-  const totalPages = Math.max(1, Math.ceil(statusFilteredTeam.length / CARDS_PER_PAGE));
-  const currentPage = Math.min(page, totalPages - 1);
-
-  const visibleMembers = useMemo(() => {
-    const start = currentPage * CARDS_PER_PAGE;
-    return statusFilteredTeam.slice(start, start + CARDS_PER_PAGE);
-  }, [statusFilteredTeam, currentPage]);
-
-  const canGoUp = currentPage > 0;
-  const canGoDown = currentPage < totalPages - 1;
 
   return (
     <div className="w-full">
@@ -151,7 +135,7 @@ export default function TeamShowcase({ filteredTeam }: TeamShowcaseProps) {
 
           {/* Hover hint for desktop */}
           <p className="hidden md:block mt-4 text-xs text-zinc-300 text-center md:text-left">
-            ✦ Hover a card to see their story
+            ✦ Hover a card to see their story · scroll for more
           </p>
         </div>
 
@@ -173,100 +157,79 @@ export default function TeamShowcase({ filteredTeam }: TeamShowcaseProps) {
             <AlumniBanner />
           )}
 
-          <div className="flex items-start gap-4">
+          <div className="relative">
 
-            {/* Cards grid */}
-            <div className="flex-1 min-h-0">
-              {statusFilteredTeam.length === 0 ? (
-                <div className="text-center py-16 flex flex-col items-center gap-3">
-                  <p className="text-sm text-muted-foreground">
-                    {statusTab === "past"
-                      ? "No alumni to show yet."
-                      : "No matches. Try a different search."}
-                  </p>
-                </div>
-              ) : (
+            {/* Cards grid — vertically scrollable, framed in its own soft panel */}
+            {statusFilteredTeam.length === 0 ? (
+              <div className="text-center py-16 flex flex-col items-center gap-3">
+                <p className="text-sm text-muted-foreground">
+                  {statusTab === "past"
+                    ? "No alumni to show yet."
+                    : "No matches. Try a different search."}
+                </p>
+              </div>
+            ) : (
+              <>
+                <style>{`
+                  .team-scroll-area::-webkit-scrollbar {
+                    width: 6px;
+                  }
+                  .team-scroll-area::-webkit-scrollbar-track {
+                    background: transparent;
+                  }
+                  .team-scroll-area::-webkit-scrollbar-thumb {
+                    background-color: #e8c2d8;
+                    border-radius: 999px;
+                  }
+                  .team-scroll-area:hover::-webkit-scrollbar-thumb {
+                    background-color: #d955a4;
+                  }
+                  .team-scroll-area {
+                    scrollbar-width: thin;
+                    scrollbar-color: #e8c2d8 transparent;
+                  }
+                `}</style>
+
                 <motion.div
-                  key={`${statusTab}-${currentPage}`}
+                  key={statusTab}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.3 }}
-                  className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-5"
+                  className="rounded-2xl border border-black/5 bg-zinc-50/50 p-5 md:p-6"
                 >
-                  {visibleMembers.map((member, index) => (
-                    <MemberProfileCard
-                      key={member.id}
-                      name={member.name}
-                      role={member.role}
-                      location={
-                        member.city && member.state
-                          ? `${member.city}, ${member.state}`
-                          : member.city || member.state
-                      }
-                      locationType="location"
-                      delay={index}
-                      linkedin={member.linkedin}
-                      twitter={member.twitter}
-                      image={member.image}
-                      description={member.description}
-                      isPast={member.status === "past"}
-                    />
-                  ))}
+                  <div
+                    className="team-scroll-area overflow-y-auto pr-4"
+                    style={{ maxHeight: SCROLL_AREA_HEIGHT }}
+                  >
+                    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-5 pb-2">
+                      {statusFilteredTeam.map((member, index) => (
+                        <MemberProfileCard
+                          key={member.id}
+                          name={member.name}
+                          role={member.role}
+                          location={
+                            member.city && member.state
+                              ? `${member.city}, ${member.state}`
+                              : member.city || member.state
+                          }
+                          locationType="location"
+                          delay={index % 6}
+                          linkedin={member.linkedin}
+                          twitter={member.twitter}
+                          image={member.image}
+                          description={member.description}
+                          isPast={member.status === "past"}
+                        />
+                      ))}
+                    </div>
+                  </div>
                 </motion.div>
-              )}
-            </div>
 
-            {/* Vertical pagination arrows */}
-            {statusFilteredTeam.length > CARDS_PER_PAGE && (
-              <div className="flex flex-col items-center gap-3 pt-16 sticky top-1/3">
-                <button
-                  onClick={() => setPage((p) => Math.max(0, p - 1))}
-                  disabled={!canGoUp}
-                  className={`
-                    h-10 w-10 flex items-center justify-center rounded-full border-2 transition-all duration-200
-                    ${canGoUp
-                      ? "border-[#d955a4] text-[#d955a4] hover:bg-[#d955a4] hover:text-white cursor-pointer shadow-sm"
-                      : "border-gray-200 text-gray-300 cursor-not-allowed"
-                    }
-                  `}
-                  aria-label="Previous page"
-                >
-                  <ChevronUp className="h-5 w-5" />
-                </button>
-
-                {/* Page dots */}
-                <div className="flex flex-col items-center gap-1.5 py-2">
-                  {Array.from({ length: totalPages }).map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setPage(i)}
-                      className={`
-                        h-2 w-2 rounded-full transition-all duration-300 cursor-pointer
-                        ${i === currentPage
-                          ? "bg-[#d955a4] scale-125"
-                          : "bg-gray-300 hover:bg-[#d955a4]/50"
-                        }
-                      `}
-                      aria-label={`Go to page ${i + 1}`}
-                    />
-                  ))}
-                </div>
-
-                <button
-                  onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
-                  disabled={!canGoDown}
-                  className={`
-                    h-10 w-10 flex items-center justify-center rounded-full border-2 transition-all duration-200
-                    ${canGoDown
-                      ? "border-[#d955a4] text-[#d955a4] hover:bg-[#d955a4] hover:text-white cursor-pointer shadow-sm"
-                      : "border-gray-200 text-gray-300 cursor-not-allowed"
-                    }
-                  `}
-                  aria-label="Next page"
-                >
-                  <ChevronDown className="h-5 w-5" />
-                </button>
-              </div>
+                {/* Fade hint — signal there's more to scroll, softened into the panel's own background */}
+                {statusFilteredTeam.length > 6 && (
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-zinc-50/90 via-zinc-50/40 to-transparent rounded-b-2xl" />
+                )}
+              </>
             )}
           </div>
         </div>
