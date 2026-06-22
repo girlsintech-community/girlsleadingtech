@@ -602,4 +602,25 @@ const baseBtn: React.CSSProperties = {
   padding: "10px 6px",
   border: "1.5px solid #e0e0e0",
   borderRadius: 10,
-}
+  background: "#f7f7f7",
+  color: "#3a3a3a",
+  fontSize: 10,
+  fontWeight: 600,
+  cursor: "pointer",
+  fontFamily: "system-ui, sans-serif",
+  lineHeight: 1.25,
+  textAlign: "center",
+  minHeight: 62,
+  letterSpacing: "0.01em",
+};
+
+const activeBtn: React.CSSProperties = {
+  ...baseBtn,
+  border: `2px solid ${PINK}`,
+  borderRadius: 10,
+  background: PINK,
+  color: "#fff",
+  fontWeight: 700,
+  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.2)",
+};
+
