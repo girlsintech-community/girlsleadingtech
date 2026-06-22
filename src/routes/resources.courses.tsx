@@ -5,6 +5,7 @@ import { GlassCard } from "@/components/site/GlassCard";
 import { courses } from "@/data/resources";
 import { ExternalLink } from "lucide-react";
 import { BackToResources } from "@/components/site/PageHeader";
+import { ResourceSearchBar, filterBySearch } from "@/components/site/ResourceSearchBar";
 import coursesMascot from "@/assets/characters/courses.png";
 import paperClip from "@/assets/stickers/paper-clip.png";
 import star from "@/assets/stickers/star.png";
@@ -64,7 +65,12 @@ function GridBackground() {
 function CoursesPage() {
   const domains = Array.from(new Set(courses.map((i) => i.category)));
   const [activeDomain, setActiveDomain] = useState<string>(domains[0] || "");
-  const activeItems = courses.filter((i) => i.category === activeDomain);
+  const [searchQ, setSearchQ] = useState("");
+  const activeItems = filterBySearch(
+    courses.filter((i) => i.category === activeDomain),
+    searchQ,
+    ["title", "description", "author", "category", "keywords"],
+  );
 
   return (
     <div className="relative w-full min-h-screen bg-[#fef9f4] overflow-hidden">
@@ -153,6 +159,11 @@ function CoursesPage() {
       </section>
 
       {/* DOMAIN FILTERS */}
+      <section className="relative z-10 px-6 pb-6">
+        <div className="container mx-auto max-w-5xl">
+          <ResourceSearchBar value={searchQ} onChange={setSearchQ} placeholder="Search courses..." />
+        </div>
+      </section>
       <section className="relative z-10 px-6 pb-10">
         <div className="container mx-auto max-w-5xl">
           <div className="flex flex-wrap gap-3 justify-center md:justify-start">
