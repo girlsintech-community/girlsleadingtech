@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { User } from "lucide-react";
 import { BackToResources } from "@/components/site/PageHeader";
+import { ResourceSearchBar, filterBySearch } from "@/components/site/ResourceSearchBar";
 import { GlassCard } from "@/components/site/GlassCard";
 import { books } from "@/data/resources";
 import booksMascot from "@/assets/characters/books.png";
@@ -49,6 +50,7 @@ function GridBackground() {
 
 function BooksPage() {
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [searchQ, setSearchQ] = useState("");
 
   const categories = [
     "All",
@@ -61,7 +63,7 @@ function BooksPage() {
     ).sort(),
   ];
 
-  const filteredBooks =
+  const byCategory =
     selectedCategory === "All"
       ? books
       : books.filter((book) =>
@@ -70,6 +72,14 @@ function BooksPage() {
             .map((c) => c.trim())
             .includes(selectedCategory)
         );
+
+  const filteredBooks = filterBySearch(byCategory, searchQ, [
+    "title",
+    "description",
+    "author",
+    "category",
+    "keywords",
+  ]);
 
   return (
     <div className="relative min-h-screen bg-[#fef9f4] overflow-hidden">
@@ -160,6 +170,13 @@ function BooksPage() {
             </div>
 
           </div>
+        </div>
+      </section>
+
+      {/* SEARCH */}
+      <section className="relative z-10 px-6 pb-6">
+        <div className="container mx-auto max-w-6xl">
+          <ResourceSearchBar value={searchQ} onChange={setSearchQ} placeholder="Search books..." />
         </div>
       </section>
 
