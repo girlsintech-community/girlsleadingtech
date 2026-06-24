@@ -110,7 +110,7 @@ export function Footer() {
             {/* CARD 2: Explore links */}
             <div className="relative group/card">
               <div className="rounded-[14px] border-2 border-black bg-[#ffed95] p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-                <h4 className="font-['Press_Start_2P',monospace] text-xs uppercase tracking-wider text-black border-b-2 border-black pb-1.5 mb-2">
+                <h4 className="font-sans font-extrabold text-sm uppercase tracking-wider text-black border-b-2 border-black pb-1.5 mb-2">
                   Explore
                 </h4>
                 <ul className="grid grid-cols-2 gap-x-4 gap-y-2 font-sans font-semibold text-sm text-black">
@@ -151,7 +151,7 @@ export function Footer() {
             {/* CARD 4: Get Involved */}
             <div className="relative group/card">
               <div className="rounded-[14px] border-2 border-black bg-[#ffc8e3] p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] relative z-10">
-                <h4 className="font-['Press_Start_2P',monospace] text-xs uppercase tracking-wider text-black border-b-2 border-black pb-1.5 mb-2">
+                <h4 className="font-sans font-extrabold text-sm uppercase tracking-wider text-black border-b-2 border-black pb-1.5 mb-2">
                   Get Involved
                 </h4>
                 <ul className="space-y-1.5 font-sans font-semibold text-sm text-black max-h-[85px] overflow-y-auto pr-1 no-scrollbar">
@@ -179,7 +179,7 @@ export function Footer() {
           {/* CARD 3: Programs links */}
           <div className="relative group/card h-full">
             <div className="h-full rounded-[14px] border-2 border-black bg-[#D8B4E8] p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
-              <h4 className="font-['Press_Start_2P',monospace] text-xs uppercase tracking-wider text-black border-b-2 border-black pb-1.5 mb-2">
+              <h4 className="font-sans font-extrabold text-sm uppercase tracking-wider text-black border-b-2 border-black pb-1.5 mb-2">
                 Programs
               </h4>
               <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5 font-sans font-semibold text-sm text-black">
