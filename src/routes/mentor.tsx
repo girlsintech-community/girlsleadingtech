@@ -57,9 +57,6 @@ function MentorPage() {
           background-size: 28px 28px;
         }
 
-        footer {
-          display: none !important;
-        }
 
         @keyframes float-line {
           0%, 100% { transform: translateY(0); }
