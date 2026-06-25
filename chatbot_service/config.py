@@ -16,6 +16,12 @@ class Settings(BaseSettings):
 
     upload_dir: str = "uploads"
 
+    # LLM Settings
+    gemini_api_key: str | None = None
+    groq_api_key: str | None = None
+    gemini_model: str = "gemini-2.5-flash"
+    groq_model: str = "llama-3.1-8b-instant"  # default llama-3.3-70b or llama3-8b-8192
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"

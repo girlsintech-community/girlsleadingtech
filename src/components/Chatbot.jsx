@@ -191,19 +191,44 @@ export default function Chatbot() {
     setLoading(true);
 
     try {
-      const { handleChatRequest } = await import("@/lib/chat-server");
-      const result = await handleChatRequest({ query: trimmed });
-      const responseText =
-        result.text ||
-        "Sorry, I couldn't find anything right now. Try asking about Scholarships, Events, or Mentorship.";
+      // 1. Try to fetch from the Python RAG Chatbot Service
+      const response = await fetch("http://localhost:8001/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question: trimmed, top_k: 5 }),
+      });
 
+      if (!response.ok) {
+        throw new Error(`RAG API responded with status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      const responseText = result.answer || "Sorry, I couldn't generate an answer.";
       const cleaned = responseText.replace(/\u2014/g, "-");
+      
       setMessages((prev) => [...prev, { role: "assistant", text: cleaned }]);
-    } catch {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", text: "Something went wrong. Please try again." },
-      ]);
+    } catch (apiError) {
+      console.warn("RAG backend offline or error, falling back to local database search:", apiError);
+      
+      // 2. Fallback to client-side database search
+      try {
+        const { handleChatRequest } = await import("@/lib/chat-server");
+        const result = await handleChatRequest({ query: trimmed });
+        const responseText =
+          result.text ||
+          "Sorry, I couldn't find anything right now. Try asking about Scholarships, Events, or Mentorship.";
+
+        const cleaned = responseText.replace(/\u2014/g, "-");
+        setMessages((prev) => [...prev, { role: "assistant", text: cleaned }]);
+      } catch (fallbackError) {
+        console.error("Local search fallback failed:", fallbackError);
+        setMessages((prev) => [
+          ...prev,
+          { role: "assistant", text: "Something went wrong. Please try again." },
+        ]);
+      }
     } finally {
       setLoading(false);
     }
