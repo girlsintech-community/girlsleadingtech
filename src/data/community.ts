@@ -406,7 +406,7 @@ export const contributors: TeamMember[] = [
     state: "Rajasthan",
     linkedin: "https://www.linkedin.com/in/suhani-garg-88a736318/",
     image: img_contrib_suhani_garg,
-    contribution:
+    description:
       "Managed the complete website development, coordinated contributors, and ensured timely delivery of major milestones. Contributed to accessibility improvements, AI chatbot development, deployment, feature integration, and overall technical execution."
   },
   {
@@ -416,7 +416,7 @@ export const contributors: TeamMember[] = [
     state: "West Bengal",
     linkedin: "https://www.linkedin.com/in/priyanka-kumari-gond-359310324/",
     image: img_contrib_priyanka_kumari_gond,
-    contribution:
+    description:
       "Curated and maintained resources, scholarships, hackathons, and platform data while keeping links updated. Supported QA, transcript processing, UI refinements, and content updates."
   },
   {
@@ -426,7 +426,7 @@ export const contributors: TeamMember[] = [
     state: "Delhi",
     linkedin: "https://www.linkedin.com/in/arya-rai-818323318/",
     image: img_contrib_arya_rai,
-    contribution:
+    description:
       "Developed frontend components and implemented UI improvements across multiple pages. Helped enhance the website's overall user experience and design."
   },
   {
@@ -436,7 +436,7 @@ export const contributors: TeamMember[] = [
     state: "Maharashtra",
     linkedin: "https://www.linkedin.com/in/samriddhi-gupta-61a96b282/",
     image: img_contrib_samriddhi_gupta,
-    contribution:
+    description:
       "Built the chatbot's data ingestion, embedding, and vector database pipeline. Integrated retrieval components and supported chatbot deployment."
   },
   {
@@ -446,7 +446,7 @@ export const contributors: TeamMember[] = [
     state: "Maharashtra",
     linkedin: "https://www.linkedin.com/in/riyagupta70",
     image: img_contrib_riya_gupta,
-    contribution:
+    description:
       "Designed and developed key website pages while maintaining a consistent visual identity. Helped coordinate team progress and collaboration."
   },
   {
@@ -456,7 +456,7 @@ export const contributors: TeamMember[] = [
     state: "West Bengal",
     linkedin: "https://www.linkedin.com/in/mudita-pandey-71b91a272/",
     image: img_contrib_mudita_pandey,
-    contribution:
+    description:
       "Developed the Impact page with map integration and designed the Resources section. Organized curated resources and added relevant links."
   },
   {
@@ -466,7 +466,7 @@ export const contributors: TeamMember[] = [
     state: "West Bengal",
     linkedin: "https://www.linkedin.com/in/rwitama-a-33a76535b",
     image: img_contrib_rwitama_aon,
-    contribution:
+    description:
       "Built the Events and Initiatives pages with responsive UI and event cards. Curated speaker profiles, tech communities, and organized community datasets."
   },
   {
@@ -476,7 +476,7 @@ export const contributors: TeamMember[] = [
     state: "Gujarat",
     linkedin: "https://www.linkedin.com/in/puja-rachchh/",
     image: img_contrib_puja_rachchh,
-    contribution:
+    description:
       "Developed the RAG chatbot using semantic retrieval, Pinecone, and Gemini integration. Implemented prompt orchestration and LLM fallback for reliable responses."
   },
   {
@@ -486,7 +486,7 @@ export const contributors: TeamMember[] = [
     state: "Maharashtra",
     linkedin: "https://www.linkedin.com/in/suzanne-daniel-thomas/",
     image: img_contrib_suzanne_daniel_thomas,
-    contribution:
+    description:
       "Researched similar platforms and shared suggestions for website improvements."
   },
 
