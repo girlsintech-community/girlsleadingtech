@@ -5,6 +5,7 @@ import { GlassCard } from "@/components/site/GlassCard";
 import { initiatives } from "@/data/initiatives";
 import { ArrowRight } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import GridBackground from "@/components/shared/GridBackground";
 
 import star from "@/assets/stickers/star.png";
 import washiTape from "@/assets/stickers/washi-tape.png";
@@ -64,20 +65,18 @@ const initiativeEnhancements: Record<string, { category: string; mascot?: string
 function InitiativesHero() {
   return (
     <div className="relative w-full pt-32 pb-24 overflow-x-clip flex items-center justify-center bg-[#fef9f4]">
-      {/* Subtle Graph Paper Grid overlay */}
-      <div
-        className="absolute inset-0 opacity-60 pointer-events-none"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(217, 85, 164, 0.15) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(217, 85, 164, 0.15) 1px, transparent 1px)
-          `,
-          backgroundSize: "32px 32px",
-        }}
+      <GridBackground
+        gridSize="32px 32px"
+        gridColor="rgba(217, 85, 164, 0.15)"
+        gridOpacity={0.6}
+        showDefaultGlows={false}
+        customGlows={
+          <>
+            <div className="absolute top-1/2 left-1/4 w-[300px] md:w-[400px] h-[300px] md:h-[400px] bg-pink-300/20 rounded-full blur-[100px] pointer-events-none -translate-y-1/2" />
+            <div className="absolute top-1/2 right-1/4 w-[300px] md:w-[400px] h-[300px] md:h-[400px] bg-violet-300/20 rounded-full blur-[100px] pointer-events-none -translate-y-1/2" />
+          </>
+        }
       />
-      {/* Ambient glows */}
-      <div className="absolute top-1/2 left-1/4 w-[300px] md:w-[400px] h-[300px] md:h-[400px] bg-pink-300/20 rounded-full blur-[100px] pointer-events-none -translate-y-1/2" />
-      <div className="absolute top-1/2 right-1/4 w-[300px] md:w-[400px] h-[300px] md:h-[400px] bg-violet-300/20 rounded-full blur-[100px] pointer-events-none -translate-y-1/2" />
 
       <div className="relative z-10 container mx-auto px-6 flex items-center justify-center gap-10 md:gap-4 lg:gap-12">
         

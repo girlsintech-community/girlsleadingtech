@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { IndiaCommunityMap } from "@/components/site/IndiaCommunityMap";
 import { TestimonialsMarquee } from "@/components/home/TestimonialsGrid";
 import React from "react";
+import GridBackground from "@/components/shared/GridBackground";
 
 export const Route = createFileRoute("/impact")({
   head: () => ({
@@ -16,33 +17,23 @@ export const Route = createFileRoute("/impact")({
   component: ImpactPage,
 });
 
-function GridBackground() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      <div
-        className="absolute left-1/2 top-1/2 h-[40rem] w-[60rem] -translate-x-1/2 -translate-y-1/2 blur-3xl"
-        style={{
-          background: "radial-gradient(circle, rgba(255,240,190,0.15), transparent 70%)",
-        }}
-      />
-      <div
-        className="absolute inset-0 opacity-80"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(217, 85, 164, 0.25) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(217, 85, 164, 0.25) 1px, transparent 1px)
-          `,
-          backgroundSize: "32px 32px",
-        }}
-      />
-    </div>
-  );
-}
-
 function ImpactPage() {
   return (
     <div className="relative w-full min-h-screen bg-[#fef9f4] overflow-hidden">
-      <GridBackground />
+      <GridBackground
+        gridSize="32px 32px"
+        gridColor="rgba(217, 85, 164, 0.25)"
+        gridOpacity={0.8}
+        showDefaultGlows={false}
+        customGlows={
+          <div
+            className="absolute left-1/2 top-1/2 h-[40rem] w-[60rem] -translate-x-1/2 -translate-y-1/2 blur-3xl"
+            style={{
+              background: "radial-gradient(circle, rgba(255,240,190,0.15), transparent 70%)",
+            }}
+          />
+        }
+      />
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');`}</style>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');`}</style>
 

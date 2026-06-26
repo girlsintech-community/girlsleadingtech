@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import GridBackground from "@/components/shared/GridBackground";
 import { useState as _useStateSearch } from "react";
 import { ResourceSearchBar, filterBySearch } from "@/components/site/ResourceSearchBar";
 import { GlassCard } from "@/components/site/GlassCard";
@@ -18,54 +19,14 @@ export const Route = createFileRoute("/resources/scholarships")({
   component: ScholarshipsPage,
 });
 
-function GridBackground() {
-  return (
-    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-      {/* LEFT GLOW */}
-      <div
-        className="absolute left-[-12%] top-[-10%] h-[120%] w-[35vw] blur-3xl opacity-80"
-        style={{
-          background: "radial-gradient(circle, rgba(255,120,180,0.28), transparent 75%)",
-        }}
-      />
 
-      {/* RIGHT GLOW */}
-      <div
-        className="absolute right-[-12%] top-[-10%] h-[120%] w-[35vw] blur-3xl opacity-80"
-        style={{
-          background: "radial-gradient(circle, rgba(240,120,255,0.24), transparent 75%)",
-        }}
-      />
-
-      {/* CENTER CREAM GLOW */}
-      <div
-        className="absolute left-1/2 top-1/2 h-[30rem] w-[50rem] -translate-x-1/2 -translate-y-1/2 blur-3xl"
-        style={{
-          background: "radial-gradient(circle, rgba(255,240,190,0.28), transparent 72%)",
-        }}
-      />
-
-      {/* GRID LAYER */}
-      <div
-        className="absolute inset-0 opacity-80"
-        style={{
-          backgroundImage: `
-            linear-gradient(rgba(217, 85, 164, 0.25) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(217, 85, 164, 0.25) 1px, transparent 1px)
-          `,
-          backgroundSize: "32px 32px",
-        }}
-      />
-    </div>
-  );
-}
 
 function ScholarshipsPage() {
   const [_q, _setQ] = _useStateSearch("");
   const _filtered = filterBySearch(scholarships, _q, ["title","name","description","summary","author","provider","organisedBy","company","role","domain","category","categories","benefit","eligibility","keywords"]);
   return (
     <div className="relative w-full min-h-screen bg-[#fef9f4] overflow-hidden">
-      <GridBackground />
+      <GridBackground gridSize="32px 32px" gridColor="rgba(217, 85, 164, 0.25)" gridOpacity={0.8} />
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');`}</style>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');`}</style>
 
