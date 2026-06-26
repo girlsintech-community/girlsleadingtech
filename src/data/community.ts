@@ -391,16 +391,151 @@ export const mentors: Mentor[] = [
 ];
 
 export const contributors: TeamMember[] = [
-  { id: "c1", name: "Naina Reddy", city: "Hyderabad", state: "TS" },
-  { id: "c2", name: "Aditi Joshi", city: "Pune", state: "MH" },
-  { id: "c3", name: "Simran Kaur", city: "Chandigarh", state: "PB" },
-  { id: "c4", name: "Tanvi Shah", city: "Surat", state: "GJ" },
-  { id: "c5", name: "Kriti Bansal", city: "Delhi", state: "DL" },
-  { id: "c6", name: "Ria Menon", city: "Kochi", state: "KL" },
-  { id: "c7", name: "Aakanksha Singh", city: "Navi MUmbai", state: "Maharashtra", linkedin: "https://www.linkedin.com/in/aakanksha-singh1/", image: img_contrib_aakanksha_singh },
-  { id: "c8", name: "Kashika Gupta", city: "Indore", state: "Madhya Pradesh", linkedin: "https://www.linkedin.com/in/kashikagupta/", image: img_contrib_kashika_gupta },
-];
+  {
+    id: "c0",
+    name: "Suhani Garg",
+    city: "Jaipur",
+    state: "Rajasthan",
+    linkedin: "https://www.linkedin.com/in/suhani-garg-88a736318/",
+    image: img_contrib_suhani_garg,
+    contribution:
+      "Managed the complete website development, coordinated contributors, and ensured timely delivery of major milestones. Contributed to accessibility improvements, AI chatbot development, deployment, feature integration, and overall technical execution."
+  },
+  {
+    id: "c1",
+    name: "Priyanka Kumari Gond",
+    city: "Kolkata",
+    state: "West Bengal",
+    linkedin: "https://www.linkedin.com/in/priyanka-kumari-gond-359310324/",
+    image: img_contrib_priyanka_kumari_gond,
+    contribution:
+      "Curated and maintained resources, scholarships, hackathons, and platform data while keeping links updated. Supported QA, transcript processing, UI refinements, and content updates."
+  },
+  {
+    id: "c2",
+    name: "Arya Rai",
+    city: "Delhi",
+    state: "Delhi",
+    linkedin: "https://www.linkedin.com/in/arya-rai-818323318/",
+    image: img_contrib_arya_rai,
+    contribution:
+      "Developed frontend components and implemented UI improvements across multiple pages. Helped enhance the website's overall user experience and design."
+  },
+  {
+    id: "c3",
+    name: "Samriddhi Gupta",
+    city: "Pune",
+    state: "Maharashtra",
+    linkedin: "https://www.linkedin.com/in/samriddhi-gupta-61a96b282/",
+    image: img_contrib_samriddhi_gupta,
+    contribution:
+      "Built the chatbot's data ingestion, embedding, and vector database pipeline. Integrated retrieval components and supported chatbot deployment."
+  },
+  {
+    id: "c4",
+    name: "Riya Gupta",
+    city: "Mumbai",
+    state: "Maharashtra",
+    linkedin: "https://www.linkedin.com/in/riyagupta70",
+    image: img_contrib_riya_gupta,
+    contribution:
+      "Designed and developed key website pages while maintaining a consistent visual identity. Helped coordinate team progress and collaboration."
+  },
+  {
+    id: "c5",
+    name: "Mudita Pandey",
+    city: "Kolkata",
+    state: "West Bengal",
+    linkedin: "https://www.linkedin.com/in/mudita-pandey-71b91a272/",
+    image: img_contrib_mudita_pandey,
+    contribution:
+      "Developed the Impact page with map integration and designed the Resources section. Organized curated resources and added relevant links."
+  },
+  {
+    id: "c6",
+    name: "Rwitama Aon",
+    city: "Serampore",
+    state: "West Bengal",
+    linkedin: "https://www.linkedin.com/in/rwitama-a-33a76535b",
+    image: img_contrib_rwitama_aon,
+    contribution:
+      "Built the Events and Initiatives pages with responsive UI and event cards. Curated speaker profiles, tech communities, and organized community datasets."
+  },
+  {
+    id: "c7",
+    name: "Puja Rachchh",
+    city: "Rajkot",
+    state: "Gujarat",
+    linkedin: "https://www.linkedin.com/in/puja-rachchh/",
+    image: img_contrib_puja_rachchh,
+    contribution:
+      "Developed the RAG chatbot using semantic retrieval, Pinecone, and Gemini integration. Implemented prompt orchestration and LLM fallback for reliable responses."
+  },
+  {
+    id: "c8",
+    name: "Suzanne Daniel Thomas",
+    city: "Pune",
+    state: "Maharashtra",
+    linkedin: "https://www.linkedin.com/in/suzanne-daniel-thomas/",
+    image: img_contrib_suzanne_daniel_thomas,
+    contribution:
+      "Researched similar platforms and shared suggestions for website improvements."
+  },
 
+  // Existing contributors
+  {
+    id: "c9",
+    name: "Naina Reddy",
+    city: "Hyderabad",
+    state: "TS"
+  },
+  {
+    id: "c10",
+    name: "Aditi Joshi",
+    city: "Pune",
+    state: "MH"
+  },
+  {
+    id: "c11",
+    name: "Simran Kaur",
+    city: "Chandigarh",
+    state: "PB"
+  },
+  {
+    id: "c12",
+    name: "Tanvi Shah",
+    city: "Surat",
+    state: "GJ"
+  },
+  {
+    id: "c13",
+    name: "Kriti Bansal",
+    city: "Delhi",
+    state: "DL"
+  },
+  {
+    id: "c14",
+    name: "Ria Menon",
+    city: "Kochi",
+    state: "KL"
+  },
+  {
+    id: "c15",
+    name: "Aakanksha Singh",
+    city: "Navi Mumbai",
+    state: "Maharashtra",
+    linkedin: "https://www.linkedin.com/in/aakanksha-singh1/",
+    image: img_contrib_aakanksha_singh
+  },
+  {
+    id: "c16",
+    name: "Kashika Gupta",
+    city: "Indore",
+    state: "Madhya Pradesh",
+    linkedin: "https://www.linkedin.com/in/kashikagupta/",
+    image: img_contrib_kashika_gupta
+  }
+];
 export const volunteers: TeamMember[] = [
   { id: "v1", name: "Aarushi Chottani", city: "Pune", state: "Maharashtra", linkedin: "https://www.linkedin.com/in/aarushi-chottani-80b861322", image: img_contrib_aarushi_chottani },
   { id: "v2", name: "Alina Abreeq", city: "Hyderabad", state: "Telangana", linkedin: "https://www.linkedin.com/in/alina-abreeq", image: img_contrib_alina_abreeq },
