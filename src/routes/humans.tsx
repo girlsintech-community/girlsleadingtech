@@ -254,6 +254,20 @@ function HumansPage() {
   }, []);
   const winnersPct = Math.round((winnersCount / speakers.length) * 100);
 
+  const maleSpeakerIds = useMemo(() => new Set([
+    "s3", "s6", "s8", "s10", "s14", "s18", "s21", "s30", "s39", "s42", 
+    "s43", "s44", "s51", "s53", "s54", "s55", "s56", "s57", "s58", "s60", 
+    "s63", "s64", "s67", "s68", "s70", "s74", "s76", "s79", "s80", "s110"
+  ]), []);
+
+  const maleCount = useMemo(() => {
+    return speakers.filter((s) => maleSpeakerIds.has(s.id)).length;
+  }, [maleSpeakerIds]);
+
+  const femaleCount = totalSpeakers - maleCount;
+  const femalePct = Math.round((femaleCount / totalSpeakers) * 100);
+  const malePct = 100 - femalePct;
+
   return (
     <>
       <style>{`
@@ -609,6 +623,35 @@ function HumansPage() {
                     <p className="text-base text-gray-700 leading-relaxed font-medium" style={{ fontFamily: "'Montserrat', sans-serif" }}>
                       Our guest speaker roster represents a curated mixture of experienced software engineers, startup operators, Google TalentSprint scholars, and winners of major hackathons. This balanced landscape delivers both deep technical mentorship and actionable career journeys.
                     </p>
+
+                    {/* Speaker Gender Ratio */}
+                    <div className="mt-6 pt-5 border-t border-dashed border-gray-200">
+                      <div className="flex justify-between text-xs font-black text-gray-800 mb-2.5" style={{ fontFamily: "'Montserrat', sans-serif" }}>
+                        <span className="flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#d955a4]"></span>
+                          Female Speakers ({femalePct}%)
+                        </span>
+                        <span className="flex items-center gap-1.5">
+                          <span className="w-2.5 h-2.5 rounded-full bg-[#4ba3e3]"></span>
+                          Male Speakers ({malePct}%)
+                        </span>
+                      </div>
+                      <div className="w-full h-5 bg-gray-100 border-2 border-black rounded-full overflow-hidden shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] flex">
+                        <div 
+                          className="h-full bg-gradient-to-r from-[#ff8fab] to-[#d955a4] transition-all duration-500" 
+                          style={{ width: `${femalePct}%` }}
+                          title={`Female Speakers: ${femalePct}%`}
+                        />
+                        <div 
+                          className="h-full bg-gradient-to-r from-[#4ba3e3] to-[#1e88e5] transition-all duration-500" 
+                          style={{ width: `${malePct}%` }}
+                          title={`Male Speakers: ${malePct}%`}
+                        />
+                      </div>
+                      <p className="text-[10px] text-gray-500 mt-2 font-semibold italic">
+                        * GLT features a diverse lineup of {femaleCount} female and {maleCount} male industry leaders.
+                      </p>
+                    </div>
                   </div>
 
                   <div className="lg:col-span-7 space-y-7 text-left">
