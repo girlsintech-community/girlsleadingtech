@@ -111,7 +111,7 @@ import spk_garima from "@/assets/speakers/garima-sahu.webp";
 import spk_garimajha from "@/assets/speakers/garima-jha.webp";
 import spk_danish from "@/assets/speakers/mohammad-danish.webp";
 import spk_sweta from "@/assets/speakers/sweta-pandey.webp";
-// import img_contrib_suhani_garg from "@/assets/contributors/suhani-garg.jpg";
+import img_contrib_suhani_garg from "@/assets/contributors/suhani-garg.jpeg";
 import img_contrib_priyanka_kumari_gond from "@/assets/contributors/priyanka-kumari-gond.webp";
 import img_contrib_arya_rai from "@/assets/contributors/arya-rai.jpg";
 import img_contrib_samriddhi_gupta from "@/assets/contributors/samriddhi-gupta.jpeg";
