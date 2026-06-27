@@ -161,10 +161,10 @@ export default function SpeakersShowcase() {
       src={pixelBtn}
       alt="See More Speakers"
       className="
-        w-[140px]
+        w-[160px]
         sm:w-[160px]
-        md:w-[180px]
-        lg:w-[200px]
+        md:w-[200px]
+        lg:w-[250px]
         h-auto
         object-contain
       "

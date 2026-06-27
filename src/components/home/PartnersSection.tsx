@@ -146,7 +146,7 @@ export function PartnersSection({
           <img
             src={pixelBtn}
             alt="See All Partners"
-            className="w-[160px] sm:w-[180px] md:w-[200px] lg:w-[220px] h-auto object-contain"
+            className="w-[160px] sm:w-[180px] md:w-[200px] lg:w-[260px] h-auto object-contain"
           />
 
           <span

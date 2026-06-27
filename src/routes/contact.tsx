@@ -489,7 +489,7 @@ function ContactPage() {
                         alt="Join Community Button"
                         className="w-[140px]
                   sm:w-[180px]
-                  md:w-[210px]
+                  md:w-[250px]
                   h-auto h-auto"
                       />
                       <span

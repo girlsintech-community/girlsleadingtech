@@ -120,7 +120,7 @@ function DesktopCollegesContent() {
             <img
               src={pixelBtn}
               alt="See All Colleges"
-              className="w-[140px] sm:w-[160px] md:w-[180px] lg:w-[200px] h-auto object-contain"
+              className="w-[140px] sm:w-[160px] md:w-[180px] lg:w-[250px] h-auto object-contain"
             />
             <span
               className="absolute inset-0 flex items-center justify-center text-black text-center font-bold pointer-events-none"

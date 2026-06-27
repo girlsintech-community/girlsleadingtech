@@ -372,7 +372,7 @@ export const team: TeamMember[] = [
   city: "Delhi",
   linkedin: "https://www.linkedin.com/in/laxmi-vijay/",
   image: img_team_vijay_laxmi,
-  description: "The voice behind GLT's incredible speaker lineup — Vijay reaches out, builds relationships, and brings inspiring women in tech to our stage.",
+  description: "The voice behind GLT's incredible speaker lineup; Vijay reaches out, builds relationships, and brings inspiring women in tech to our stage.",
 },
   { id: "t4", name: "Ananya Agarwal", role: "Design", city: "Mumbai", state: "Maharashtra", linkedin: "https://www.linkedin.com/in/ananya-agarwal-861317290/", image: img_team_ananya_agarwal },
   { id: "t5", name: "Mahi Awasthi", role: "Content Creation", city: "Derabassi", state: "Punjab", linkedin: "https://www.linkedin.com/in/mahiawasthi/", image: img_team_mahi_awasthi },
@@ -490,43 +490,6 @@ export const contributors: TeamMember[] = [
       "Researched similar platforms and shared suggestions for website improvements."
   },
 
-  // Existing contributors
-  {
-    id: "c9",
-    name: "Naina Reddy",
-    city: "Hyderabad",
-    state: "TS"
-  },
-  {
-    id: "c10",
-    name: "Aditi Joshi",
-    city: "Pune",
-    state: "MH"
-  },
-  {
-    id: "c11",
-    name: "Simran Kaur",
-    city: "Chandigarh",
-    state: "PB"
-  },
-  {
-    id: "c12",
-    name: "Tanvi Shah",
-    city: "Surat",
-    state: "GJ"
-  },
-  {
-    id: "c13",
-    name: "Kriti Bansal",
-    city: "Delhi",
-    state: "DL"
-  },
-  {
-    id: "c14",
-    name: "Ria Menon",
-    city: "Kochi",
-    state: "KL"
-  },
   {
     id: "c15",
     name: "Aakanksha Singh",
