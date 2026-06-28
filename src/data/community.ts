@@ -111,6 +111,12 @@ import spk_garima from "@/assets/speakers/garima-sahu.webp";
 import spk_garimajha from "@/assets/speakers/garima-jha.webp";
 import spk_danish from "@/assets/speakers/mohammad-danish.webp";
 import spk_sweta from "@/assets/speakers/sweta-pandey.webp";
+import img_mentor_sahitya_roy from "@/assets/mentors/sahitya-roy.png";
+import img_mentor_ekta_agrawal from "@/assets/mentors/ekta-agrawal.jpg"
+import img_mentor_shivam_garg from "@/assets/mentors/shivam-garg.png"
+import img_mentor_krish_khattar from "@/assets/mentors/krish-khattar.jpg"
+import img_mentor_bhupendra_chouhan from "@/assets/mentors/bhupendra-chouhan.jpg"
+import img_mentor_vinit_vijal from "@/assets/mentors/vinit-vijal.jpg"
 import img_contrib_suhani_garg from "@/assets/contributors/suhani-garg.jpeg";
 import img_contrib_priyanka_kumari_gond from "@/assets/contributors/priyanka-kumari-gond.webp";
 import img_contrib_arya_rai from "@/assets/contributors/arya-rai.jpg";
@@ -138,7 +144,6 @@ import img_contrib_ragini_pandey from "@/assets/contributors/ragini-pandey.jpg";
 import img_contrib_simran_parween from "@/assets/contributors/simran-parween.jpg";
 import img_contrib_swagita_parida from "@/assets/contributors/swagita-parida.jpg";
 import img_contrib_vanshika_chauhan from "@/assets/contributors/vanshika-chauhan.jpg";
-import img_mentor_sara_kapoor from "@/assets/contributors/Sara-Kapoor.jpg";
 import img_team_aditi_madhukar from "@/assets/team/aditi-madhukar.jpeg";
 import img_team_adyasha_das from "@/assets/contributors/adyasha-das.jpg";
 import img_team_ananya_agarwal from "@/assets/team/ananya-agarwal.jpg";
@@ -390,12 +395,60 @@ export const team: TeamMember[] = [
 ];
 
 export const mentors: Mentor[] = [
-  { id: "m1", name: "Dr. Kavita Iyer", designation: "Director of Engineering", company: "Salesforce" },
-  { id: "m2", name: "Sushmita Rao", designation: "VP Product", company: "Razorpay" },
-  { id: "m3", name: "Anjali Mehra", designation: "Principal SDE", company: "Amazon" },
-  { id: "m4", name: "Pooja Sinha", designation: "Founder & CEO", company: "BloomTech" },
-  { id: "m5", name: "Devika Nair", designation: "Staff ML", company: "Meta" },
-  { id: "m6", name: "Sara Kapoor", designation: "Engineering Manager", company: "Shopify", image: img_mentor_sara_kapoor },
+  {
+    id: "m1",
+    name: "Sahitya Roy",
+    linkedin: "https://www.linkedin.com/in/sahityaroy/",
+    image: img_mentor_sahitya_roy,
+    designation: "Developer Ecosystem Strategy Lead",
+    company: "Rise In"
+  },
+  {
+    id: "m2",
+    name: "Ekta Agrawal",
+    linkedin: "https://www.linkedin.com/in/theektaagrawal/",
+    image: img_mentor_ekta_agrawal,
+    designation: "Co-Founder",
+    company: "SheBuilds"
+  },
+  {
+    id: "m3",
+    name: "Shivam Garg",
+    linkedin: "https://www.linkedin.com/in/meshivamgarg/",
+    image: img_mentor_shivam_garg,
+    designation: "Founding DevRel",
+    company: "HeLa Labs"
+  },
+  {
+    id: "m4",
+    name: "Krish Khattar",
+    linkedin: "https://www.linkedin.com/in/krishkhattar/",
+    image: img_mentor_krish_khattar,
+    designation: "Associate Software Developer ",
+    company: "Antino Labs"
+  },
+  {
+    id: "m5",
+    name: "Bhupendra Chouhan",
+    linkedin: "https://www.linkedin.com/in/theektaagrawal/",
+    image: img_mentor_bhupendra_chouhan,
+    designation: "Blockchain DevRel Engineer & Maintainer",
+    company: "RiseIn"
+  },
+  {
+    id: "m6",
+    name: "Vinit Vijal",
+    linkedin: "https://www.linkedin.com/in/vinitvijal/",
+    image: img_mentor_vinit_vijal,
+    designation: "Software Engineer",
+    company: "Roger N Reckon"
+  },
+
+
+
+
+
+
 ];
 
 export const contributors: TeamMember[] = [
@@ -490,43 +543,6 @@ export const contributors: TeamMember[] = [
       "Researched similar platforms and shared suggestions for website improvements."
   },
 
-  // Existing contributors
-  {
-    id: "c9",
-    name: "Naina Reddy",
-    city: "Hyderabad",
-    state: "TS"
-  },
-  {
-    id: "c10",
-    name: "Aditi Joshi",
-    city: "Pune",
-    state: "MH"
-  },
-  {
-    id: "c11",
-    name: "Simran Kaur",
-    city: "Chandigarh",
-    state: "PB"
-  },
-  {
-    id: "c12",
-    name: "Tanvi Shah",
-    city: "Surat",
-    state: "GJ"
-  },
-  {
-    id: "c13",
-    name: "Kriti Bansal",
-    city: "Delhi",
-    state: "DL"
-  },
-  {
-    id: "c14",
-    name: "Ria Menon",
-    city: "Kochi",
-    state: "KL"
-  },
   {
     id: "c15",
     name: "Aakanksha Singh",
