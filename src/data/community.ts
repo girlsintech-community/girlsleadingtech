@@ -117,6 +117,16 @@ import img_mentor_shivam_garg from "@/assets/mentors/shivam-garg.png"
 import img_mentor_krish_khattar from "@/assets/mentors/krish-khattar.jpg"
 import img_mentor_bhupendra_chouhan from "@/assets/mentors/bhupendra-chouhan.jpg"
 import img_mentor_vinit_vijal from "@/assets/mentors/vinit-vijal.jpg"
+import img_mentor_kashika_gupta from "@/assets/mentors/kashika-gupta.png"
+import img_mentor_diya_k_bhat from "@/assets/mentors/diya-k-bhat.jpg"
+import img_mentor_tushar_gupta from "@/assets/mentors/tushar-gupta.png"
+import img_mentor_abhijeet_jha from "@/assets/mentors/abhijeet-jha.png"
+import img_mentor_adyasha_das from "@/assets/mentors/adyasha-das.png"
+import img_mentor_vansh_mehta from "@/assets/mentors/vansh-mehta.png"
+import img_mentor_kabir_singh from "@/assets/mentors/kabir-singh.jpg"
+import img_mentor_aryan_brahmane from "@/assets/mentors/aryan-bramhane.jpg"
+import img_mentor_shreya_mathur from "@/assets/mentors/shreya-mathur.png"
+import img_mentor_manas_narang from "@/assets/mentors/mannas-narang.png"
 import img_contrib_suhani_garg from "@/assets/contributors/suhani-garg.jpeg";
 import img_contrib_priyanka_kumari_gond from "@/assets/contributors/priyanka-kumari-gond.webp";
 import img_contrib_arya_rai from "@/assets/contributors/arya-rai.jpg";
@@ -430,7 +440,7 @@ export const mentors: Mentor[] = [
   {
     id: "m5",
     name: "Bhupendra Chouhan",
-    linkedin: "https://www.linkedin.com/in/theektaagrawal/",
+    linkedin: "https://www.linkedin.com/in/bhupendrachouhan/",
     image: img_mentor_bhupendra_chouhan,
     designation: "Blockchain DevRel Engineer & Maintainer",
     company: "RiseIn"
@@ -443,12 +453,100 @@ export const mentors: Mentor[] = [
     designation: "Software Engineer",
     company: "Roger N Reckon"
   },
-
-
-
-
-
-
+  {
+    id: "m7",
+    name: "Shreya Sharma",
+    linkedin: "https://www.linkedin.com/in/shreya-8970-",
+    designation: "Frontend developer",
+    company: "ScholarRank AI"
+  },
+  {
+    id: "m8",
+    name: "Sarah Park",
+    linkedin: "https://www.linkedin.com/in/sarah-park-324407328/",
+    designation: "Student",
+    company: "Thomas Jefferson High School for Science and Technology "
+  },
+  {
+    id: "m9",
+    name: "Kashika Gupta",
+    linkedin: "https://www.linkedin.com/in/kashikagupta/",
+    image: img_mentor_kashika_gupta,
+    designation: "System Engineer",
+    company: "Infosys"
+  },
+  {
+    id: "m10",
+    name: "Diya K Bhat",
+    linkedin: "https://www.linkedin.com/in/diya-k-bhat-75b450257?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    image: img_mentor_diya_k_bhat,
+    designation: "AI&ML Engineer",
+    company: "WizzyBox Private Limited"
+  },
+  {
+    id: "m11",
+    name: "Tushar Gupta",
+    linkedin: "https://linkedin.com/in/tushar1504",
+    image: img_mentor_tushar_gupta,
+    designation: "Mentor",
+    company: "topmate.io"
+  },
+  {
+    id: "m12",
+    name: "Abhijeet Jha",
+    linkedin: "https://www.linkedin.com/in/abhijeetcreates?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    image: img_mentor_abhijeet_jha,
+    designation: "Co Founder & Chief AI ML Engineer",
+    company: "Pathixo "
+  },
+  {
+    id: "m13",
+    name: "Adyasha Jha",
+    linkedin: "https://www.linkedin.com/in/adyashadas04?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    image: img_mentor_adyasha_das,
+    designation: "Engineering Intern(T&T)",
+    company: "Deloitte India"
+  },
+  {
+    id: "m14",
+    name: "Vansh Mehta",
+    linkedin: "https://www.linkedin.com/in/vansh-mehta-8867b8275?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_appps://www.linkedin.com/in/diya-k-bhat-75b450257?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    image: img_mentor_vansh_mehta,
+    designation: "Full stack Engineer Intern",
+    company: "Inovatix Solutions"
+  },
+  {
+    id: "m15",
+    name: "Kabir Singh",
+    linkedin: "https://www.linkedin.com/in/kabir-singh-9193k/://www.linkedin.com/in/diya-k-bhat-75b450257?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    image: img_mentor_kabir_singh,
+    designation: "React Lead",
+    company: "AppStorys"
+  },
+  {
+    id: "m16",
+    name: "Aryan Brahmane",
+    linkedin: "https://www.linkedin.com/in/aryan-bramhane/",
+    image: img_mentor_aryan_brahmane,
+    designation: "Developer Relationship",
+    company: "Anakin (YC S21)"
+  },
+  {
+    id: "m17",
+    name: "Shreya Mathur",
+    linkedin: "https://www.linkedin.com/in/shreya-mathur19?utm_source=share_via&utm_content=profile&utm_medium=member_android",
+    image: img_mentor_shreya_mathur,
+    designation: "Software Developer",
+    company: "Mobisec Technologies"
+  },
+  {
+    id: "m18",
+    name: "Manas Narang",
+    linkedin: "https://www.linkedin.com/in/mannasnarang/",
+    image: img_mentor_manas_narang,
+    designation: "Product Engineer",
+    company: "Wander"
+  },
 ];
 
 export const contributors: TeamMember[] = [
