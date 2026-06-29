@@ -143,6 +143,7 @@ import img_contrib_ankita_kuntal from "@/assets/contributors/ankita-kuntal.jpg";
 import img_contrib_archana_gupta from "@/assets/contributors/archana-gupta.jpg";
 import img_contrib_avya_giri from "@/assets/contributors/avya-giri.jpg";
 import img_contrib_charmi_reddy_p from "@/assets/contributors/charmi-reddy-p.jpg";
+import img_contrib_dakshata_mishra from "@/assets/contributors/dakshata-mishra.jpeg";
 import img_contrib_dhairya_kanabar from "@/assets/contributors/dhairya-kanabar.jpeg";
 import img_contrib_gungun_goel from "@/assets/contributors/gungun-goel.jpg";
 import img_contrib_kashika_gupta from "@/assets/contributors/kashika-gupta.jpg";
@@ -665,7 +666,7 @@ export const volunteers: TeamMember[] = [
   { id: "v4", name: "Archana gupta", city: "New delhi", state: "delhi", linkedin: "https://www.linkedin.com/in/archana-gupta2006", image: img_contrib_archana_gupta },
   { id: "v5", name: "Avya giri", city: "Delhi", linkedin: "https://www.linkedin.com/in/avya-giri-919842320?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", image: img_contrib_avya_giri },
   { id: "v6", name: "Charmi Reddy P", city: "Hyderabad", state: "Telangana", linkedin: "https://www.linkedin.com/in/charmi-reddy-p-b2aaa2294?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", image: img_contrib_charmi_reddy_p },
-  { id: "v7", name: "Dakshata", city: "Delhi" },
+  { id: "v7", name: "Dakshata Mishra", city: "New Delhi", state: "Delhi", linkedin: "https://www.linkedin.com/in/daky2024/", image: img_contrib_dakshata_mishra},
   { id: "v8", name: "Dhairya Kanabar", city: "Surendranagar", state: "Gujarat", linkedin: "https://www.linkedin.com/in/dhairya-kanabar-411990294?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app", image: img_contrib_dhairya_kanabar },
   { id: "v9", name: "Gungun goel", city: "Meerut", state: "Uttar pradesh", linkedin: "https://www.linkedin.com/in/gungun-goyal-05154426a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app", image: img_contrib_gungun_goel },
   { id: "v10", name: "Kashish Mahendra Sonawane", city: "Nashik", state: "Maharashtra", linkedin: "https://www.linkedin.com/in/kashish-sonawane-41923a326", image: img_contrib_kashish_mahendra_sonawane },
