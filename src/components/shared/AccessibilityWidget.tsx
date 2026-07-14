@@ -823,6 +823,7 @@ export default function AccessibilityWidget() {
       if ("mute" in p) setupMuteSounds(next.mute);
       if ("magnifier" in p) setupMagnifier(next.magnifier);
       if ("dictionary" in p) setupDictionary(next.dictionary);
+      if ("language" in p) applyTranslate(next.language);
       return next;
     });
   };
