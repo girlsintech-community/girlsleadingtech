@@ -472,6 +472,145 @@ function setupDictionary(on: boolean) {
   }
 }
 
+// ─── Google Translate integration ─────────────────────────────────────────────
+export const TRANSLATE_LANGUAGES: { code: string; label: string; group: "Indian" | "Foreign" }[] = [
+  // English (default)
+  { code: "en", label: "English", group: "Foreign" },
+  // Indian languages
+  { code: "hi", label: "हिन्दी (Hindi)", group: "Indian" },
+  { code: "bn", label: "বাংলা (Bengali)", group: "Indian" },
+  { code: "ta", label: "தமிழ் (Tamil)", group: "Indian" },
+  { code: "te", label: "తెలుగు (Telugu)", group: "Indian" },
+  { code: "mr", label: "मराठी (Marathi)", group: "Indian" },
+  { code: "gu", label: "ગુજરાતી (Gujarati)", group: "Indian" },
+  { code: "kn", label: "ಕನ್ನಡ (Kannada)", group: "Indian" },
+  { code: "ml", label: "മലയാളം (Malayalam)", group: "Indian" },
+  { code: "pa", label: "ਪੰਜਾਬੀ (Punjabi)", group: "Indian" },
+  { code: "ur", label: "اردو (Urdu)", group: "Indian" },
+  { code: "or", label: "ଓଡ଼ିଆ (Odia)", group: "Indian" },
+  { code: "as", label: "অসমীয়া (Assamese)", group: "Indian" },
+  { code: "sa", label: "संस्कृतम् (Sanskrit)", group: "Indian" },
+  { code: "sd", label: "سنڌي (Sindhi)", group: "Indian" },
+  { code: "ne", label: "नेपाली (Nepali)", group: "Indian" },
+  { code: "si", label: "සිංහල (Sinhala)", group: "Indian" },
+  { code: "mai", label: "मैथिली (Maithili)", group: "Indian" },
+  { code: "bho", label: "भोजपुरी (Bhojpuri)", group: "Indian" },
+  { code: "kok", label: "कोंकणी (Konkani)", group: "Indian" },
+  { code: "doi", label: "डोगरी (Dogri)", group: "Indian" },
+  // Foreign languages
+  { code: "es", label: "Español (Spanish)", group: "Foreign" },
+  { code: "fr", label: "Français (French)", group: "Foreign" },
+  { code: "de", label: "Deutsch (German)", group: "Foreign" },
+  { code: "it", label: "Italiano (Italian)", group: "Foreign" },
+  { code: "pt", label: "Português (Portuguese)", group: "Foreign" },
+  { code: "ru", label: "Русский (Russian)", group: "Foreign" },
+  { code: "zh-CN", label: "简体中文 (Chinese Simplified)", group: "Foreign" },
+  { code: "zh-TW", label: "繁體中文 (Chinese Traditional)", group: "Foreign" },
+  { code: "ja", label: "日本語 (Japanese)", group: "Foreign" },
+  { code: "ko", label: "한국어 (Korean)", group: "Foreign" },
+  { code: "ar", label: "العربية (Arabic)", group: "Foreign" },
+  { code: "tr", label: "Türkçe (Turkish)", group: "Foreign" },
+  { code: "nl", label: "Nederlands (Dutch)", group: "Foreign" },
+  { code: "pl", label: "Polski (Polish)", group: "Foreign" },
+  { code: "sv", label: "Svenska (Swedish)", group: "Foreign" },
+  { code: "no", label: "Norsk (Norwegian)", group: "Foreign" },
+  { code: "da", label: "Dansk (Danish)", group: "Foreign" },
+  { code: "fi", label: "Suomi (Finnish)", group: "Foreign" },
+  { code: "el", label: "Ελληνικά (Greek)", group: "Foreign" },
+  { code: "he", label: "עברית (Hebrew)", group: "Foreign" },
+  { code: "th", label: "ไทย (Thai)", group: "Foreign" },
+  { code: "vi", label: "Tiếng Việt (Vietnamese)", group: "Foreign" },
+  { code: "id", label: "Bahasa Indonesia", group: "Foreign" },
+  { code: "ms", label: "Bahasa Melayu (Malay)", group: "Foreign" },
+  { code: "fil", label: "Filipino", group: "Foreign" },
+  { code: "sw", label: "Kiswahili (Swahili)", group: "Foreign" },
+  { code: "uk", label: "Українська (Ukrainian)", group: "Foreign" },
+  { code: "cs", label: "Čeština (Czech)", group: "Foreign" },
+  { code: "hu", label: "Magyar (Hungarian)", group: "Foreign" },
+  { code: "ro", label: "Română (Romanian)", group: "Foreign" },
+  { code: "fa", label: "فارسی (Persian)", group: "Foreign" },
+  { code: "af", label: "Afrikaans", group: "Foreign" },
+  { code: "am", label: "አማርኛ (Amharic)", group: "Foreign" },
+];
+
+function loadGoogleTranslate() {
+  if (document.getElementById("glt-a11y-gt-script")) return;
+  if (!document.getElementById("google_translate_element")) {
+    const div = document.createElement("div");
+    div.id = "google_translate_element";
+    document.body.appendChild(div);
+  }
+  (window as any).googleTranslateElementInit = () => {
+    const G = (window as any).google;
+    if (!G?.translate?.TranslateElement) return;
+    new G.translate.TranslateElement(
+      { pageLanguage: "en", autoDisplay: false },
+      "google_translate_element",
+    );
+  };
+  const s = document.createElement("script");
+  s.id = "glt-a11y-gt-script";
+  s.src = "//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit";
+  s.async = true;
+  document.body.appendChild(s);
+}
+
+function setGoogTransCookie(lang: string) {
+  const value = lang === "en" ? "/en/en" : `/en/${lang}`;
+  const domain = window.location.hostname;
+  const setOn = (d: string) => {
+    document.cookie = `googtrans=${value};path=/;domain=${d}`;
+    document.cookie = `googtrans=${value};path=/`;
+  };
+  setOn(domain);
+  // also try parent domain (e.g. .example.com)
+  const parts = domain.split(".");
+  if (parts.length > 1) setOn("." + parts.slice(-2).join("."));
+}
+
+function clearGoogTransCookie() {
+  const expire = "; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+  const domain = window.location.hostname;
+  document.cookie = "googtrans=" + expire;
+  document.cookie = `googtrans=; domain=${domain}${expire}`;
+  const parts = domain.split(".");
+  if (parts.length > 1) {
+    document.cookie = `googtrans=; domain=.${parts.slice(-2).join(".")}${expire}`;
+  }
+}
+
+function applyTranslate(lang: string) {
+  if (typeof window === "undefined") return;
+  loadGoogleTranslate();
+  if (lang === "en") {
+    clearGoogTransCookie();
+    // Try to switch back via combo
+    const combo = document.querySelector<HTMLSelectElement>(".goog-te-combo");
+    if (combo) {
+      combo.value = "";
+      combo.dispatchEvent(new Event("change"));
+    } else {
+      // reload to fully restore
+      setTimeout(() => window.location.reload(), 100);
+    }
+    return;
+  }
+  const trySelect = (attempts = 0) => {
+    const combo = document.querySelector<HTMLSelectElement>(".goog-te-combo");
+    if (combo) {
+      combo.value = lang;
+      combo.dispatchEvent(new Event("change"));
+    } else if (attempts < 20) {
+      setTimeout(() => trySelect(attempts + 1), 250);
+    } else {
+      // Fallback: cookie + reload
+      setGoogTransCookie(lang);
+      window.location.reload();
+    }
+  };
+  trySelect();
+}
+
 // ─── Accessibility Profiles ───────────────────────────────────────────────────
 type Profile = "none" | "blindness" | "motor" | "color-blind" | "epilepsy" | "adhd" | "dyslexia" | "elder";
 
