@@ -781,7 +781,7 @@ export default function AccessibilityWidget() {
   const [open, setOpen] = useState(false);
   const [st, setSt] = useState<St>(DEF);
   const [mounted, setMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState<"profiles"|"vision"|"reading"|"navigation">("profiles");
+  const [activeTab, setActiveTab] = useState<"profiles"|"vision"|"reading"|"navigation"|"translate">("profiles");
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
