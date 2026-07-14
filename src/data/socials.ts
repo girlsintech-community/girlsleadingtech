@@ -23,4 +23,5 @@ export const programLinks = [
   { name: "Global AI Buildathon", url: "https://global-ai-buildathon.girlsleadingtech.com/" },
   { name: "Machine Learning Cohort" },
   { name: "Build Sprint", url: "https://empowerher2026.girlsleadingtech.com/portfolio-build-sprint" },
+  { name: "DSA Cohort", url: "https://mentorship.girlsleadingtech.com/" },
 ];
