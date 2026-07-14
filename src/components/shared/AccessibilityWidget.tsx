@@ -796,6 +796,9 @@ export default function AccessibilityWidget() {
     setupMuteSounds(saved.mute);
     setupMagnifier(saved.magnifier);
     setupDictionary(saved.dictionary);
+    // Init translate (loads Google Translate; applies saved language if non-en)
+    if (saved.language && saved.language !== "en") applyTranslate(saved.language);
+    else loadGoogleTranslate();
   }, []);
 
   useEffect(() => {
