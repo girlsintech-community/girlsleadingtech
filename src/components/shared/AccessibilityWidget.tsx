@@ -888,6 +888,7 @@ export default function AccessibilityWidget() {
     { id: "vision" as const,     label: "Vision" },
     { id: "reading" as const,    label: "Reading" },
     { id: "navigation" as const, label: "Nav" },
+    { id: "translate" as const,  label: "Translate" },
   ];
 
   const PROFILE_LIST: { id: Profile; label: string; desc: string }[] = [
