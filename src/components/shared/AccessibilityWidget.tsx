@@ -1214,6 +1214,70 @@ export default function AccessibilityWidget() {
               </>
             )}
 
+            {/* ── TRANSLATE TAB ── */}
+            {activeTab === "translate" && (
+              <>
+                <Group label="Translate Website">
+                  <div style={{ fontSize: 10, color: "#888", marginBottom: 8, lineHeight: 1.5 }}>
+                    Translate the entire website into 50+ Indian & foreign languages. Powered by Google Translate.
+                  </div>
+                  <select
+                    value={st.language}
+                    onChange={(e) => patch({ language: e.target.value })}
+                    style={{
+                      width: "100%",
+                      padding: "10px 12px",
+                      borderRadius: 10,
+                      border: st.language !== "en" ? `2px solid ${PINK}` : "1.5px solid #e0e0e0",
+                      background: "#fff",
+                      fontSize: 12,
+                      fontWeight: 600,
+                      color: "#222",
+                      fontFamily: "system-ui, sans-serif",
+                      cursor: "pointer",
+                    }}
+                  >
+                    <optgroup label="Default">
+                      <option value="en">English (Original)</option>
+                    </optgroup>
+                    <optgroup label="Indian Languages">
+                      {TRANSLATE_LANGUAGES.filter(l => l.group === "Indian").map(l => (
+                        <option key={l.code} value={l.code}>{l.label}</option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Foreign Languages">
+                      {TRANSLATE_LANGUAGES.filter(l => l.group === "Foreign" && l.code !== "en").map(l => (
+                        <option key={l.code} value={l.code}>{l.label}</option>
+                      ))}
+                    </optgroup>
+                  </select>
+                  {st.language !== "en" && (
+                    <button
+                      onClick={() => patch({ language: "en" })}
+                      style={{
+                        marginTop: 8,
+                        width: "100%",
+                        padding: "8px",
+                        borderRadius: 8,
+                        border: "1.5px solid #e0e0e0",
+                        background: "#f7f7f7",
+                        color: "#333",
+                        fontSize: 11,
+                        fontWeight: 700,
+                        cursor: "pointer",
+                        fontFamily: "system-ui, sans-serif",
+                      }}
+                    >
+                      Restore English
+                    </button>
+                  )}
+                  <div style={{ fontSize: 9, color: "#aaa", marginTop: 10, lineHeight: 1.5 }}>
+                    Translations are automatic and may not be 100% accurate. Some brand names and code snippets remain in English.
+                  </div>
+                </Group>
+              </>
+            )}
+
           </div>
 
           {/* Footer */}
