@@ -655,6 +655,7 @@ type St = {
   magnifier: boolean;
   dictionary: boolean;
   profile: Profile;
+  language: string;
 };
 
 const DEF: St = {
@@ -665,6 +666,7 @@ const DEF: St = {
   focus: false, adhd: false, mask: false, guide: false,
   mute: false, keynav: false, magnifier: false, dictionary: false,
   profile: "none",
+  language: "en",
 };
 
 let originalFontSize: number | null = null;
