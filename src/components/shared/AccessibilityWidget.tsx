@@ -292,6 +292,17 @@ const A11Y_CSS = `
     gap: 10px !important;
     font-family: system-ui, sans-serif !important;
   }
+
+  /* ── Hide Google Translate top banner / tooltip / branding ── */
+  .goog-te-banner-frame.skiptranslate,
+  .goog-te-gadget-icon,
+  .goog-logo-link,
+  #goog-gt-tt,
+  .goog-te-balloon-frame { display: none !important; }
+  body { top: 0 !important; }
+  .goog-tooltip, .goog-tooltip:hover { display: none !important; }
+  .goog-text-highlight { background: none !important; box-shadow: none !important; }
+  #google_translate_element { position: absolute; left: -9999px; top: -9999px; }
 `;
 
 function injectCSS() {
